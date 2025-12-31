@@ -13,12 +13,17 @@ html, body, #root {
 }
 
 .main-content {
+  position: relative;
   display: flex;
   height: 100vh;
   width: 100vw;        
   overflow: hidden;
   padding: 14px;
   gap: 24px;
+  box-sizing: border-box;   /* ensures padding doesn’t overflow */
+  padding-top: 35px;       /* same height as title bar */
+
+
 
 }
 
@@ -221,6 +226,101 @@ html, body, #root {
   opacity: 0.8;
 }
 
+.title-bar {
+ position: absolute;           
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 35px;                
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  background-color: rgba(0, 0, 0, 0); 
+  -webkit-app-region: drag;     
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  z-index: 1000;
+}
+button:focus,
+button:active {
+  outline: none;           
+}
 
+.title-bar .window-controls button {
+  -webkit-app-region: no-drag;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.title-bar .window-controls button:hover {
+  background-color: #333;
+}
+
+
+.user-footer {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+
+  margin-top: auto;  /* Push to bottom */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-top: 4px solid #ffffff;
+  background-color: #242424;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.user-footer:hover {
+  background-color: #2a2a2a;
+  cursor: pointer;
+}
+
+.github-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;  
+  border: 2px solid #f5f5f5;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logged-in-text {
+  font-size: 12px;
+  color: #888888;
+}
+
+.github-username {
+  font-size: 14px;
+  color: #f7f7f7;
+  font-weight: 500;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.project-modal {
+  background: #1e1e1e;
+  border-radius: 10px;
+  padding: 32px;
+  width: 520px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
 
 

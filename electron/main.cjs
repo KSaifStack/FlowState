@@ -1,28 +1,36 @@
-/**
- npm run electron:dev 
- */
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 function createWindow() {
   const win = new BrowserWindow({
-     width: 1100,
-    height: 550,
-    frame: true,
-    minHeight: 550,
+    width: 1100,
+    height: 650,
     minWidth: 1100,
+    minHeight: 650,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
+      contextIsolation: true,  // safe
+      nodeIntegration: false,  // no remote needed
     },
   });
 
   win.loadURL('http://localhost:5173');
-    //win.removeMenu();
-
+  win.removeMenu();
 }
 
-app.whenReady().then(createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+ipcMain.on('window-control', (event, action) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (!win) return;
+  switch (action) {
+    case 'minimize': win.minimize(); break;
+    case 'maximize':
+      win.isMaximized() ? win.unmaximize() : win.maximize();
+      break;
+    case 'close': win.close(); break;
+  }
 });
+
+app.whenReady().then(createWindow);
+app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
+app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });

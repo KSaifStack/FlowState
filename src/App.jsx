@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import TitleBar from './TitleBar.jsx'; 
 import './App.css'
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
 function App() {
   const projects = [
-    {
+     {
       id: 1,
       icon: '🎮',
       iconClass: 'godot-icon',
@@ -13,7 +14,13 @@ function App() {
       title: 'The Amazing Gorgonzola',
       subtitle: 'RPG Adventure',
       date: 'Last Opened: Over 5 days ago',
-      status: ' Your at a good pace keep up the good work!'
+      status: ' Your at a good pace keep up the good work!',
+      isPinned: false,
+      workflow: ['VS Code', 'Godot Engine'],
+      path: '/Users/projects/gorgonzola',
+      commits: 47,
+      techStack: ['GDScript', 'Godot'],
+      goals: ['Complete level 3', 'Add sound effects', 'Test multiplayer']
     },
     {
       id: 2,
@@ -23,7 +30,13 @@ function App() {
       title: 'CodingAssignment3.cpp',
       subtitle: 'Portfolio Site',
       date: 'Last Opened: Dec 15, 2024',
-      status: 'You have been commiting a lot overnight consider taking a break!'
+      status: 'You have been commiting a lot overnight consider taking a break!',
+      isPinned: true,
+      workflow: ['VS Code'],
+      path: '/Users/projects/assignment3',
+      commits: 23,
+      techStack: ['C++'],
+      goals: ['Finish algorithm implementation', 'Add documentation']
     },
     {
       id: 3,
@@ -33,11 +46,19 @@ function App() {
       title: 'Christmas_Video_Project',
       subtitle: 'Mobile App Prototype',
       date: 'Last Opened: Nov 2, 2024',
-      status: 'You have stopped working on this project for awhile would you like to remove it?'
+      status: 'You have stopped working on this project for awhile would you like to remove it?',
+      isPinned: false,
+      workflow: ['DaVinci Resolve'],
+      path: '/Users/projects/christmas-video',
+      commits: 8,
+      techStack: ['Video Editing'],
+      goals: ['Render final cut', 'Add music']
     },
   
   ];
   return (
+    <div className="app">
+      <TitleBar />  {/* <- custom window bar here */}
 <div className = "main-content">
   <div className ="left-panel ">
     <div className ="greeting">Hey, <span className="username">[USER]</span>          </div>
@@ -48,25 +69,30 @@ function App() {
   <button className="bigbutton">
   Open <br/> CodingAssignment3.cpp
 </button>
+<div className="user-footer">
+    <img 
+      src="https://github.com/KsaifStack.png" 
+      alt="GitHub Profile" 
+      className="github-avatar"
+    />
+    <div className="user-info">
+      <div className="logged-in-text">Logged in as</div>
+      <div className="github-username">KsaifStack</div>
+    </div>
+    </div>
   </div>
   <div className="right-panel">
     <div className ="toolbar">
      <div className="button-container">
-    <button className="Pinbutton">
-      <img id="buttonImage" src={darkPin} ></img>
-    </button>
     <button className ="Addbutton">
       <img id="buttonImage" src={darkAdd} >
       </img>
     </button>
-    <button className ="Trashbutton">
-      <img id="buttonImage" src={darkTrash} >
-      </img>
-    </button>
+   
       
     </div>
     <button className ="sort-button">
-      Sort by: Name (A-Z) <span className="arrow">▼</span>
+      Sort by: Name (A-Z) <span className="arrosw">▼</span>
     </button>
     </div>
 
@@ -90,6 +116,7 @@ function App() {
           </div>
         </div>
           </div>
+        </div>
         </div>
     
   )

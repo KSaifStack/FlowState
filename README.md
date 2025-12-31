@@ -20,18 +20,25 @@ By prioritizing ethical data use, burnout awareness, and human-in-the-loop workf
   
  UI:
  --
+ - When adding a project the user should be able to pick if they would like to get a project from there computer or from github.
+ - Once picked a file manager will open if local and if they chose github they will be req to paste the link(The project might need to be public idk rn)
+ - When adding a project the user will be req to pick what ide or apps to open for the workflow.
+ - After that the user will have to set up the workflow the ai should be able to tell the goals of the project depending on the readme so we should push the user to explain     what it is on the readme so it can give goals and reminders otherwise the ai will auto generate goals(should be a off and on thing by the user)
+- Once created the user should have a option to see and edit the workflow,open the workflow,see goals and roadmaps for project,commit history,to pin and trash the project
+- Keep sleeping like a bum. 
 - The app will stay open upon closing and can only be closed when pressed in menu other wise it will stay in system tray.
-- On the right side, it should display the username along with the last project they had open and the option to start it.
-- on the left should be a list of projects that are on GitHub/on System(if not connected to GitHub or didn't add)
-- Add a button on the top right to add projects in case the user does not have GitHub linked.
-- (Maybe) an option to add certain projects from GitHub.
+- Once a project is pressed they should see the following: TechStack,Workflow,Goals(Ai),Insights(Ai),Total commits,Daily commits,Last opened data,Saved Workflow(while being able to edit it)
+- The pin and trash feature will be moved inside the project card window.
+- On the left side, it should display the username along with the last project they had open and the option to start it.(Done)
+- on the right should be a list of projects that are on GitHub/on System(if not connected to GitHub or didn't add)(Done)
 - When the project is pressed, it will open a card with AI features inside of it, along with a button to open the previous workflow in one go, rather than opening apps one by one.
 - Local users can link their data to GitHub at any time.
-- simple yet clean ui design.
+- simple yet clean ui design.(Done).
 - If the user didn't open the project before or through the app, it will prompt them to choose an app of their choice to remember it by.
   (eg: VS Code and if the user pressed VS Code through the app and opens Spotify for music, it will remember VS Code + Spotify.)
 - The user should be able to press the icon on the top left to open a menu dialogue in which they can edit settings.
   e.g.: Exit application, future app settings. 
+  - FlowState title on the top left will be replaced with a logo this logo will open a dropdown menu which will open a settings page for the app.
 
 AI FEATURES:
 --
@@ -43,10 +50,117 @@ AI FEATURES:
 
 BACKEND: 
 --
-- Find a way to get userdata from GitHub onto the app and display project information, profile pic from GitHub, etc.
-- Pull GitHub project data to the app so the user can see it and AI, and generate a response to it.
-- Take an AI module and get it to display the necessary data for a smart app.
-- More stuff should be taken from UI into here, my head is not heading rn. 
+
+**GitHub Integration (Getting data from GitHub):**
+- Set up GitHub OAuth so users can login with their GitHub account
+- Once logged in, we can access their data using GitHub's API
+- We need to get:
+  * Username and profile picture (Example: https://github.com/KsaifStack.png)
+  * List of all their repositories (projects)
+  * For each repo: how many commits they made, what languages/tech they used
+  * The README file (so AI can read what the project is about)
+- GitHub API Documentation: https://docs.github.com/en/rest
+- Important: GitHub limits us to 5000 API requests per hour, so we need to cache data
+
+**AI Integration (Smart suggestions and insights):**
+- Pick an AI service: OpenAI API, Claude API, or run a local model
+- What the AI needs to do:
+  1. Read the project's README file
+  2. Generate 3-5 goals/tasks for the user (Example: "Add unit tests", "Improve documentation")
+  3. Look at commit history and warn if user is overworking
+     - Example: "You've committed at 2am for 5 days straight, take a break!"
+  4. Suggest which project to work on based on last opened date
+- We need to write clear prompts for the AI like:
+  "Based on this README, suggest 3 actionable goals for this project: [README content]"
+
+**SQLite Database (Storing all the data locally):**
+- SQLite is a simple database that stores data in a single file on the user's computer
+- We need to create tables (like Excel sheets) for:
+  
+  **Table 1: projects**
+  - Columns: id, title, type (local or github), path, icon, isPinned, lastOpened
+  - This stores basic info about each project
+  
+  **Table 2: workflows**
+  - Columns: id, projectId, appName (like "VS Code"), appPath (where the app is installed)
+  - This remembers which apps to open for each project
+  
+  **Table 3: commits**
+  - Columns: id, projectId, date, dailyCount, totalCount
+  - Tracks how many commits per day (resets at midnight)
+  
+  **Table 4: goals**
+  - Columns: id, projectId, goalText, isCompleted, generatedBy (AI or user)
+  - Stores project goals and whether they're done
+  
+  **Table 5: settings**
+  - Columns: key, value
+  - Stores user preferences like "autoGenerateGoals: true"
+
+**Electron Integration (Making the desktop app work):**
+- Electron lets React talk to the computer's file system and apps
+- We need to create these functions in Electron's "main process":
+  
+  1. **window.electron.selectFolder()** 
+     - Opens the system file picker so user can choose a project folder
+     - Returns the folder path
+  
+  2. **window.electron.openApps(appPaths)**
+     - Takes an array like ["C:/VS Code/code.exe", "C:/Spotify/spotify.exe"]
+     - Launches all those apps at once
+  
+  3. **window.electron.getInstalledApps()**
+     - Scans the computer for installed IDEs (VS Code, WebStorm, etc.)
+     - Returns a list so user can pick which to use
+  
+  4. **window.electron.minimizeToTray()**
+     - Instead of closing the app, it hides in the system tray
+     - User can click the tray icon to bring it back
+
+**Workflow System (Remembering which apps to open):**
+- When user first opens a project, ask them: "Which apps do you want to open?"
+- Let them select VS Code, Spotify, browser, etc.
+- Store these in the "workflows" table
+- When they click "Open Workflow" button, launch all those apps automatically
+- Also track if they open OTHER apps while working (like if they open Discord)
+  - After a few times, ask: "I noticed you always open Discord with this project, add it to workflow?"
+
+**Daily Commit Counter (Tracking productivity):**
+- Every time we fetch commits from GitHub, check the date
+- If commit was made TODAY (compare dates), add to dailyCount
+- Store in commits table like: projectId=1, date="2025-01-01", dailyCount=5
+- At midnight, reset dailyCount to 0 (can use a scheduled task or check on app startup)
+- Show user: "You've committed 5 times today!" in the project detail view
+
+**Tech Stack Detection (Figuring out what languages are used):**
+- GitHub API has an endpoint: /repos/:owner/:repo/languages
+- It returns something like: {"JavaScript": 45000, "CSS": 12000, "HTML": 8000}
+- The numbers are bytes of code
+- Convert to percentages and show: "JavaScript 69%, CSS 18%, HTML 13%"
+- Display in the project detail modal
+
+**README Parser (So AI can understand the project):**
+- Fetch README from GitHub: /repos/:owner/:repo/contents/README.md
+- For local projects, read the README.md file from the project folder
+- Send README text to AI with a prompt like:
+  "Based on this project description, generate 3-5 specific, actionable goals: [README content]"
+- Parse AI response and save to the goals table
+- If there's no README, AI generates generic goals based on tech stack
+
+**Setup Guide for Your Friend:**
+1. Learn Electron basics: https://www.electronjs.org/docs/latest/tutorial/quick-start
+2. Learn GitHub API: https://docs.github.com/en/rest/quickstart
+3. Learn SQLite with better-sqlite3: https://github.com/WiseLibs/better-sqlite3
+4. Pick an AI service and get API key (OpenAI is easiest to start)
+5. Set up Electron IPC for communication between React and Node.js
+
+**Testing Plan:**
+- First get GitHub OAuth working and display user profile pic
+- Then fetch one repo's data and display it
+- Set up SQLite and store one project manually
+- Get Electron file picker working
+- Test launching one app (like VS Code)
+- Then add AI features last (they're optional for MVP)
 
 Winter Hackathon 2025 Officially Open — Project Repository & Devpost Submission Instructions
 Dear Participants, @channel
