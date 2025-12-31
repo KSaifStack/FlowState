@@ -147,7 +147,7 @@ BACKEND:
 - Parse AI response and save to the goals table
 - If there's no README, AI generates generic goals based on tech stack
 
-**Setup Guide for Your Friend:**
+**Setup Guide for YOU:**
 1. Learn Electron basics: https://www.electronjs.org/docs/latest/tutorial/quick-start
 2. Learn GitHub API: https://docs.github.com/en/rest/quickstart
 3. Learn SQLite with better-sqlite3: https://github.com/WiseLibs/better-sqlite3
