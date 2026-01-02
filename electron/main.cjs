@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-
+// npm run electron:dev
 function createWindow() {
   const win = new BrowserWindow({
     width: 1100,
