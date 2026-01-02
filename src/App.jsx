@@ -58,10 +58,10 @@ function App() {
   ];
   return (
     <div className="app">
-      <TitleBar />  {/* <- custom window bar here */}
+      <TitleBar/>  
 <div className = "main-content">
   <div className ="left-panel ">
-    <div className ="greeting">Hey, <span className="username">[USER]</span>          </div>
+    <div className ="greeting">Hey, <span className="username">[USER]</span> </div>
     <p className ="Mess">
       It’s been a while since you’ve touched your <strong>CodingAssignment3.cpp</strong>, 
       why don’t we have a crack at it today?
@@ -69,17 +69,7 @@ function App() {
   <button className="bigbutton">
   Open <br/> CodingAssignment3.cpp
 </button>
-<div className="user-footer">
-    <img 
-      src="https://github.com/KsaifStack.png" 
-      alt="GitHub Profile" 
-      className="github-avatar"
-    />
-    <div className="user-info">
-      <div className="logged-in-text">Logged in as</div>
-      <div className="github-username">KsaifStack</div>
-    </div>
-    </div>
+
   </div>
   <div className="right-panel">
     <div className ="toolbar">

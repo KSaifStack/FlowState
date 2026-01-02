@@ -20,8 +20,8 @@ html, body, #root {
   overflow: hidden;
   padding: 14px;
   gap: 24px;
-  box-sizing: border-box;   /* ensures padding doesn’t overflow */
-  padding-top: 35px;       /* same height as title bar */
+  box-sizing: border-box;   
+  padding-top: 45px;       
 
 
 
@@ -79,6 +79,7 @@ html, body, #root {
   background-color: #333333;
   color: #eeeeee;
   border-radius: 4px;
+  margin-top: 80px;
   padding: 18px 20px;
   cursor: pointer;
   transition: all 0.2s;
@@ -181,6 +182,18 @@ html, body, #root {
   
 }
 
+#TitleImage {
+  margin-top: 10px;
+  width:65px;
+  height: 65px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  
+}
+
 .Trashbutton {
   background: transparent;
   border: none;
@@ -192,6 +205,12 @@ html, body, #root {
   border: none;
   cursor: pointer;
   padding: 8px;
+  transition: all 0.2s;
+}
+
+.Addbutton:hover{
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  background-color: #272727;
 }
 
 .Pinbutton{
@@ -199,6 +218,15 @@ html, body, #root {
   border: none;
   cursor: pointer;
   padding: 8px;
+}
+
+.Titlebutton {
+  margin-left: -26px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  
 }
 
 .sort-button {
@@ -246,6 +274,15 @@ button:focus,
 button:active {
   outline: none;           
 }
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.user-footer,
+.title-bar button {
+  -webkit-app-region: no-drag;
+}
 
 .title-bar .window-controls button {
   -webkit-app-region: no-drag;
@@ -253,9 +290,8 @@ button:active {
   border: none;
   color: white;
   font-size: 14px;
-  width: 32px;
-  height: 32px;
   cursor: pointer;
+  height: 35px;  
 }
 
 .title-bar .window-controls button:hover {
@@ -264,15 +300,14 @@ button:active {
 
 
 .user-footer {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-
-  margin-top: auto;  /* Push to bottom */
-  display: flex;
+ display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-top: 4px solid #ffffff;
-  background-color: #242424;
+  gap: 8px;           
+  height: 34px;
+  margin-right: 4px;
+  padding: 0 16px;     
+  margin-right: 4px;
+  background-color: transparent;
   border-radius: 4px;
   transition: all 0.2s;
 }
@@ -283,9 +318,9 @@ button:active {
 }
 
 .github-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;  
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
   border: 2px solid #f5f5f5;
 }
 
@@ -301,7 +336,7 @@ button:active {
 }
 
 .github-username {
-  font-size: 14px;
+  font-size: 13px;
   color: #f7f7f7;
   font-weight: 500;
 }

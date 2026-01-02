@@ -7,11 +7,12 @@ function createWindow() {
     height: 650,
     minWidth: 1100,
     minHeight: 650,
+    icon: path.join(__dirname, 'assets/images/logo.png'),
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
-      contextIsolation: true,  // safe
-      nodeIntegration: false,  // no remote needed
+      contextIsolation: true,  
+      nodeIntegration: false,  
     },
   });
 
