@@ -1,0 +1,115 @@
+﻿import { useState } from 'react';
+import TitleBar from './TitleBar.jsx';
+import './App.css'
+import darkPin from './assets/images/darkPin.png';
+import darkAdd from './assets/images/darkAdd.png';
+import darkTrash from './assets/images/darkTrash.png'
+function App() {
+    const projects = [
+        {
+            id: 1,
+            icon: '🎮',
+            iconClass: 'godot-icon',
+            ProjectType: 'Local Project',
+            title: 'The Amazing Gorgonzola',
+            subtitle: 'RPG Adventure',
+            date: 'Last Opened: Over 5 days ago',
+            status: ' Your at a good pace keep up the good work!',
+            isPinned: false,
+            workflow: ['VS Code', 'Godot Engine'],
+            path: '/Users/projects/gorgonzola',
+            commits: 47,
+            techStack: ['GDScript', 'Godot'],
+            goals: ['Complete level 3', 'Add sound effects', 'Test multiplayer']
+        },
+        {
+            id: 2,
+            icon: '⚠️',
+            iconClass: 'warning-icon-emoji',
+            ProjectType: 'Local Project',
+            title: 'CodingAssignment3.cpp',
+            subtitle: 'Portfolio Site',
+            date: 'Last Opened: Dec 15, 2024',
+            status: 'You have been commiting a lot overnight consider taking a break!',
+            isPinned: true,
+            workflow: ['VS Code'],
+            path: '/Users/projects/assignment3',
+            commits: 23,
+            techStack: ['C++'],
+            goals: ['Finish algorithm implementation', 'Add documentation']
+        },
+        {
+            id: 3,
+            icon: '💀',
+            iconClass: 'skull',
+            ProjectType: 'Local Project',
+            title: 'Christmas_Video_Project',
+            subtitle: 'Mobile App Prototype',
+            date: 'Last Opened: Nov 2, 2024',
+            status: 'You\'ve stopped working on this project for a while, maybe pick it up when you\'ve got a moment.',
+            isPinned: false,
+            workflow: ['DaVinci Resolve'],
+            path: '/Users/projects/christmas-video',
+            commits: 8,
+            techStack: ['Video Editing'],
+            goals: ['Render final cut', 'Add music']
+        },
+
+    ];
+    return (
+        <div className="app">
+            <TitleBar />
+            <div className="main-content">
+                <div className="left-panel ">
+                    <div className="greeting">Hey, <span className="username">[USER]</span> </div>
+                    <p className="Mess">
+                        It’s been a while since you’ve touched your <strong>CodingAssignment3.cpp</strong>,
+                        why don’t we have a crack at it today?
+                    </p>
+                    <button className="bigbutton">
+                        Open <br /> CodingAssignment3.cpp
+                    </button>
+
+                </div>
+                <div className="right-panel">
+                    <div className="toolbar">
+                        <div className="button-container">
+                            <button className="Addbutton">
+                                <img id="buttonImage" src={darkAdd} >
+                                </img>
+                            </button>
+
+
+                        </div>
+                        <button className="sort-button">
+                            Sort by: Name (A-Z) <span className="arrosw">▼</span>
+                        </button>
+                    </div>
+
+
+                    <div className="project-info">
+                        <div className="project-list">
+                            {projects.map(project => (
+                                <div key={project.id} className="project-card">
+                                    <div className={`project-icon ${project.iconClass}`}>
+                                        {project.icon}
+                                    </div>
+                                    <div className="project-info">
+                                        <div className="project-title">{project.title}</div>
+                                        <div className="project-type">{project.ProjectType}</div>
+                                        <div className="project-subtitle">{project.subtitle}</div>
+                                        <div className="project-date">{project.date}</div>
+                                        <div className="project-status">{project.status}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    )
+}
+
+export default App;

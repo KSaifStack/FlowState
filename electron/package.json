@@ -1,0 +1,21 @@
+{
+  "name": "flowstate-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env ELECTRON_DEV=1 electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "electron": "^39.2.7",
+    "wait-port": "^1.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

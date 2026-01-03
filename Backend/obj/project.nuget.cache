@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "IuH1yi2HYFY=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Princ\\source\\repos\\React\\JavaScript\\flowstate\\Backend\\Backend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Princ\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.9\\microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512",
+    "C:\\Users\\Princ\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

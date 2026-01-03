@@ -1,3 +1,5 @@
+# [IMPORTANT: PLEASE READ USAGE.md FOR IMPORTANT DETAILS.]
+
 # colorstackwinterhack2025-[FlowState]
 Theme is: Responsible AI
 FlowState is a Responsible AI-powered project assistant that supports—not replaces—human decision-making.
