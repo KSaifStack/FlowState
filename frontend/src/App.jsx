@@ -1,11 +1,12 @@
 ﻿import { useState } from 'react';
 import TitleBar from './TitleBar.jsx';
-import './App.css'
+import ProjectModalComponent from './ProjectModal.jsx'; 
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
 function App() {
-    const projects = [
+    const [selectedProject, setSelectedProject] = useState(null); 
+    const [projects, setProjects] = useState([ 
         {
             id: 1,
             icon: '🎮',
@@ -55,7 +56,24 @@ function App() {
             goals: ['Render final cut', 'Add music']
         },
 
-    ];
+    ]);
+    const handleProjectClick = (project) => {
+        setSelectedProject(project);
+    };
+
+    const closeModal = () => {
+        setSelectedProject(null);
+    };
+
+    const updateWorkflow = (projectId, newWorkflow) => {
+        setProjects(projects.map(p => 
+            p.id === projectId ? { ...p, workflow: newWorkflow } : p
+        ));
+        if (selectedProject && selectedProject.id === projectId) {
+            setSelectedProject({ ...selectedProject, workflow: newWorkflow });
+        }
+    };
+    
     return (
         <div className="app">
             <TitleBar />
@@ -90,7 +108,9 @@ function App() {
                     <div className="project-info">
                         <div className="project-list">
                             {projects.map(project => (
-                                <div key={project.id} className="project-card">
+                                <div key={project.id} className="project-card"
+                                onClick={() => handleProjectClick(project)} 
+                                >
                                     <div className={`project-icon ${project.iconClass}`}>
                                         {project.icon}
                                     </div>
@@ -107,6 +127,13 @@ function App() {
                     </div>
                 </div>
             </div>
+             {selectedProject && (
+                <ProjectModalComponent 
+                    project={selectedProject}
+                    onClose={closeModal}
+                    onUpdateWorkflow={updateWorkflow}
+                />
+            )}
         </div>
 
     )

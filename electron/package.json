@@ -12,6 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "all": "^0.0.0",
     "electron": "^39.2.7",
     "wait-port": "^1.1.0"
   },
