@@ -73,6 +73,15 @@ function App() {
             setSelectedProject({ ...selectedProject, workflow: newWorkflow });
         }
     };
+
+    const mostRecentProject = projects[0];
+    const openProjectById = (projectId) => {
+    const project = projects.find(p => p.id === projectId);
+    if (project) {
+        setSelectedProject(project);
+    }
+};
+
     
     return (
         <div className="app">
@@ -84,8 +93,9 @@ function App() {
                         It’s been a while since you’ve touched your <strong>CodingAssignment3.cpp</strong>,
                         why don’t we have a crack at it today?
                     </p>
-                    <button className="bigbutton">
-                        Open <br /> CodingAssignment3.cpp
+                    <button className="bigbutton" onClick={() => setSelectedProject(mostRecentProject)}
+>
+                        Open <br /> {mostRecentProject.title}
                     </button>
 
                 </div>
