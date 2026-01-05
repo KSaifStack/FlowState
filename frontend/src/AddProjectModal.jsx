@@ -1,0 +1,80 @@
+/**  NOTE: This is prob gonna be the hardest thing on my part depending how you want to handle this.
+     What I plan to do is have two windows open depending on what the user.
+
+     GITHUB BUTTON: will open a window with needed info for creating a project(simliar to docktask).
+     but the information will already be filled with information from the github.
+
+     LOCAL BUTTON: will open a window in the same format without the prefilled info.
+*/
+
+class AddProjectModal {
+    constructor(onClose, onUpdateWorkflow) {
+        this.onClose = onClose;
+        this.onUpdateWorkflow = onUpdateWorkflow;
+    }
+
+    openGithub() {
+        console.log("Opened Github link");
+        // TODO:
+        // - Prompt for GitHub URL
+        // - Fetch repo info
+        // - Auto-fill project fields using AI
+    }
+
+    openInFileManager() {
+        console.log("Opened file manager");
+        // TODO:
+        // - Electron: dialog.showOpenDialog
+        // - User manually fills in project info
+    }
+
+    render() {
+        return (
+            <div className="overlay" onClick={this.onClose}>
+                <div
+                    className="project-modal"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="modal-header">
+                        <h2 className="modal-title">Add New Project</h2>
+                        <button
+                            className="close-button"
+                            onClick={this.onClose}
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <div className="modal-content">
+                        <p className="modal-subtitle">
+                            Choose how you want to create your project
+                        </p>
+
+                        <div className="action-buttons vertical">
+                            <button
+                                className="secondary-action-btn"
+                                onClick={() => this.openGithub()}
+                            >
+                                Import from GitHub
+                            </button>
+
+                            <button
+                                className="secondary-action-btn"
+                                onClick={() => this.openInFileManager()}
+                            >
+                                Import from Local Folder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+function AddProjectModalComponent({ onClose, onUpdateWorkflow }) {
+    const modal = new AddProjectModal(onClose, onUpdateWorkflow);
+    return modal.render();
+}
+
+export default AddProjectModalComponent;
