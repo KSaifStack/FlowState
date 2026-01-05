@@ -63,6 +63,7 @@ async function createWindow() {
         webPreferences: {
             contextIsolation: true,
         },
+        frame: false
     });
 
     if (devMode) {
