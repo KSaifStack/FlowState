@@ -12,9 +12,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "all": "^0.0.0",
     "electron": "^39.2.7",
-    "wait-port": "^1.1.0"
+    "wait-port": "^1.1.0",
+    "cross-env": "^10.1.0"
   },
   "devDependencies": {
     "cross-env": "^10.1.0"
