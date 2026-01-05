@@ -1,4 +1,3 @@
-# [IMPORTANT: PLEASE READ USAGE.md FOR IMPORTANT DETAILS.]
 
 # colorstackwinterhack2025-[FlowState]
 FlowState is a project assistant that supports—not replaces—human decision-making.
