@@ -18,7 +18,7 @@ var app = builder.Build();
 app.UseCors("ReactDevPolicy");
 app.MapControllers();
 
-// ⚡ Force backend to run on a fixed port
+// Force backend to run on a fixed port
 var port = 5180;
 app.Urls.Clear();
 app.Urls.Add($"http://127.0.0.1:{port}");

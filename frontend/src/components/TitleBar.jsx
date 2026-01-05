@@ -1,5 +1,5 @@
-﻿import './App.css';
-import logo from './assets/images/logo.png';
+﻿import '../App.css';
+import logo from '../assets/images/logo.png';
 function TitleBar() {
     return (
         <div className="title-bar">

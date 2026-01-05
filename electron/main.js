@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+﻿const { ipcMain, app, BrowserWindow } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
 const waitPort = require("wait-port");
@@ -15,7 +15,7 @@ function getBackendPath() {
     const isLinux = process.platform === "linux";
 
     if (isWin) return path.join(__dirname, "backend-win", "Backend.exe");
-    if (isMac) return path.join(__dirname, "backend-mac", "Backend");
+    if (isMac) return path.join(__dirname, "backend-osx", "Backend");
     if (isLinux) return path.join(__dirname, "backend-linux", "Backend");
 
     throw new Error("Unsupported platform");
@@ -55,17 +55,19 @@ async function createWindow() {
         return;
     }
 
-    const win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1000,
         height: 800,
         webPreferences: {
             contextIsolation: true,
+            preload: path.join(__dirname, 'preload.js'),
         },
+        frame: false
     });
 
     if (devMode) {
         console.log("Loading React dev server...");
-        win.loadURL("http://localhost:5173");
+        mainWindow.loadURL("http://localhost:5173");
     } else {
         const indexPath = path.join(__dirname, "../frontend/dist/index.html");
         if (!fs.existsSync(indexPath)) {
@@ -74,13 +76,31 @@ async function createWindow() {
             return;
         }
         console.log("Loading production React build...");
-        win.loadFile(indexPath);
+        mainWindow.loadFile(indexPath);
     }
 }
 
-app.whenReady().then(() => {
-    createWindow();
-});
+let mainWindow;
+
+// 👇 SINGLETON LOCK
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+    // Another instance is already running → exit immediately
+    app.quit();
+} else {
+    // Fired when a second instance is launched
+    app.on("second-instance", () => {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore();
+            mainWindow.focus();
+        }
+    });
+}
+
+if (gotTheLock) {
+    app.whenReady().then(createWindow);
+}
 
 // Kill backend on exit
 app.on("quit", () => {
@@ -93,4 +113,20 @@ app.on("window-all-closed", () => {
 
 app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
+ipcMain.on('window-control', (event, action) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return;
+
+    switch (action) {
+        case 'minimize':
+            win.minimize();
+            break;
+        case 'maximize':
+            win.isMaximized() ? win.unmaximize() : win.maximize();
+            break;
+        case 'close':
+            win.close();
+            break;
+    }
 });

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+dotnet publish Backend -c Release -r osx-x64 --self-contained -o ./electron/backend-osx
+
+
 cd frontend && npm install && npm run dev &
 
 sleep 3
