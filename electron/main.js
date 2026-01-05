@@ -56,11 +56,12 @@ async function createWindow() {
     }
 
     mainWindow = new BrowserWindow({
-         width: 1100,
+        width: 1100,
         height: 650,
         minWidth: 1100,
         minHeight: 650,
         webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
         },
         frame: false
@@ -81,6 +82,8 @@ async function createWindow() {
         mainWindow.loadFile(indexPath);
     }
 }
+
+
 
 let mainWindow;
 
