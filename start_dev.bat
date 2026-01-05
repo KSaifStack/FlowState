@@ -6,6 +6,4 @@ REM Give React dev server a moment to start
 timeout /t 3 /nobreak >nul
 
 REM Start Electron
-cd electron
-npm install
-npm start
+start "" cmd /k "cd electron && npm install && npm start"
