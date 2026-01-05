@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react';
 import TitleBar from './components/TitleBar.jsx';
 import ProjectModalComponent from './components/ProjectModal.jsx';
-import AddProjectModalComponent from './AddProjectModal.jsx';
+import AddProjectModalComponent from './components/AddProjectModal.jsx';
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
