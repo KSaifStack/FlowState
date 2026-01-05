@@ -67,8 +67,9 @@ async function createWindow() {
     });
 
     if (devMode) {
-        console.log("Loading React dev server...");
+        console.log("Loading React via dev server...");
         mainWindow.loadURL("http://localhost:5173");
+        console.log("React was succcessfuly loaded from the dev server!");
     } else {
         const indexPath = path.join(__dirname, "../frontend/dist/index.html");
         if (!fs.existsSync(indexPath)) {
