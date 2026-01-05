@@ -1,12 +1,15 @@
 ﻿import { useState } from 'react';
 import TitleBar from './components/TitleBar.jsx';
-import ProjectModalComponent from './components/ProjectModal.jsx'; 
+import ProjectModalComponent from './components/ProjectModal.jsx';
+import AddProjectModalComponent from './AddProjectModal.jsx';
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
+
 function App() {
-    const [selectedProject, setSelectedProject] = useState(null); 
-    const [projects, setProjects] = useState([ 
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [projects, setProjects] = useState([
         {
             id: 1,
             icon: '🎮',
@@ -20,8 +23,10 @@ function App() {
             workflow: ['VS Code', 'Godot Engine'],
             path: '/Users/projects/gorgonzola',
             commits: 47,
+            dailyCommits: 3,
             techStack: ['GDScript', 'Godot'],
-            goals: ['Complete level 3', 'Add sound effects', 'Test multiplayer']
+            goals: ['Complete level 3', 'Add sound effects', 'Test multiplayer'],
+            insights: 'Consistent progress with regular commits. Focus on completing level 3 this week.'
         },
         {
             id: 2,
@@ -36,8 +41,10 @@ function App() {
             workflow: ['VS Code'],
             path: '/Users/projects/assignment3',
             commits: 23,
+            dailyCommits: 8,
             techStack: ['C++'],
-            goals: ['Finish algorithm implementation', 'Add documentation']
+            goals: ['Finish algorithm implementation', 'Add documentation'],
+            insights: 'High overnight activity detected. Consider taking breaks to avoid burnout.'
         },
         {
             id: 3,
@@ -52,17 +59,31 @@ function App() {
             workflow: ['DaVinci Resolve'],
             path: '/Users/projects/christmas-video',
             commits: 8,
+            dailyCommits: 0,
             techStack: ['Video Editing'],
-            goals: ['Render final cut', 'Add music']
+            goals: ['Render final cut', 'Add music'],
+            insights: 'Project inactive for over 60 days. Consider scheduling time to complete remaining tasks.'
         },
-
     ]);
+
     const handleProjectClick = (project) => {
         setSelectedProject(project);
     };
 
     const closeModal = () => {
         setSelectedProject(null);
+    };
+
+    const openAddModal = () => {
+        setShowAddModal(true);
+    };
+
+    const closeAddModal = () => {
+        setShowAddModal(false);
+    };
+
+    const addProject = (newProject) => {
+        setProjects([...projects, newProject]);
     };
 
     const updateWorkflow = (projectId, newWorkflow) => {
@@ -75,14 +96,14 @@ function App() {
     };
 
     const mostRecentProject = projects[0];
-    const openProjectById = (projectId) => {
-    const project = projects.find(p => p.id === projectId);
-    if (project) {
-        setSelectedProject(project);
-    }
-};
-
     
+    const openProjectById = (projectId) => {
+        const project = projects.find(p => p.id === projectId);
+        if (project) {
+            setSelectedProject(project);
+        }
+    };
+
     return (
         <div className="app">
             <TitleBar />
@@ -90,36 +111,32 @@ function App() {
                 <div className="left-panel ">
                     <div className="greeting">Hey, <span className="username">[USER]</span> </div>
                     <p className="Mess">
-                        It’s been a while since you’ve touched your <strong>CodingAssignment3.cpp</strong>,
-                        why don’t we have a crack at it today?
+                        It's been a while since you've touched your <strong>CodingAssignment3.cpp</strong>,
+                        why don't we have a crack at it today?
                     </p>
-                    <button className="bigbutton" onClick={() => setSelectedProject(mostRecentProject)}
->
+                    <button className="bigbutton" onClick={() => setSelectedProject(mostRecentProject)}>
                         Open <br /> {mostRecentProject.title}
                     </button>
-
                 </div>
                 <div className="right-panel">
                     <div className="toolbar">
                         <div className="button-container">
-                            <button className="Addbutton">
-                                <img id="buttonImage" src={darkAdd} >
-                                </img>
+                            <button className="Addbutton" onClick={openAddModal}>
+                                <img id="buttonImage" src={darkAdd} />
                             </button>
-
-
                         </div>
                         <button className="sort-button">
                             Sort by: Name (A-Z) <span className="arrosw">▼</span>
                         </button>
                     </div>
 
-
                     <div className="project-info">
                         <div className="project-list">
                             {projects.map(project => (
-                                <div key={project.id} className="project-card"
-                                onClick={() => handleProjectClick(project)} 
+                                <div 
+                                    key={project.id} 
+                                    className="project-card"
+                                    onClick={() => handleProjectClick(project)}
                                 >
                                     <div className={`project-icon ${project.iconClass}`}>
                                         {project.icon}
@@ -137,15 +154,20 @@ function App() {
                     </div>
                 </div>
             </div>
-             {selectedProject && (
+            {selectedProject && (
                 <ProjectModalComponent 
                     project={selectedProject}
                     onClose={closeModal}
                     onUpdateWorkflow={updateWorkflow}
                 />
             )}
+            {showAddModal && (
+                <AddProjectModalComponent 
+                    onClose={closeAddModal}
+                    onAddProject={addProject}
+                />
+            )}
         </div>
-
     )
 }
 
