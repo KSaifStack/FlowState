@@ -17,7 +17,7 @@ function App() {
             ProjectType: 'Local Project',
             title: 'The Amazing Gorgonzola',
             subtitle: 'RPG Adventure',
-            date: 'Last Opened: Over 5 days ago',
+            date: 'Last Opened: 5 days ago',
             status: 'Your at a good pace, keep up the good work!',
             isPinned: false,
             workflow: [
@@ -44,7 +44,7 @@ function App() {
             ProjectType: 'Local Project',
             title: 'CodingAssignment3.cpp',
             subtitle: 'Portfolio Site',
-            date: 'Last Opened: Dec 15, 2024',
+            date: 'Last Opened: 20 days ago',
             status: 'You have been committing a lot overnight, consider taking a break!',
             isPinned: true,
             workflow: [
@@ -67,7 +67,7 @@ function App() {
             ProjectType: 'Local Project',
             title: 'Christmas_Video_Project',
             subtitle: 'Mobile App Prototype',
-            date: 'Last Opened: Nov 2, 2024',
+            date: 'Last Opened: Over 2 months',
             status: 'You\'ve stopped working on this project for a while, maybe pick it up when you\'ve got a moment.',
             isPinned: false,
             workflow: [

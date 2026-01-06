@@ -121,7 +121,7 @@ openInFileManager() {
                              <button className = "path-button">...</button>
                             <p className="path-text">{this.project.path}</p>
                             </div> 
-                            <p className="pic" >💀</p>
+                            <p className="icon" >💀</p>
                             <div className="Directory-section">
                              <button className = "path-button">...</button>
                             <p className="path-text">{this.project.path}</p>
@@ -133,16 +133,17 @@ openInFileManager() {
 
                         <div className="model-stats">
                             <div className="stat-item">
-                                <div className="stat-value">{this.project.commits}</div>
                                 <div className="stat-label">Total Commits</div>
+                                <div className="stat-value">  {this.project.commits}</div>
                             </div>
                             <div className="stat-item">
-                                <div className="stat-value">{this.project.dailyCommits}</div>
                                 <div className="stat-label">Daily Commits</div>
+                                <div className="stat-value">{this.project.dailyCommits}</div>
                             </div>
                             <div className="stat-item">
-                                <div className="stat-value">{this.project.date.replace('Last Opened: ', '')}</div>
                                 <div className="stat-label">Last Opened</div>
+                                <div className="stat-value">{this.project.date.replace('Last Opened: ', '>')}</div>
+                                
                             </div>
                         </div>
 
