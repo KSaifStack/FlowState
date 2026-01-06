@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
-public class WeatherController : ControllerBase
+public class ProjDirectoryController : ControllerBase
 {
     [HttpGet]
     public IActionResult Get()
