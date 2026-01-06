@@ -1,12 +1,7 @@
 ﻿import { useState } from 'react';
 import TitleBar from './components/TitleBar.jsx';
-<<<<<<< Updated upstream
-import ProjectModalComponent from './components/ProjectModal.jsx';
-import AddProjectModalComponent from './components/AddProjectModal.jsx';
-=======
 import ProjectModelComponent from './components/ProjectModel.jsx';
-import AddProjectModelComponent from './AddProjectModel.jsx';
->>>>>>> Stashed changes
+import AddProjectModelComponent from './components/AddProjectModel.jsx';
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
