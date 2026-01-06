@@ -106,14 +106,20 @@ openInFileManager() {
                         
                         <div className = "model-section">
                             <h3>Project config</h3>
-                            <p className="text">apple</p>      
+                            <p className="text">Project Main Directory</p>
+                            <div className="Directory-section">
+                             <p className = "File Mana">...</p>
+                            <p className="path-text">{this.project.path}</p>
+                            </div> 
+                            <p className="pic" >💀</p>
+                            <div className="Directory-section">
+                             <p className = "File Mana">...</p>
+                            <p className="path-text">{this.project.path}</p>
+                            </div> 
                         </div>
 
                         
-                        <div className="model-section">
-                            <p className="path-text">{this.project.path}</p>
-                            <p className = "Fil ">...</p>
-                        </div>
+                        
 
                         <div className="model-stats">
                             <div className="stat-item">
