@@ -222,8 +222,3 @@ async function sendPathBackend(path) {
 }
 
 export default ProjectModelComponent;
-
-
-
-
-export default ProjectModelComponent;
