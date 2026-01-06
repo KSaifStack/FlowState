@@ -1,27 +1,27 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
+var builder = WebApplication.CreateBuilder(args);
+
+// Add controllers
 builder.Services.AddControllers();
 
-// CORS for React dev server
+// Enable CORS so frontend at 5180 can fetch
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ReactDevPolicy", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+              .AllowAnyMethod());
 });
 
 var app = builder.Build();
 
-app.UseCors("ReactDevPolicy");
+// Middleware
+app.UseCors();
+app.UseHttpsRedirection();
+app.UseAuthorization();
 app.MapControllers();
 
-// Force backend to run on a fixed port
-var port = 5180;
-app.Urls.Clear();
-app.Urls.Add($"http://127.0.0.1:{port}");
-
-app.Logger.LogInformation("Backend starting on port {Port}", port);
 app.Run();

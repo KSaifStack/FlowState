@@ -1,4 +1,4 @@
-﻿const { ipcMain, app, BrowserWindow } = require("electron");
+﻿const { ipcMain, app, BrowserWindow, dialog } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
 const waitPort = require("wait-port");
@@ -8,12 +8,12 @@ let backendProcess;
 
 const BACKEND_PORT = 5180;
 
-// Detect OS and backend path
+// Detect OS 
+const isWin = process.platform === "win32";
+const isMac = process.platform === "darwin";
+const isLinux = process.platform === "linux";
 function getBackendPath() {
-    const isWin = process.platform === "win32";
-    const isMac = process.platform === "darwin";
-    const isLinux = process.platform === "linux";
-
+    // Detect backend path
     if (isWin) return path.join(__dirname, "backend-win", "Backend.exe");
     if (isMac) return path.join(__dirname, "backend-osx", "Backend");
     if (isLinux) return path.join(__dirname, "backend-linux", "Backend");
@@ -24,7 +24,7 @@ function getBackendPath() {
 function startBackend() {
     const backendPath = getBackendPath();
 
-    backendProcess = spawn(backendPath, [], { stdio: "inherit" });
+    backendProcess = spawn(backendPath, ["--urls", `http://127.0.0.1:${BACKEND_PORT}`], { stdio: "inherit" });
 
     backendProcess.on("exit", (code) => {
         console.log(`Backend exited with code ${code}`);
@@ -34,6 +34,7 @@ function startBackend() {
         console.error("Failed to start backend:", err);
     });
 }
+
 
 // Detect if React dev server is running
 async function isDevServerRunning() {
@@ -134,4 +135,29 @@ ipcMain.on('window-control', (event, action) => {
             win.close();
             break;
     }
+});
+
+ipcMain.handle("open-exe-dialog", async () => {
+    const result = await dialog.showOpenDialog({
+        properties: ["openFile"],
+        filters: [
+            { name: "Executables/Shortcuts", extensions: ["exe", "lnk"] },
+            { name: "All Files", extensions: ["*"] }
+        ]
+    });
+
+    if (result.canceled) return null;
+    return result.filePaths[0];
+});
+
+ipcMain.handle("open-directory-dialog", async () => {
+    const result = await dialog.showOpenDialog({
+        properties: ["openDirectory"]
+    });
+
+    if (result.canceled || result.filePaths.length === 0) {
+        return null;
+    }
+
+    return result.filePaths[0];
 });

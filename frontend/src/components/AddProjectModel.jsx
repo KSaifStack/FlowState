@@ -21,11 +21,13 @@ class AddProjectModel {
         // - Auto-fill project fields using AI
     }
 
-    openInFileManager() {
+    async openInFileManager() {
         console.log("Opened file manager");
-        // TODO:
-        // - Electron: dialog.showOpenDialog
-        // - User manually fills in project info
+
+        const path = await window.electronAPI.openDirectoryDialog();
+        if (!path) return;
+
+        console.log("Selected folder:", path);
     }
 
     render() {
