@@ -19,13 +19,20 @@ openInFileManager() {
     // - Electron: shell.openPath(this.project.path)
 }
 
-    addWorkflowItem() {
-        const newItem = prompt('Enter workflow tool:');
-        if (newItem && newItem.trim()) {
-            const newWorkflow = [...this.project.workflow, newItem.trim()];
+    async addWorkflowItem() {
+        try {
+            const newItemPath = await window.electronAPI.openExeDialog();
+            if (!newItemPath) return;
+
+            const toolInfo = await sendPathBackend(newItemPath);
+
+            const newWorkflow = [...this.project.workflow, toolInfo];
             this.onUpdateWorkflow(this.project.id, newWorkflow);
+        } catch (err) {
+            console.error("Failed to add workflow item:", err);
         }
     }
+
 
     removeWorkflowItem(index) {
         const newWorkflow = this.project.workflow.filter((_, i) => i !== index);
@@ -79,7 +86,8 @@ openInFileManager() {
                             <div className="workflow-list">
                                 {this.project.workflow.map((tool, idx) => (
                                     <div key={idx} className="workflow-item">
-                                        <span>{tool}</span>
+                                        <span>{tool.name}</span>
+                                        <span>{tool.path}</span>
                                         <button 
                                             className="remove-btn"
                                             onClick={() => this.removeWorkflowItem(idx)}
@@ -140,5 +148,27 @@ function ProjectModelComponent({ project, onClose, onUpdateWorkflow }) {
     const model = new ProjectModel(project, onClose, onUpdateWorkflow);
     return model.render();
 }
+
+async function sendPathBackend(path) {
+    const response = await fetch(
+        "http://127.0.0.1:5180/api/projdirectory/send", // backend port
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ path })
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Backend request failed");
+    }
+
+    return await response.json();
+}
+
+
+
+
+
 
 export default ProjectModelComponent;

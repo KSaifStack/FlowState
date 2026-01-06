@@ -24,7 +24,7 @@ function getBackendPath() {
 function startBackend() {
     const backendPath = getBackendPath();
 
-    backendProcess = spawn(backendPath, [], { stdio: "inherit" });
+    backendProcess = spawn(backendPath, ["--urls", `http://127.0.0.1:${BACKEND_PORT}`], { stdio: "inherit" });
 
     backendProcess.on("exit", (code) => {
         console.log(`Backend exited with code ${code}`);
@@ -34,6 +34,7 @@ function startBackend() {
         console.error("Failed to start backend:", err);
     });
 }
+
 
 // Detect if React dev server is running
 async function isDevServerRunning() {

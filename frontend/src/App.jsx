@@ -18,9 +18,18 @@ function App() {
             title: 'The Amazing Gorgonzola',
             subtitle: 'RPG Adventure',
             date: 'Last Opened: Over 5 days ago',
-            status: ' Your at a good pace keep up the good work!',
+            status: 'Your at a good pace, keep up the good work!',
             isPinned: false,
-            workflow: ['VS Code', 'Godot Engine'],
+            workflow: [
+                {
+                    name: 'VS Code',
+                    path: 'C:/Applications/VSCode'
+                },
+                {
+                    name: 'Godot Engine',
+                    path: 'C:/Applications/Godot'
+                }
+            ],
             path: '/Users/projects/gorgonzola',
             commits: 47,
             dailyCommits: 3,
@@ -36,9 +45,11 @@ function App() {
             title: 'CodingAssignment3.cpp',
             subtitle: 'Portfolio Site',
             date: 'Last Opened: Dec 15, 2024',
-            status: 'You have been commiting a lot overnight consider taking a break!',
+            status: 'You have been committing a lot overnight, consider taking a break!',
             isPinned: true,
-            workflow: ['VS Code'],
+            workflow: [
+                { name: 'VS Code', path: '/Applications/VSCode' }
+            ],
             path: '/Users/projects/assignment3',
             commits: 23,
             dailyCommits: 8,
@@ -56,15 +67,18 @@ function App() {
             date: 'Last Opened: Nov 2, 2024',
             status: 'You\'ve stopped working on this project for a while, maybe pick it up when you\'ve got a moment.',
             isPinned: false,
-            workflow: ['DaVinci Resolve'],
+            workflow: [
+                { name: 'DaVinci Resolve', path: '/Applications/DaVinciResolve' }
+            ],
             path: '/Users/projects/christmas-video',
             commits: 8,
             dailyCommits: 0,
             techStack: ['Video Editing'],
             goals: ['Render final cut', 'Add music'],
             insights: 'Project inactive for over 60 days. Consider scheduling time to complete remaining tasks.'
-        },
+        }
     ]);
+
 
     const handleProjectClick = (project) => {
         setSelectedProject(project);
