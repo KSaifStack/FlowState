@@ -103,10 +103,16 @@ openInFileManager() {
                                 ))}
                             </ul>
                         </div>
+                        
+                        <div className = "model-section">
+                            <h3>Project config</h3>
+                            <p className="text">apple</p>      
+                        </div>
 
+                        
                         <div className="model-section">
-                            <h3>Insights (AI)</h3>
-                            <p className="insights-text">{this.project.insights}</p>
+                            <p className="path-text">{this.project.path}</p>
+                            <p className = "Fil ">...</p>
                         </div>
 
                         <div className="model-stats">
@@ -124,8 +130,9 @@ openInFileManager() {
                             </div>
                         </div>
 
-                        <div className="model-section">
-                            <p className="path-text">{this.project.path}</p>
+                         <div className="model-section">
+                            <h3>Insights (AI)</h3>
+                            <p className="insights-text">{this.project.insights}</p>
                         </div>
                     </div>
                 </div>
