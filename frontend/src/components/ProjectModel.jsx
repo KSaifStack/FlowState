@@ -18,6 +18,13 @@ class ProjectModel {
         // TODO:
         // - Electron: shell.openPath(this.project.path)
     }
+    
+    changeFilePath() {
+    console.log("Open in file manager to change path:", this.project.path);
+    // TODO:
+    // - Electron: implement file/folder selection dialog
+}
+
 
     async addWorkflowItem() {
         try {
@@ -157,7 +164,7 @@ class ProjectModel {
                             <div className="Directory-section">
                                 <button
                                     className="path-button"
-                                    onClick={() => this.openInFileManager()}
+                                    onClick={() => this.changeFilePath()}
                                 >
                                     ...
                                 </button>
