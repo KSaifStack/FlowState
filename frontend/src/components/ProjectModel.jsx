@@ -166,9 +166,4 @@ async function sendPathBackend(path) {
     return await response.json();
 }
 
-
-
-
-
-
 export default ProjectModelComponent;
