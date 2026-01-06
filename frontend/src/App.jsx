@@ -1,14 +1,19 @@
 ﻿import { useState } from 'react';
 import TitleBar from './components/TitleBar.jsx';
+<<<<<<< Updated upstream
 import ProjectModalComponent from './components/ProjectModal.jsx';
 import AddProjectModalComponent from './components/AddProjectModal.jsx';
+=======
+import ProjectModelComponent from './components/ProjectModel.jsx';
+import AddProjectModelComponent from './AddProjectModel.jsx';
+>>>>>>> Stashed changes
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
 
 function App() {
     const [selectedProject, setSelectedProject] = useState(null);
-    const [showAddModal, setShowAddModal] = useState(false);
+    const [showAddModel, setShowAddModel] = useState(false);
     const [projects, setProjects] = useState([
         {
             id: 1,
@@ -70,16 +75,16 @@ function App() {
         setSelectedProject(project);
     };
 
-    const closeModal = () => {
+    const closeModel = () => {
         setSelectedProject(null);
     };
 
-    const openAddModal = () => {
-        setShowAddModal(true);
+    const openAddModel = () => {
+        setShowAddModel(true);
     };
 
-    const closeAddModal = () => {
-        setShowAddModal(false);
+    const closeAddModel = () => {
+        setShowAddModel(false);
     };
 
     const addProject = (newProject) => {
@@ -121,7 +126,7 @@ function App() {
                 <div className="right-panel">
                     <div className="toolbar">
                         <div className="button-container">
-                            <button className="Addbutton" onClick={openAddModal}>
+                            <button className="Addbutton" onClick={openAddModel}>
                                 <img id="buttonImage" src={darkAdd} />
                             </button>
                         </div>
@@ -155,15 +160,15 @@ function App() {
                 </div>
             </div>
             {selectedProject && (
-                <ProjectModalComponent 
+                <ProjectModelComponent 
                     project={selectedProject}
-                    onClose={closeModal}
+                    onClose={closeModel}
                     onUpdateWorkflow={updateWorkflow}
                 />
             )}
-            {showAddModal && (
-                <AddProjectModalComponent 
-                    onClose={closeAddModal}
+            {showAddModel && (
+                <AddProjectModelComponent 
+                    onClose={closeAddModel}
                     onAddProject={addProject}
                 />
             )}

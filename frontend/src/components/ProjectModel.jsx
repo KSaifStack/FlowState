@@ -1,4 +1,4 @@
-class ProjectModal {
+class ProjectModel {
     constructor(project, onClose, onUpdateWorkflow) {
         this.project = project;
         this.onClose = onClose;
@@ -33,13 +33,13 @@ openInFileManager() {
     render() {
         return (
             <div className="overlay" onClick={this.onClose}>
-                <div className="project-modal" onClick={(e) => e.stopPropagation()}>
-                   <div className="modal-header">
-    <div className="modal-icon">{this.project.icon}</div>
+                <div className="project-model" onClick={(e) => e.stopPropagation()}>
+                   <div className="model-header">
+    <div className="model-icon">{this.project.icon}</div>
 
-    <div className="modal-header-content">
-        <h2 className="modal-title">{this.project.title}</h2>
-        <p className="modal-subtitle">{this.project.subtitle}</p>
+    <div className="model-header-content">
+        <h2 className="model-title">{this.project.title}</h2>
+        <p className="model-subtitle">{this.project.subtitle}</p>
 
         <div className="header-action-buttons">
             <button
@@ -62,8 +62,8 @@ openInFileManager() {
 </div>
 
 
-                    <div className="modal-content">
-                        <div className="modal-section">
+                    <div className="model-content">
+                        <div className="model-section">
                             <h3>Tech Stack</h3>
                             <div className="tags">
                                 {this.project.techStack.map((tech, idx) => (
@@ -72,7 +72,7 @@ openInFileManager() {
                             </div>
                         </div>
 
-                        <div className="modal-section">
+                        <div className="model-section">
                             <h3>Workflow</h3>
                             <div className="workflow-list">
                                 {this.project.workflow.map((tool, idx) => (
@@ -95,7 +95,7 @@ openInFileManager() {
                             </div>
                         </div>
 
-                        <div className="modal-section">
+                        <div className="model-section">
                             <h3>Goals (AI)</h3>
                             <ul className="goals-list">
                                 {this.project.goals.map((goal, idx) => (
@@ -104,12 +104,12 @@ openInFileManager() {
                             </ul>
                         </div>
 
-                        <div className="modal-section">
+                        <div className="model-section">
                             <h3>Insights (AI)</h3>
                             <p className="insights-text">{this.project.insights}</p>
                         </div>
 
-                        <div className="modal-stats">
+                        <div className="model-stats">
                             <div className="stat-item">
                                 <div className="stat-value">{this.project.commits}</div>
                                 <div className="stat-label">Total Commits</div>
@@ -124,7 +124,7 @@ openInFileManager() {
                             </div>
                         </div>
 
-                        <div className="modal-section">
+                        <div className="model-section">
                             <p className="path-text">{this.project.path}</p>
                         </div>
                     </div>
@@ -134,9 +134,9 @@ openInFileManager() {
     }
 }
 
-function ProjectModalComponent({ project, onClose, onUpdateWorkflow }) {
-    const modal = new ProjectModal(project, onClose, onUpdateWorkflow);
-    return modal.render();
+function ProjectModelComponent({ project, onClose, onUpdateWorkflow }) {
+    const model = new ProjectModel(project, onClose, onUpdateWorkflow);
+    return model.render();
 }
 
-export default ProjectModalComponent;
+export default ProjectModelComponent;

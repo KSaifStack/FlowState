@@ -139,7 +139,7 @@ BACKEND:
 - It returns something like: {"JavaScript": 45000, "CSS": 12000, "HTML": 8000}
 - The numbers are bytes of code
 - Convert to percentages and show: "JavaScript 69%, CSS 18%, HTML 13%"
-- Display in the project detail modal
+- Display in the project detail model
 
 **README Parser (So AI can understand the project):**
 - Fetch README from GitHub: /repos/:owner/:repo/contents/README.md

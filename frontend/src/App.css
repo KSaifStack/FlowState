@@ -351,7 +351,7 @@ button:active {
     z-index: 3000;
 }
 
-.project-modal {
+.project-model {
     background: #1e1e1e;
     border-radius: 10px;
     padding: 32px;
@@ -368,7 +368,7 @@ button:active {
     z-index: 3000;
 }
 
-.project-modal {
+.project-model {
     background: #1e1e1e;
     border-radius: 12px;
     width: 540px;
@@ -379,23 +379,23 @@ button:active {
     border: 1px solid #2f2f2f;
 }
 
-.modal-header {
+.model-header {
     display: flex;
     align-items: center;
     gap: 16px;
     margin-bottom: 28px;
 }
 
-.modal-icon {
+.model-icon {
     font-size: 48px;
 }
 
-.modal-title {
+.model-title {
     font-size: 26px;
     font-weight: 600;
 }
 
-.modal-subtitle {
+.model-subtitle {
     font-size: 16px;
     color: #b0b0b0;
 }
@@ -414,13 +414,13 @@ button:active {
     color: #ffffff;
 }
 
-.modal-content {
+.model-content {
     display: flex;
     flex-direction: column;
     gap: 26px;
 }
 
-.modal-section h3 {
+.model-section h3 {
     font-size: 18px;
     margin-bottom: 10px;
     color: #eaeaea;
@@ -501,7 +501,7 @@ button:active {
     color: #cfcfcf;
 }
 
-.modal-stats {
+.model-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
@@ -532,7 +532,7 @@ button:active {
     word-break: break-all;
 }
 
-.modal-header-content {
+.model-header-content {
     display: flex;
     flex-direction: column;
     gap: 6px;
