@@ -23,14 +23,14 @@ function App() {
             workflow: [
                 {
                     name: 'VS Code',
-                    path: 'C:/Applications/VSCode'
+                    path: 'C:\\Applications\\VSCode.exe'
                 },
                 {
                     name: 'Godot Engine',
-                    path: 'C:/Applications/Godot'
+                    path: 'C:\\Applications\\Godot.exe'
                 }
             ],
-            path: '/Users/projects/gorgonzola',
+            path: 'C:\\Users\\projects\\gorgonzola',
             commits: 47,
             dailyCommits: 3,
             techStack: ['GDScript', 'Godot'],
@@ -48,9 +48,12 @@ function App() {
             status: 'You have been committing a lot overnight, consider taking a break!',
             isPinned: true,
             workflow: [
-                { name: 'VS Code', path: '/Applications/VSCode' }
+                {
+                    name: 'VS Code',
+                    path: 'C:\\Applications\\Code.exe'
+                }
             ],
-            path: '/Users/projects/assignment3',
+            path: 'C:\\Users\\projects\\assignment3',
             commits: 23,
             dailyCommits: 8,
             techStack: ['C++'],
@@ -68,9 +71,12 @@ function App() {
             status: 'You\'ve stopped working on this project for a while, maybe pick it up when you\'ve got a moment.',
             isPinned: false,
             workflow: [
-                { name: 'DaVinci Resolve', path: '/Applications/DaVinciResolve' }
+                {
+                    name: 'DaVinci Resolve',
+                    path: 'C:\\Applications\\DaVinciResolve.exe'
+                }
             ],
-            path: '/Users/projects/christmas-video',
+            path: 'C:\\Users\\projects\\christmas-video',
             commits: 8,
             dailyCommits: 0,
             techStack: ['Video Editing'],
