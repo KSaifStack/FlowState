@@ -1,4 +1,4 @@
-
+import dummyIcon from '../assets/images/defaultProj.png';
 
 class ProjectModel {
     constructor(project, onClose, onUpdateWorkflow) {
@@ -8,16 +8,16 @@ class ProjectModel {
     }
 
     openWorkflow() {
-    console.log("Open workflow for:", this.project);
-    // TODO:
-    // - Electron: ipcRenderer.send("open-workflow", this.project.path)
-}
+        console.log("Open workflow for:", this.project);
+        // TODO:
+        // - Electron: ipcRenderer.send("open-workflow", this.project.path)
+    }
 
-openInFileManager() {
-    console.log("Open in file manager:", this.project.path);
-    // TODO:
-    // - Electron: shell.openPath(this.project.path)
-}
+    openInFileManager() {
+        console.log("Open in file manager:", this.project.path);
+        // TODO:
+        // - Electron: shell.openPath(this.project.path)
+    }
 
     async addWorkflowItem() {
         try {
@@ -25,14 +25,12 @@ openInFileManager() {
             if (!newItemPath) return;
 
             const toolInfo = await sendPathBackend(newItemPath);
-
             const newWorkflow = [...this.project.workflow, toolInfo];
             this.onUpdateWorkflow(this.project.id, newWorkflow);
         } catch (err) {
             console.error("Failed to add workflow item:", err);
         }
     }
-
 
     removeWorkflowItem(index) {
         const newWorkflow = this.project.workflow.filter((_, i) => i !== index);
@@ -42,41 +40,56 @@ openInFileManager() {
     render() {
         return (
             <div className="overlay" onClick={this.onClose}>
-                <div className="project-model" onClick={(e) => e.stopPropagation()}>
-                   <div className="model-header">
-    <div className="model-icon">{this.project.icon}</div>
+                <div
+                    className="project-model"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        className="close-button"
+                        onClick={this.onClose}
+                    >
+                        ×
+                    </button>
 
-    <div className="model-header-content">
-        <h2 className="model-title">{this.project.title}</h2>
-        <p className="model-subtitle">{this.project.subtitle}</p>
+                    <div className="model-header">
+                        <div className="model-icon">
+                            <img
+                                src={this.project.icon || dummyIcon}
+                                alt="Project icon"
+                                className="model-icon-img"
+                            />
+                        </div>
 
-        <div className="header-action-buttons">
-            <button
-                className="primary-action-btn"
-                onClick={() => this.openWorkflow()}
-            >
-                Open Workflow
-            </button>
+                        <div className="model-header-content">
+                            <h2 className="model-title">{this.project.title}</h2>
+                            <p className="model-subtitle">{this.project.subtitle}</p>
 
-            <button
-                className="secondary-action-btn"
-                onClick={() => this.openInFileManager()}
-            >
-                Open in File Manager
-            </button>
-        </div>
-    </div>
+                            <div className="header-action-buttons">
+                                <button
+                                    className="primary-action-btn"
+                                    onClick={() => this.openWorkflow()}
+                                >
+                                    Open Workflow
+                                </button>
 
-    <button className="close-button" onClick={this.onClose}>×</button>
-</div>
-
+                                <button
+                                    className="secondary-action-btn"
+                                    onClick={() => this.openInFileManager()}
+                                >
+                                    Open in File Manager
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                     <div className="model-content">
                         <div className="model-section">
                             <h3>Tech Stack</h3>
                             <div className="tags">
                                 {this.project.techStack.map((tech, idx) => (
-                                    <span key={idx} className="tag">{tech}</span>
+                                    <span key={idx} className="tag">
+                                        {tech}
+                                    </span>
                                 ))}
                             </div>
                         </div>
@@ -86,17 +99,41 @@ openInFileManager() {
                             <div className="workflow-list">
                                 {this.project.workflow.map((tool, idx) => (
                                     <div key={idx} className="workflow-item">
-                                        <span>{tool.name}</span>
-                                        <span>{tool.path}</span>
-                                        <button 
-                                            className="remove-btn"
-                                            onClick={() => this.removeWorkflowItem(idx)}
-                                        >
-                                            ×
-                                        </button>
+                                        <div className="workflow-icon">
+                                            <img
+                                                src={tool.icon || dummyIcon}
+                                                alt={tool.name}
+                                            />
+                                        </div>
+
+                                        <div className="workflow-info">
+                                            <div className="workflow-header">
+                                                <span className="workflow-name">{tool.name}</span>
+                                                <button
+                                                    className="remove-btn"
+                                                    onClick={() => this.removeWorkflowItem(idx)}
+                                                >
+                                                    ×
+                                                </button>
+                                            </div>
+                                            <span className="workflow-path">{tool.path}</span>
+                                        </div>
                                     </div>
                                 ))}
-                                <button 
+
+                                {this.project.workflow.length === 0 && (
+                                    <p
+                                        style={{
+                                            color: '#888',
+                                            fontSize: '14px',
+                                            fontStyle: 'italic'
+                                        }}
+                                    >
+                                        No workflow tools added yet
+                                    </p>
+                                )}
+
+                                <button
                                     className="add-workflow-btn"
                                     onClick={() => this.addWorkflowItem()}
                                 >
@@ -113,37 +150,41 @@ openInFileManager() {
                                 ))}
                             </ul>
                         </div>
-                        
-                        <div className = "model-section">
-                            <h3>Project Configuration </h3>
+
+                        <div className="model-section">
+                            <h3>Project Configuration</h3>
                             <p className="text">Project Main Directory</p>
                             <div className="Directory-section">
-                             <button className = "path-button">...</button>
-                            <p className="path-text">{this.project.path}</p>
-                            </div> 
-                            
+                                <button
+                                    className="path-button"
+                                    onClick={() => this.openInFileManager()}
+                                >
+                                    ...
+                                </button>
+                                <p className="path-text">{this.project.path}</p>
+                            </div>
                         </div>
-
-                        
-                        
 
                         <div className="model-stats">
                             <div className="stat-item">
                                 <div className="stat-label">Total Commits</div>
-                                <div className="stat-value">  {this.project.commits}</div>
+                                <div className="stat-value">{this.project.commits}</div>
                             </div>
+
                             <div className="stat-item">
                                 <div className="stat-label">Daily Commits</div>
                                 <div className="stat-value">{this.project.dailyCommits}</div>
                             </div>
+
                             <div className="stat-item">
                                 <div className="stat-label">Last Opened</div>
-                                <div className="stat-value">{this.project.date.replace('Last Opened: ', '>')}</div>
-                                
+                                <div className="stat-value">
+                                    {this.project.date.replace("Last Opened: ", ">")}
+                                </div>
                             </div>
                         </div>
 
-                         <div className="model-section">
+                        <div className="model-section">
                             <h3>Insights (AI)</h3>
                             <p className="insights-text">{this.project.insights}</p>
                         </div>
@@ -160,14 +201,11 @@ function ProjectModelComponent({ project, onClose, onUpdateWorkflow }) {
 }
 
 async function sendPathBackend(path) {
-    const response = await fetch(
-        "http://127.0.0.1:5180/api/projdirectory/send", // backend port
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ path })
-        }
-    );
+    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path }),
+    });
 
     if (!response.ok) {
         throw new Error("Backend request failed");
@@ -175,10 +213,5 @@ async function sendPathBackend(path) {
 
     return await response.json();
 }
-
-
-
-
-
 
 export default ProjectModelComponent;

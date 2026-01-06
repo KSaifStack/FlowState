@@ -5,6 +5,7 @@ import AddProjectModelComponent from './components/AddProjectModel.jsx';
 import darkPin from './assets/images/darkPin.png';
 import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png'
+import dummyIcon from './assets/images/defaultProj.png'
 
 function App() {
     const [selectedProject, setSelectedProject] = useState(null);
@@ -12,7 +13,7 @@ function App() {
     const [projects, setProjects] = useState([
         {
             id: 1,
-            icon: '🎮',
+            icon: dummyIcon,
             iconClass: 'godot-icon',
             ProjectType: 'Local Project',
             title: 'The Amazing Gorgonzola',
@@ -39,7 +40,7 @@ function App() {
         },
         {
             id: 2,
-            icon: '⚠️',
+            icon: dummyIcon,
             iconClass: 'warning-icon-emoji',
             ProjectType: 'Local Project',
             title: 'CodingAssignment3.cpp',
@@ -62,7 +63,7 @@ function App() {
         },
         {
             id: 3,
-            icon: '💀',
+            icon: dummyIcon,
             iconClass: 'skull',
             ProjectType: 'Local Project',
             title: 'Christmas_Video_Project',
@@ -131,7 +132,7 @@ function App() {
                 <div className="left-panel ">
                     <div className="greeting">Hey, <span className="username">[USER]</span> </div>
                     <p className="Mess">
-                        It's been a while since you've touched your <strong>CodingAssignment3.cpp</strong>,
+                        It's been a while since you've touched <strong>{mostRecentProject.title}</strong>,
                         why don't we have a crack at it today?
                     </p>
                     <button className="bigbutton" onClick={() => setSelectedProject(mostRecentProject)}>
@@ -158,9 +159,9 @@ function App() {
                                     className="project-card"
                                     onClick={() => handleProjectClick(project)}
                                 >
-                                    <div className={`project-icon ${project.iconClass}`}>
-                                        {project.icon}
-                                    </div>
+                                    <div className="project-icon">
+                                        <img src={project.icon} alt="Project icon"/>
+                                        </div>
                                     <div className="project-info">
                                         <div className="project-title">{project.title}</div>
                                         <div className="project-type">{project.ProjectType}</div>
