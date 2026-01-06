@@ -105,15 +105,15 @@ openInFileManager() {
                         </div>
                         
                         <div className = "model-section">
-                            <h3>Project config</h3>
+                            <h3>Project Configuration </h3>
                             <p className="text">Project Main Directory</p>
                             <div className="Directory-section">
-                             <p className = "File Mana">...</p>
+                             <button className = "path-button">...</button>
                             <p className="path-text">{this.project.path}</p>
                             </div> 
                             <p className="pic" >💀</p>
                             <div className="Directory-section">
-                             <p className = "File Mana">...</p>
+                             <button className = "path-button">...</button>
                             <p className="path-text">{this.project.path}</p>
                             </div> 
                         </div>

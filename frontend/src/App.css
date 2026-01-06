@@ -506,6 +506,23 @@ button:active {
     line-height: 1.6;
     color: #cfcfcf;
 }
+.path-button{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 4px;
+    padding: 0 16px;
+    margin-right: 4px;
+    background-color: transparent;
+    border-radius: 4px;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+
+.Directory-section{
+    display: flex;
+    
+}
 
 .model-stats {
     display: grid;
@@ -536,6 +553,7 @@ button:active {
     font-size: 13px;
     color: #888;
     word-break: break-all;
+    margin-bottom: 10px;
 }
 
 .model-header-content {
