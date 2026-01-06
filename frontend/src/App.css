@@ -507,9 +507,7 @@ button:active {
     color: #cfcfcf;
 }
 .path-button{
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    
     margin-right: 4px;
     padding: 0 16px;
     margin-right: 4px;
@@ -517,6 +515,12 @@ button:active {
     border-radius: 4px;
     transition: all 0.2s;
     margin-bottom: 10px;
+}
+
+.path-button:hover{
+    border-color: #cfcfcf;
+    background-color: #2a2a2a;
+    cursor: pointer;
 }
 
 .Directory-section{
@@ -553,13 +557,12 @@ button:active {
     font-size: 13px;
     color: #888;
     word-break: break-all;
-    margin-bottom: 10px;
+    margin-top: 4px;
 }
 
 .model-header-content {
     display: flex;
     flex-direction: column;
-    gap: 6px;
 }
 
 .header-action-buttons {

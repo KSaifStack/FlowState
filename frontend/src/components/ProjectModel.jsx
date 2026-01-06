@@ -121,11 +121,7 @@ openInFileManager() {
                              <button className = "path-button">...</button>
                             <p className="path-text">{this.project.path}</p>
                             </div> 
-                            <p className="icon" >💀</p>
-                            <div className="Directory-section">
-                             <button className = "path-button">...</button>
-                            <p className="path-text">{this.project.path}</p>
-                            </div> 
+                            
                         </div>
 
                         
