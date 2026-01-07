@@ -224,7 +224,24 @@ class ProjectModel {
                                     </div>
                                     <div className="dropdown-option" onClick ={()=>this.changeProjectIcon()}> 
                                         <p className="text">Change Project img</p>
+                                    <div
+                                    className="icon-wrapper"
+                                    style={{cursor: 'pointer',display: 'inline-block'}}
+                                    title="Click to change"
+                                    onClick={async () => {
+                                        const iconPath = await window.electronAPI.openFileDialog();
+                                        if (iconPath) this.changeProjectIcon(iconPath);
+                                    }}
+                                    >
+                                        <img
+                                        src={this.project.icon ||dummyIcon}
+                                        alt="Project Icon"
+                                        className = "current-icon"
+                                        style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #ccc' }}
+                                        />
+                                        </div>
                                     </div>
+                                    
                                     <div className="dropdown-option">
                                         <p className="text">Project Main Directory</p>
                                         <div className="Directory-section">
