@@ -163,6 +163,22 @@ ipcMain.handle("open-directory-dialog", async () => {
     return result.filePaths[0];
 });
 
+ipcMain.handle('open-image-dialog', async (event) => {
+    const result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'ico'] }
+        ]
+    });
+    
+    if (result.canceled) {
+        return null;
+    }
+    
+    return result.filePaths[0];
+});
+
+
 async function sendPathToBackend(path) {
     const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
         method: "POST",
