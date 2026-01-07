@@ -828,6 +828,34 @@ button:active {
     border: 1px solid #888888;
 }
 
+.sort-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px;
+    background-color: #2f2f2f;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    min-width: 200px;
+    z-index: 1000;
+    overflow: hidden;
+}
 
+.sort-option {
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sort-option:hover {
+    background-color: #555555;
+}
+
+.sort-option + .sort-option {
+    border-top: 1px solid #3a3a3a;
+}
 
 
