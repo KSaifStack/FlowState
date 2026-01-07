@@ -881,5 +881,34 @@ button:active {
 .sort-option + .sort-option {
     border-top: 1px solid #3a3a3a;
 }
+.settings-dropdown {
+    position: absolute;
+    top: 90%;
+    left: 0;
+    background-color: #2f2f2f;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    min-width: 180px;
+    z-index: 1200;
+    overflow: hidden;
+}
+.settings-option {
+    padding: 8px 14px;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.settings-option:hover {
+    background-color: #555555;
+}
+
+.settings-option + .settings-option {
+    border-top: 1px solid #3a3a3a;
+}
+
 
 

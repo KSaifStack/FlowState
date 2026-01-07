@@ -1,15 +1,22 @@
 ﻿import '../App.css';
+import { useState } from 'react';
 import logo from '../assets/images/logo.png';
 import GithubModel from './GithubModel.jsx';
+import SettingsModel from './SettingsModel.jsx';
+
 function TitleBar() {
+    const [theme, setTheme] = useState('dark');
+
     return (
         <div className="title-bar">
-            <button className="Titlebutton"><img id="TitleImage" src={logo} >
-            </img>
-            </button>
+            <SettingsModel theme={theme} setTheme={setTheme}>
+                <button className="Titlebutton">
+                    <img id="TitleImage" src={logo} alt="App Logo" />
+                </button>
+            </SettingsModel>
 
             <div className="window-controls">
-               <GithubModel />                
+                <GithubModel />
                 <button onClick={() => window.electronAPI.windowControl('minimize')}>—</button>
                 <button onClick={() => window.electronAPI.windowControl('maximize')}>▢</button>
                 <button onClick={() => window.electronAPI.windowControl('close')}>✕</button>
