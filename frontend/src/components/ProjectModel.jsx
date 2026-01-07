@@ -1,4 +1,5 @@
 import dummyIcon from '../assets/images/defaultProj.png';
+import App from "../App.jsx";
 
 class ProjectModel {
     constructor(project, onClose, onUpdateWorkflow, onUpdatePath) {
@@ -8,10 +9,13 @@ class ProjectModel {
         this.onUpdatePath = onUpdatePath;
     }
 
-    openWorkflow() {
+    openWorkFlow() {
         console.log("Open workflow for:", this.project);
-        // TODO:
-        // - Electron: ipcRenderer.send("open-workflow", this.project.path)
+
+        for (let i = 0; i < this.project.workflow.length; i++) {
+            window.electronAPI.openTool(this.project.workflow[i].path);
+        }
+
     }
 
     async openInFileManager() {
@@ -82,7 +86,7 @@ class ProjectModel {
                             <div className="header-action-buttons">
                                 <button
                                     className="primary-action-btn"
-                                    onClick={() => this.openWorkflow()}
+                                    onClick={() => this.openWorkFlow()}
                                 >
                                     Open Workflow
                                 </button>
@@ -110,7 +114,7 @@ class ProjectModel {
                         </div>
 
                         <div className="model-section">
-                            <h3>Workflow</h3>
+                            <h3>WorkFlow</h3>
                             <div className="workflow-list">
                                 {this.project.workflow.map((tool, idx) => (
                                     <div key={idx} className="workflow-item">
@@ -144,7 +148,7 @@ class ProjectModel {
                                             fontStyle: 'italic'
                                         }}
                                     >
-                                        No workflow tools added yet
+                                        No WorkFlow tools added yet!
                                     </p>
                                 )}
 

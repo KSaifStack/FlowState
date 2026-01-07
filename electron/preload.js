@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openExeDialog: () => ipcRenderer.invoke("open-exe-dialog"),
     openDirectoryDialog: () => ipcRenderer.invoke("open-directory-dialog"),
     openProjDirectory: (path) => ipcRenderer.invoke("open-proj-directory", path),
-    sendPathToBackend: (path) => ipcRenderer.invoke("send-path-to-backend", path)
+    sendPathToBackend: (path) => ipcRenderer.invoke("send-path-to-backend", path),
+    openTool: (path) => ipcRenderer.invoke("open-tool", path)
 });

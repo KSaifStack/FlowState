@@ -147,6 +147,7 @@ ipcMain.handle("open-exe-dialog", async () => {
     });
 
     if (result.canceled) return null;
+
     return result.filePaths[0];
 });
 
@@ -161,6 +162,20 @@ ipcMain.handle("open-directory-dialog", async () => {
 
     return result.filePaths[0];
 });
+
+async function sendPathToBackend(path) {
+    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Backend request failed");
+    }
+
+    return await response.json();
+}
 
 ipcMain.handle("open-proj-directory", async (event, path) => {
     try {
@@ -188,16 +203,5 @@ ipcMain.handle("send-path-to-backend", async (event, path) => {
     return await sendPathToBackend(path);
 });
 
-async function sendPathToBackend(path) {
-    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path }),
-    });
 
-    if (!response.ok) {
-        throw new Error("Backend request failed");
-    }
-
-    return await response.json();
-}
+ipcMain.handle("open-tool", async (event, path) => { shell.openExternal("file://" + path) });
