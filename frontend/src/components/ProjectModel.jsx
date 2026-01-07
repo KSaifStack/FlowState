@@ -3,13 +3,31 @@ import dummyIcon from '../assets/images/defaultProj.png';
 import App from "../App.jsx";
 
 class ProjectModel {
-    constructor(project, onClose, onUpdateWorkflow, onUpdatePath, isConfigOpen, toggleConfig) {
+    constructor(
+        project,
+        onClose,
+        onUpdateWorkflow,
+        onUpdatePath,
+        onUpdateTitle,
+        onUpdateIcon,
+        isConfigOpen,
+        toggleConfig,
+        titleInput,
+        setTitleInput,
+        handleTitleChange
+    ) {
         this.project = project;
         this.onClose = onClose;
         this.onUpdateWorkflow = onUpdateWorkflow;
         this.onUpdatePath = onUpdatePath;
+        this.onUpdateTitle = onUpdateTitle;
+        this.onUpdateIcon = onUpdateIcon;
         this.isConfigOpen = isConfigOpen;
         this.toggleConfig = toggleConfig;
+
+        this.titleInput = titleInput;
+        this.setTitleInput = setTitleInput;
+        this.handleTitleChange = handleTitleChange;
     }
 
     openWorkFlow() {
@@ -40,6 +58,15 @@ class ProjectModel {
         console.log("Selected folder:", path);
     }
 
+   
+
+    changeProjectIcon(newImg){
+        console.log("Changed project icon.")
+        //TODO:
+        // - Update current project picture to new picture
+
+        this.onUpdateIcon(this.project.id, iconPath);
+    }
 
     async addWorkflowItem() {
         try {
@@ -185,18 +212,31 @@ class ProjectModel {
                             </button>
                             {this.isConfigOpen && (
                                 <div className="dropdown-container">
-                                    <div className="dropdown-option">
-                                    <p className="text">Project Main Directory</p>
-                                    <div className="Directory-section">
-                                        <button
-                                            className="path-button"
-                                            onClick={() => this.changeFilePath()}
-                                        >
-                                            ...
-                                        </button>
-                                        <p className="path-text">{this.project.path}</p>
+                                    <div className ="dropdown-option"> 
+                                        <p className="text">Change Project Title</p>
+                                        <input 
+                                            type="text"
+                                            value={this.titleInput}
+                                            onChange={(e) => this.setTitleInput(e.target.value)}
+                                            className="title-input"
+                                        />
+                                        <button className="done-btn" onClick={this.handleTitleChange}>Done</button>
                                     </div>
-                                </div>
+                                    <div className="dropdown-option" onClick ={()=>this.changeProjectIcon()}> 
+                                        <p className="text">Change Project img</p>
+                                    </div>
+                                    <div className="dropdown-option">
+                                        <p className="text">Project Main Directory</p>
+                                        <div className="Directory-section">
+                                            <button
+                                                className="path-button"
+                                                onClick={() => this.changeFilePath()}
+                                            >
+                                                ...
+                                            </button>
+                                            <p className="path-text">{this.project.path}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -230,14 +270,39 @@ class ProjectModel {
     }
 }
 
-function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath }) {
+function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath, onUpdateTitle, onUpdateIcon }) {
     const [isConfigOpen, setIsConfigOpen] = useState(false);
-    
-    const toggleConfig = () => {
-        setIsConfigOpen(!isConfigOpen);
+    const [titleInput, setTitleInput] = useState(project.title);
+
+    const toggleConfig = () => setIsConfigOpen(!isConfigOpen);
+
+    const handleTitleChange = () => {
+        if (titleInput.trim() === '' || titleInput === project.title) return;
+        onUpdateTitle(project.id, titleInput);
+        console.log("Title has been updated to: ",titleInput)
     };
-    
-    const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath, isConfigOpen, toggleConfig);
+
+    const handleIconChange = async () => {
+        const iconPath = await window.electronAPI.openImageDialog();
+        if (!iconPath) return;
+        onUpdateIcon(project.id, iconPath);
+};
+
+
+    const model = new ProjectModel(
+        project,
+        onClose,
+        onUpdateWorkflow,
+        onUpdatePath,
+        onUpdateTitle,
+        onUpdateIcon,
+        isConfigOpen,
+        toggleConfig,
+        titleInput,
+        setTitleInput,
+        handleTitleChange
+    );
+
     return model.render();
 }
 

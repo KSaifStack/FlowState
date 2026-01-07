@@ -125,6 +125,27 @@ function App() {
         }
     }
 
+    const updateTitle = (projectId, newTitle) => {
+    setProjects(projects.map(p =>
+        p.id === projectId ? { ...p, title: newTitle } : p
+    ));
+
+    if (selectedProject && selectedProject.id === projectId) {
+        setSelectedProject({ ...selectedProject, title: newTitle });
+    }
+}
+
+    const updateIcon = (projectId, newIconPath) => {
+        setProjects(projects.map(p =>
+        p.id === projectId ? { ...p, icon: newIconPath } : p
+        ));
+
+    if (selectedProject && selectedProject.id === projectId) {
+        setSelectedProject({ ...selectedProject, icon: newIconPath });
+        }
+}
+
+
     const mostRecentProject = projects[0];
 
     const openProjectById = (projectId) => {
@@ -190,6 +211,8 @@ function App() {
                     onClose={closeModel}
                     onUpdateWorkflow={updateWorkflow}
                     onUpdatePath={updatePath}
+                    onUpdateTitle={updateTitle}
+                    onUpdateIcon={updateIcon}
                 />
             )}
             {showAddModel && (
