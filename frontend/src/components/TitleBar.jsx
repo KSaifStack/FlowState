@@ -1,5 +1,6 @@
 ﻿import '../App.css';
 import logo from '../assets/images/logo.png';
+import GithubModel from './GithubModel.jsx';
 function TitleBar() {
     return (
         <div className="title-bar">
@@ -8,16 +9,7 @@ function TitleBar() {
             </button>
 
             <div className="window-controls">
-                <div className="user-footer">
-                    <img
-                        src="https://github.com/KsaifStack.png"
-                        alt="GitHub Profile"
-                        className="github-avatar"
-                    />
-                    <div className="user-info">
-                        <div className="github-username">KsaifStack</div>
-                    </div>
-                </div>
+               <GithubModel />                
                 <button onClick={() => window.electronAPI.windowControl('minimize')}>—</button>
                 <button onClick={() => window.electronAPI.windowControl('maximize')}>▢</button>
                 <button onClick={() => window.electronAPI.windowControl('close')}>✕</button>

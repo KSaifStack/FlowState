@@ -776,16 +776,40 @@ button:active {
 
     transition: background-color 0.15s ease;
 }
+.gitdropdown-option{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 125px;
+    padding: 10px 12px;
+    border-radius: 6px;
+
+    transition: background-color 0.15s ease;
+}
+
+.gitdropdown-option {
+    padding: 10px 16px; 
+    font-size: 10px;    
+    color: #ffffff;     
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.gitdropdown-option:hover {
+    background-color: #555555; 
+}
+.gitdropdown-option + .gitdropdown-option {
+    border-top: 1px solid #3a3a3a;
+}
 
 .dropdown-option + .dropdown-option {
     border-top: 1px solid #3a3a3a;
 }
 .option-label {
-    font-size: 13px;
-    color: #bdbdbd;
+    font-size: 14px;
+    color: #ffffff;
     font-weight: 500;
 }
-
 .title-input {
     width: 100%;
     padding: 10px 12px;

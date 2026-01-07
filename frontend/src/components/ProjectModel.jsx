@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import dummyIcon from '../assets/images/defaultProj.png';
 import App from "../App.jsx";
-
+/*
+TODO: 
+- ADD TRASH UI ELEMENT 
+- ADD PIN UI ELEMENT
+*/
 class ProjectModel {
     constructor(
         project,
