@@ -1,10 +1,11 @@
 import dummyIcon from '../assets/images/defaultProj.png';
 
 class ProjectModel {
-    constructor(project, onClose, onUpdateWorkflow) {
+    constructor(project, onClose, onUpdateWorkflow, onUpdatePath) {
         this.project = project;
         this.onClose = onClose;
         this.onUpdateWorkflow = onUpdateWorkflow;
+        this.onUpdatePath = onUpdatePath;
     }
 
     openWorkflow() {
@@ -13,19 +14,22 @@ class ProjectModel {
         // - Electron: ipcRenderer.send("open-workflow", this.project.path)
     }
 
-    openInFileManager() {
+    async openInFileManager() {
         console.log("Open in file manager:", this.project.path);
+
+        //await sendPathBackend(this.pro)
         // TODO:
         // - Electron: shell.openPath(this.project.path)
     }
 
-    changeFilePath() {
+    async changeFilePath() {
         console.log("Open in file manager to change path:", this.project.path);
         // TODO:
         // - Electron: implement file/folder selection dialog
         const path = await window.electronAPI.openDirectoryDialog();
         if (!path) return;
 
+        this.onUpdatePath(this.project.id, path);
         // set current project path to path
 
         console.log("Selected folder:", path);
@@ -207,8 +211,8 @@ class ProjectModel {
     }
 }
 
-function ProjectModelComponent({ project, onClose, onUpdateWorkflow }) {
-    const model = new ProjectModel(project, onClose, onUpdateWorkflow);
+function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath }) {
+    const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath);
     return model.render();
 }
 

@@ -161,3 +161,9 @@ ipcMain.handle("open-directory-dialog", async () => {
 
     return result.filePaths[0];
 });
+
+ipcMain.handle("open-directory", async (path) => {
+
+
+
+});

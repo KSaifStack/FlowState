@@ -116,6 +116,15 @@ function App() {
         }
     };
 
+    const updatePath = (projectId, newPath) => {
+        setProjects(projects.map(p =>
+            p.id === projectId ? { ...p, path: newPath} : p
+        ));
+        if (selectedProject && selectedProject.id === projectId) {
+            setSelectedProject({ ...selectedProject, path: newPath });
+        }
+    }
+
     const mostRecentProject = projects[0];
     
     const openProjectById = (projectId) => {
@@ -180,6 +189,7 @@ function App() {
                     project={selectedProject}
                     onClose={closeModel}
                     onUpdateWorkflow={updateWorkflow}
+                    onUpdatePath={updatePath}
                 />
             )}
             {showAddModel && (
