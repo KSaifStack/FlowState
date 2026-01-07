@@ -58,14 +58,29 @@ class ProjectModel {
         console.log("Selected folder:", path);
     }
 
-   
+    async openProjectIcon() {
+        console.log("Icon value:", this.project.icon);
+        console.log("Icon type:", typeof this.project.icon);
+        
+        if (!this.project.icon) {
+            console.log("No icon set for this project");
+            return;
+        }
+        
+        console.log("Opening project icon in file explorer:", this.project.icon);
+        
+        try {
+            await window.electronAPI.openTool(this.project.icon);
+            console.log("Successfully opened icon location");
+        } catch (error) {
+            console.error("Error opening file explorer:", error);
+        }
+    }
 
-    changeProjectIcon(newImg){
-        console.log("Changed project icon.")
-        //TODO:
-        // - Update current project picture to new picture
-
-        this.onUpdateIcon(this.project.id, iconPath);
+    async changeProjectIcon(newImg) {
+        if (!newImg) return;
+        console.log("Changed project icon:", newImg);
+        this.onUpdateIcon(this.project.id, newImg);
     }
 
     async addWorkflowItem() {
@@ -212,7 +227,7 @@ class ProjectModel {
                             </button>
                             {this.isConfigOpen && (
                                 <div className="dropdown-container">
-                                    <div className ="dropdown-option"> 
+                                    <div className="dropdown-option"> 
                                         <p className="text">Change Project Title</p>
                                         <input 
                                             type="text"
@@ -222,24 +237,34 @@ class ProjectModel {
                                         />
                                         <button className="done-btn" onClick={this.handleTitleChange}>Done</button>
                                     </div>
-                                    <div className="dropdown-option" onClick ={()=>this.changeProjectIcon()}> 
+                                    <div className="dropdown-option"> 
                                         <p className="text">Change Project img</p>
-                                    <div
-                                    className="icon-wrapper"
-                                    style={{cursor: 'pointer',display: 'inline-block'}}
-                                    title="Click to change"
-                                    onClick={async () => {
-                                        const iconPath = await window.electronAPI.openFileDialog();
-                                        if (iconPath) this.changeProjectIcon(iconPath);
-                                    }}
-                                    >
-                                        <img
-                                        src={this.project.icon ||dummyIcon}
-                                        alt="Project Icon"
-                                        className = "current-icon"
-                                        style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #ccc' }}
-                                        />
+                                        <div
+                                            className="icon-wrapper"
+                                            style={{cursor: 'pointer',display: 'inline-block'}}
+                                            title="Click to open in file explorer"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                this.openProjectIcon();
+                                            }}
+                                        >
+                                            <img
+                                                src={this.project.icon || dummyIcon}
+                                                alt="Project Icon"
+                                                className="current-icon"
+                                                style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #ccc' }}
+                                            />
                                         </div>
+                                        <button 
+                                            className="done-btn"
+                                            onClick={async (e) => {
+                                                e.stopPropagation();
+                                                const iconPath = await window.electronAPI.openImageDialog();
+                                                if (iconPath) this.changeProjectIcon(iconPath);
+                                            }}
+                                        >
+                                            Change Icon
+                                        </button>
                                     </div>
                                     
                                     <div className="dropdown-option">
@@ -303,8 +328,7 @@ function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePat
         const iconPath = await window.electronAPI.openImageDialog();
         if (!iconPath) return;
         onUpdateIcon(project.id, iconPath);
-};
-
+    };
 
     const model = new ProjectModel(
         project,
