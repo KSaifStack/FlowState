@@ -23,6 +23,12 @@ class ProjectModel {
         console.log("Open in file manager to change path:", this.project.path);
         // TODO:
         // - Electron: implement file/folder selection dialog
+        const path = await window.electronAPI.openDirectoryDialog();
+        if (!path) return;
+
+        // set current project path to path
+
+        console.log("Selected folder:", path);
     }
 
 
@@ -183,7 +189,7 @@ class ProjectModel {
                             </div>
 
                             <div className="stat-item">
-                                <div className="stat-label">Daily Commits</div>
+                                <div className="stat-label">Average Daily Commits</div>
                                 <div className="stat-value">{this.project.dailyCommits}</div>
                             </div>
 
