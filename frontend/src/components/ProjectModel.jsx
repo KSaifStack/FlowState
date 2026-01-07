@@ -18,12 +18,12 @@ class ProjectModel {
         // TODO:
         // - Electron: shell.openPath(this.project.path)
     }
-    
+
     changeFilePath() {
-    console.log("Open in file manager to change path:", this.project.path);
-    // TODO:
-    // - Electron: implement file/folder selection dialog
-}
+        console.log("Open in file manager to change path:", this.project.path);
+        // TODO:
+        // - Electron: implement file/folder selection dialog
+    }
 
 
     async addWorkflowItem() {
@@ -172,6 +172,10 @@ class ProjectModel {
                             </div>
                         </div>
 
+                        <div className="model-section">
+                            <h3>Insights (AI)</h3>
+                            <p className="insights-text">{this.project.insights}</p>
+                        </div>
                         <div className="model-stats">
                             <div className="stat-item">
                                 <div className="stat-label">Total Commits</div>
@@ -189,11 +193,6 @@ class ProjectModel {
                                     {this.project.date.replace("Last Opened: ", ">")}
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="model-section">
-                            <h3>Insights (AI)</h3>
-                            <p className="insights-text">{this.project.insights}</p>
                         </div>
                     </div>
                 </div>
