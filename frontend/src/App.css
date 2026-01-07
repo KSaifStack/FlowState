@@ -463,6 +463,7 @@ button:active {
 }
 
 .workflow-icon {
+    margin-top: 8px;
     flex-shrink: 0;
     width: 32px;
     height: 32px;
