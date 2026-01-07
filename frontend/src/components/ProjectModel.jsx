@@ -17,9 +17,7 @@ class ProjectModel {
     async openInFileManager() {
         console.log("Open in file manager:", this.project.path);
 
-        //await sendPathBackend(this.pro)
-        // TODO:
-        // - Electron: shell.openPath(this.project.path)
+        await window.electronAPI.openProjDirectory(this.project.path);
     }
 
     async changeFilePath() {
@@ -41,7 +39,7 @@ class ProjectModel {
             const newItemPath = await window.electronAPI.openExeDialog();
             if (!newItemPath) return;
 
-            const toolInfo = await sendPathBackend(newItemPath);
+            const toolInfo = await window.electronAPI.sendPathToBackend(newItemPath);
             const newWorkflow = [...this.project.workflow, toolInfo];
             this.onUpdateWorkflow(this.project.id, newWorkflow);
         } catch (err) {
@@ -214,20 +212,6 @@ class ProjectModel {
 function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath }) {
     const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath);
     return model.render();
-}
-
-async function sendPathBackend(path) {
-    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path }),
-    });
-
-    if (!response.ok) {
-        throw new Error("Backend request failed");
-    }
-
-    return await response.json();
 }
 
 export default ProjectModelComponent;

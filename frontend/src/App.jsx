@@ -108,7 +108,7 @@ function App() {
     };
 
     const updateWorkflow = (projectId, newWorkflow) => {
-        setProjects(projects.map(p => 
+        setProjects(projects.map(p =>
             p.id === projectId ? { ...p, workflow: newWorkflow } : p
         ));
         if (selectedProject && selectedProject.id === projectId) {
@@ -118,7 +118,7 @@ function App() {
 
     const updatePath = (projectId, newPath) => {
         setProjects(projects.map(p =>
-            p.id === projectId ? { ...p, path: newPath} : p
+            p.id === projectId ? { ...p, path: newPath } : p
         ));
         if (selectedProject && selectedProject.id === projectId) {
             setSelectedProject({ ...selectedProject, path: newPath });
@@ -126,7 +126,7 @@ function App() {
     }
 
     const mostRecentProject = projects[0];
-    
+
     const openProjectById = (projectId) => {
         const project = projects.find(p => p.id === projectId);
         if (project) {
@@ -163,14 +163,14 @@ function App() {
                     <div className="project-info">
                         <div className="project-list">
                             {projects.map(project => (
-                                <div 
-                                    key={project.id} 
+                                <div
+                                    key={project.id}
                                     className="project-card"
                                     onClick={() => handleProjectClick(project)}
                                 >
                                     <div className="project-icon">
-                                        <img src={project.icon} alt="Project icon"/>
-                                        </div>
+                                        <img src={project.icon} alt="Project icon" />
+                                    </div>
                                     <div className="project-info">
                                         <div className="project-title">{project.title}</div>
                                         <div className="project-type">{project.ProjectType}</div>
@@ -185,7 +185,7 @@ function App() {
                 </div>
             </div>
             {selectedProject && (
-                <ProjectModelComponent 
+                <ProjectModelComponent
                     project={selectedProject}
                     onClose={closeModel}
                     onUpdateWorkflow={updateWorkflow}
@@ -193,7 +193,7 @@ function App() {
                 />
             )}
             {showAddModel && (
-                <AddProjectModelComponent 
+                <AddProjectModelComponent
                     onClose={closeAddModel}
                     onAddProject={addProject}
                 />
@@ -201,5 +201,6 @@ function App() {
         </div>
     )
 }
+
 
 export default App;

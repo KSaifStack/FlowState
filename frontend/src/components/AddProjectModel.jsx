@@ -22,12 +22,10 @@ class AddProjectModel {
     }
 
     async openInFileManager() {
+
+        window.electronAPI.openProjDirectory(this.project.path)
+
         console.log("Opened file manager");
-
-        const path = await window.electronAPI.openDirectoryDialog();
-        if (!path) return;
-
-        console.log("Selected folder:", path);
     }
 
     render() {

@@ -1,4 +1,4 @@
-﻿const { ipcMain, app, BrowserWindow, dialog } = require("electron");
+﻿const { ipcMain, app, BrowserWindow, dialog, shell } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
 const waitPort = require("wait-port");
@@ -162,8 +162,42 @@ ipcMain.handle("open-directory-dialog", async () => {
     return result.filePaths[0];
 });
 
-ipcMain.handle("open-directory", async (path) => {
+ipcMain.handle("open-proj-directory", async (event, path) => {
+    try {
+        const validatedPath = await sendPathToBackend(path);
 
+        if (!validatedPath || !validatedPath.path) {
+            throw new Error("Invalid response from backend");
+        }
 
+        // Open in explorer/finder
+        await shell.openPath(validatedPath.path);
 
+        console.log(validatedPath.path);
+
+        return { success: true };
+    } catch (err) {
+        console.error("Failed to open project directory:", err);
+        return { success: false, error: err.message };
+    }
 });
+
+
+
+ipcMain.handle("send-path-to-backend", async (event, path) => {
+    return await sendPathToBackend(path);
+});
+
+async function sendPathToBackend(path) {
+    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path }),
+    });
+
+    if (!response.ok) {
+        throw new Error("Backend request failed");
+    }
+
+    return await response.json();
+}
