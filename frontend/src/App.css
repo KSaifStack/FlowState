@@ -587,12 +587,11 @@ button:active {
 }
 
     
-}
+
 
 .path-button:hover{
-    border-color: #cfcfcf;
-    background-color: #2a2a2a;
-    cursor: pointer;
+   background-color: #555555;
+   border: 1px solid #888888;
     
 }
 
@@ -631,7 +630,7 @@ button:active {
     font-size: 13px;
     color: #888;
     word-break: break-all;
-    margin-top: 6px;
+    margin-bottom: 10px;
 }
 
 .model-header-content {
@@ -706,6 +705,85 @@ button:active {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.dropdown-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2f2f2f;
+    border: 1px solid #3a3a3a;
+    border-bottom: none;              
+    border-radius: 8px 8px 0 0;      
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.dropdown-header:hover {
+    background-color: #555555;
+    border-color: #888888;
+}
+.dropdown-header:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+
+.dropdown-arrow {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
+
+.dropdown-container {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-top: none;                
+    border-radius: 0 0 8px 8px;       
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dropdown-container .text {
+    margin: 0 0 8px 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.Directory-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 4px;
+}
+.dropdown-option {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 10px 12px;
+    border-radius: 6px;
+
+    transition: background-color 0.15s ease;
+}
+
+.dropdown-option + .dropdown-option {
+    border-top: 1px solid #3a3a3a;
+}
+.option-label {
+    font-size: 13px;
+    color: #bdbdbd;
+    font-weight: 500;
 }
 
 

@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import dummyIcon from '../assets/images/defaultProj.png';
 import App from "../App.jsx";
 
 class ProjectModel {
-    constructor(project, onClose, onUpdateWorkflow, onUpdatePath) {
+    constructor(project, onClose, onUpdateWorkflow, onUpdatePath, isConfigOpen, toggleConfig) {
         this.project = project;
         this.onClose = onClose;
         this.onUpdateWorkflow = onUpdateWorkflow;
         this.onUpdatePath = onUpdatePath;
+        this.isConfigOpen = isConfigOpen;
+        this.toggleConfig = toggleConfig;
     }
 
     openWorkFlow() {
@@ -171,17 +174,31 @@ class ProjectModel {
                         </div>
 
                         <div className="model-section">
-                            <h3>Project Configuration</h3>
-                            <p className="text">Project Main Directory</p>
-                            <div className="Directory-section">
-                                <button
-                                    className="path-button"
-                                    onClick={() => this.changeFilePath()}
-                                >
-                                    ...
-                                </button>
-                                <p className="path-text">{this.project.path}</p>
-                            </div>
+                            <button
+                                className="dropdown-header"
+                                onClick={this.toggleConfig}
+                            >
+                                <span>Project Configuration</span>
+                                <span className={`dropdown-arrow ${this.isConfigOpen ? 'open' : ''}`}>
+                                    ▾
+                                </span>
+                            </button>
+                            {this.isConfigOpen && (
+                                <div className="dropdown-container">
+                                    <div className="dropdown-option">
+                                    <p className="text">Project Main Directory</p>
+                                    <div className="Directory-section">
+                                        <button
+                                            className="path-button"
+                                            onClick={() => this.changeFilePath()}
+                                        >
+                                            ...
+                                        </button>
+                                        <p className="path-text">{this.project.path}</p>
+                                    </div>
+                                </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="model-section">
@@ -214,7 +231,13 @@ class ProjectModel {
 }
 
 function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath }) {
-    const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath);
+    const [isConfigOpen, setIsConfigOpen] = useState(false);
+    
+    const toggleConfig = () => {
+        setIsConfigOpen(!isConfigOpen);
+    };
+    
+    const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath, isConfigOpen, toggleConfig);
     return model.render();
 }
 
