@@ -102,7 +102,7 @@ function App() {
         if (selectedProject?.id === projectId) setSelectedProject({ ...selectedProject, icon: newIconPath });
     };
 
-    // Sorting Handling 
+    //  Sorting Handling 
     const handleSortChange = (newSort) => {
         setSortBy(newSort);
         setShowSortDropdown(false);
