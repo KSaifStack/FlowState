@@ -168,7 +168,7 @@ html, body, #root {
 .button-container {
     display: flex;
     gap: 15px;
-    margin-top: -9px;
+    margin-top: -10px;
     margin-bottom: 10px;
 }
 
@@ -832,6 +832,7 @@ button:active {
     font-weight: 500;
 }
 .title-input {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
     width: 100%;
     padding: 10px 12px;
     font-size: 15px;
@@ -856,6 +857,7 @@ button:active {
 
 
 .done-btn {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
     align-self: flex-start;
     margin-top: 6px;
     padding: 6px 12px;

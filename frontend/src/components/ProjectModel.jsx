@@ -4,11 +4,7 @@ import App from '../App.jsx';
 import darkPin from '../assets/images/darkPin.png';
 import darkTrash from '../assets/images/darkTrash.png';
 
-/*
-TODO:
-- ADD TRASH UI ELEMENT
-- ADD PIN UI ELEMENT
-*/
+
 class ProjectModel {
     constructor(
         project,
@@ -21,7 +17,9 @@ class ProjectModel {
         toggleConfig,
         titleInput,
         setTitleInput,
-        handleTitleChange
+        handleTitleChange,
+        onDeleteProject,
+        onPinProject
     ) {
         this.project = project;
         this.onClose = onClose;
@@ -34,6 +32,8 @@ class ProjectModel {
         this.titleInput = titleInput;
         this.setTitleInput = setTitleInput;
         this.handleTitleChange = handleTitleChange;
+        this.onDeleteProject= onDeleteProject;
+        this.onPinProject=onPinProject;
     }
 
     openWorkFlow() {
@@ -101,6 +101,25 @@ class ProjectModel {
         this.onUpdateWorkflow(this.project.id, newWorkflow);
     }
 
+    async requestDeleteProject() {
+    console.log('[API] Delete project request:', this.project.id);
+
+    // TODO: Delete Project
+    // await window.electronAPI.deleteProject(this.project.id);
+
+    this.onDeleteProject?.(this.project.id);
+    this.onClose();
+}
+
+async requestPinProject() {
+    console.log('[API] Pin project request:', this.project.id);
+
+    // TODO: Pins current Project via status
+    // await window.electronAPI.pinProject(this.project.id);
+
+    this.onPinProject?.(this.project.id);
+}
+
     render() {
         return (
             <div className="overlay" onClick={this.onClose}>
@@ -109,11 +128,11 @@ class ProjectModel {
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="button-container">
-                        <button className="Trashbutton" onClick={'input here'}>
+                        <button className="Trashbutton" onClick={() => this.requestDeleteProject()}>
                             <img id="probuttonImage" src={darkTrash} />
                         </button>
 
-                        <button className="Pinbutton" onClick={'input here'}>
+                        <button className="Pinbutton" onClick={() => this.requestDeleteProject()}>
                             <img id="probuttonImage" src={darkPin} />
                         </button>
                     </div>
@@ -254,7 +273,7 @@ class ProjectModel {
                                 <div className="dropdown-container">
                                     <div className="dropdown-option">
                                         <p className="text">
-                                            Change Project Title
+                                            Edit Title
                                         </p>
                                         <input
                                             type="text"
@@ -274,7 +293,7 @@ class ProjectModel {
 
                                     <div className="dropdown-option">
                                         <p className="text">
-                                            Change Project img
+                                            Edit Icon 
                                         </p>
 
                                         <div
@@ -324,7 +343,7 @@ class ProjectModel {
 
                                     <div className="dropdown-option">
                                         <p className="text">
-                                            Project Main Directory
+                                             Main Directory
                                         </p>
                                         <div className="Directory-section">
                                             <button
