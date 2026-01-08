@@ -3,13 +3,10 @@ import LoginGate from './LoginGate.jsx';
 import App from './App.jsx';
 
 function AppRoot() {
-    const [authState, setAuthState] = useState('github');
+    const [authState, setAuthState] = useState('guest');
     // 'guest' | 'github'
 
     const handleSignOut = () => {
-        // TODO later:
-        // window.electronAPI.auth.signOut();
-
         setAuthState('guest');
     };
 

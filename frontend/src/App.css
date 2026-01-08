@@ -24,6 +24,17 @@ html, body, #root {
     padding-top: 45px;
 }
 
+.center-panel {
+    width: 460px;
+    background-color: #2a2a2a;
+    border-right: 1px solid #3f3f3f;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+}
+
 .left-panel {
     width: 460px;
     background-color: #2a2a2a;
@@ -168,8 +179,8 @@ html, body, #root {
 .button-container {
     display: flex;
     gap: 15px;
-    margin-top: -10px;
-    margin-bottom: 10px;
+    margin-top: -20px;
+    margin-bottom: 15px;
 }
 
 #buttonImage {
