@@ -13,7 +13,7 @@ function LoginGate({ onAuth }) {
 
     return (
         <div className="login-screen">
-            <TitleBar />
+            <TitleBar authState="guest" />
             <div className="login-container">
                 <div className="center-panel">
                     <p className="Title">FlowState</p>

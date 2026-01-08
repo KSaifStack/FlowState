@@ -7,7 +7,7 @@ import darkAdd from './assets/images/darkAdd.png';
 import darkTrash from './assets/images/darkTrash.png';
 import dummyIcon from './assets/images/defaultProj.png';
 
-function App() {
+function App({ onSignOut, authState }) {
     const [selectedProject, setSelectedProject] = useState(null);
     const [showAddModel, setShowAddModel] = useState(false);
     const [sortBy, setSortBy] = useState('Name (A-Z)');
@@ -123,7 +123,7 @@ function App() {
 
     return (
         <div className="app">
-            <TitleBar />
+            <TitleBar authState={authState} />
             <div className="main-content">
                 <div className="left-panel">
                     <div className="greeting">Hey, <span className="username">[USER]</span></div>

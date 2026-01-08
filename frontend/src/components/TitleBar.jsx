@@ -4,19 +4,20 @@ import logo from '../assets/images/logo.png';
 import GithubModel from './GithubModel.jsx';
 import SettingsModel from './SettingsModel.jsx';
 
-function TitleBar() {
+function TitleBar({ authState }) {
     const [theme, setTheme] = useState('dark');
 
     return (
         <div className="title-bar">
             <SettingsModel theme={theme} setTheme={setTheme}>
                 <button className="Titlebutton">
-                    <img id="TitleImage" src={logo} alt="App Logo" />
+                    <img src={logo} alt="App Logo" />
                 </button>
             </SettingsModel>
 
             <div className="window-controls">
-                <GithubModel />
+                {authState !== 'guest' && <GithubModel />}
+
                 <button onClick={() => window.electronAPI.windowControl('minimize')}>—</button>
                 <button onClick={() => window.electronAPI.windowControl('maximize')}>▢</button>
                 <button onClick={() => window.electronAPI.windowControl('close')}>✕</button>
