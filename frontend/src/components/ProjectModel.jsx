@@ -88,7 +88,7 @@ class ProjectModel {
                                     className="primary-action-btn"
                                     onClick={() => this.openWorkFlow()}
                                 >
-                                    Open Workflow
+                                    Open WorkFlow
                                 </button>
 
                                 <button
