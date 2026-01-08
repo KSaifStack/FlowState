@@ -167,12 +167,23 @@ html, body, #root {
 
 .button-container {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    margin-top: -9px;
+    margin-bottom: 10px;
 }
 
 #buttonImage {
     width: 30px;
     height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+}
+#probuttonImage {
+    width: 25px;
+    height: 25px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -196,7 +207,12 @@ html, body, #root {
     border: none;
     cursor: pointer;
     padding: 8px;
+    transition: all 0.2s;
 }
+.Trashbutton:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        background-color: #272727;
+    }
 
 .Addbutton {
     background: transparent;
@@ -216,7 +232,12 @@ html, body, #root {
     border: none;
     cursor: pointer;
     padding: 8px;
+    transition: all 0.2s;
 }
+.Pinbutton:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        background-color: #272727;
+    }
 
 .Titlebutton {
     margin-left: -26px;
