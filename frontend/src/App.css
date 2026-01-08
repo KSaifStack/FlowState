@@ -24,17 +24,22 @@ html, body, #root {
     padding-top: 45px;
 }
 
+
+
 .center-panel {
     width: 90vw;
-    min-height: 90vh;
+    min-height: 80vh;
     padding: 40px;
+
     background-color: #2a2a2a;
-    border-right: 1px solid #3f3f3f;
-    padding: 30px;
+    border: 1px solid #3f3f3f;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+
     display: flex;
     flex-direction: column;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -49,6 +54,18 @@ html, body, #root {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.Title{
+    font-size: 60px;
+    font-weight: 500;
+    margin-top:-20px;
+}
+
+.Subtext{
+    font-size: 18px;
+    color: #e0e0e0;
+    margin-bottom: 10px;
 }
 
 
@@ -961,61 +978,46 @@ button:active {
     border-top: 1px solid #3a3a3a;
 }
 
-.login-gate {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1e1e1e;
-}
 
-.login-card {
-    width: 420px;
-    padding: 32px;
-    background: #2a2a2a;
-    border-radius: 10px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-    text-align: center;
-}
-
-.login-card h1 {
-    margin-bottom: 12px;
-}
-
-.login-card p {
-    margin-bottom: 24px;
-    color: #b0b0b0;
-}
-
-.primary-login-btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-    background: #058120;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    margin-bottom: 12px;
-}
-
-.primary-login-btn:hover {
-    background: #06b52c;
-}
-
-.secondary-login-btn {
-    width: 100%;
-    padding: 10px;
-    background: transparent;
-    border: 1px solid #3a3a3a;
-    border-radius: 6px;
-    color: #ccc;
-    cursor: pointer;
-}
 
 .secondary-login-btn:hover {
     background: #333;
 }
+
+.Github-button,
+.Local-button {
+    width: 50%;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.Github-button {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
+    background: #24292e;
+    color: white;
+}
+
+.Github-button:hover {
+    border: 1px solid #888888;
+}
+
+.Local-button {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    color: #ccc;
+}
+
+.Local-button:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+
 
 
 

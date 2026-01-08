@@ -17,7 +17,7 @@ function LoginGate({ onAuth }) {
             <div className="login-container">
                 <div className="center-panel">
                     <p className="Title">FlowState</p>
-                    <p className="Subtext">Slogan go here!</p>
+                    <p className="Subtext">AI–Powered Project Manager.</p>
             <button className="Github-button" onClick={loginWithGithub}>
                 Sign in with GitHub
             </button>
