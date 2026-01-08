@@ -167,12 +167,23 @@ html, body, #root {
 
 .button-container {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    margin-top: -9px;
+    margin-bottom: 10px;
 }
 
 #buttonImage {
     width: 30px;
     height: 30px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+}
+#probuttonImage {
+    width: 25px;
+    height: 25px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -196,7 +207,12 @@ html, body, #root {
     border: none;
     cursor: pointer;
     padding: 8px;
+    transition: all 0.2s;
 }
+.Trashbutton:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        background-color: #272727;
+    }
 
 .Addbutton {
     background: transparent;
@@ -216,7 +232,12 @@ html, body, #root {
     border: none;
     cursor: pointer;
     padding: 8px;
+    transition: all 0.2s;
 }
+.Pinbutton:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        background-color: #272727;
+    }
 
 .Titlebutton {
     margin-left: -26px;
@@ -562,20 +583,37 @@ button:active {
     line-height: 1.6;
     color: #cfcfcf;
 }
-.path-button{
+.path-button{  
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+    padding-bottom: 10px;               
+    line-height: 1;           
+
+    text-align: center;
+    text-align: center;
+    vertical-align: middle;
     margin-right: 4px;
-    padding: 0 16px;
-    margin-right: 4px;
-    background-color: transparent;
-    border-radius: 4px;
-    transition: all 0.2s;
     margin-bottom: 10px;
+
+    background-color: transparent;
+
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+
+    transition: all 0.2s;
 }
 
+    
+
+
 .path-button:hover{
-    border-color: #cfcfcf;
-    background-color: #2a2a2a;
-    cursor: pointer;
+   background-color: #555555;
+   border: 1px solid #888888;
+    
 }
 
 .Directory-section{
@@ -613,7 +651,7 @@ button:active {
     font-size: 13px;
     color: #888;
     word-break: break-all;
-    margin-top: 4px;
+    margin-bottom: 10px;
 }
 
 .model-header-content {
@@ -689,5 +727,266 @@ button:active {
     height: 100%;
     object-fit: contain;
 }
+
+.dropdown-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2f2f2f;
+    border: 1px solid #3a3a3a;
+    border-bottom: none;              
+    border-radius: 8px 8px 0 0;      
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.dropdown-header:hover {
+    background-color: #555555;
+    border-color: #888888;
+}
+.dropdown-header:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+
+.dropdown-arrow {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
+
+.dropdown-container {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-top: none;                
+    border-radius: 0 0 8px 8px;       
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dropdown-container .text {
+    margin: 0 0 8px 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.Directory-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 4px;
+}
+.dropdown-option {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 10px 12px;
+    border-radius: 6px;
+
+    transition: background-color 0.15s ease;
+}
+.gitdropdown-option{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 125px;
+    padding: 10px 12px;
+    border-radius: 6px;
+
+    transition: background-color 0.15s ease;
+}
+
+.gitdropdown-option {
+    padding: 10px 16px; 
+    font-size: 10px;    
+    color: #ffffff;     
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.gitdropdown-option:hover {
+    background-color: #555555; 
+}
+.gitdropdown-option + .gitdropdown-option {
+    border-top: 1px solid #3a3a3a;
+}
+
+.dropdown-option + .dropdown-option {
+    border-top: 1px solid #3a3a3a;
+}
+.option-label {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 500;
+}
+.title-input {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.title-input::placeholder {
+    color: #888888;
+}
+
+.title-input:focus {
+    outline: none;
+    border: 1px solid #888888;
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
+    background-color: #333333;
+}
+
+
+
+.done-btn {
+    align-self: flex-start;
+    margin-top: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    background-color: #2a2a2a;
+    color: #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.done-btn:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+
+.sort-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 6px;
+    background-color: #2f2f2f;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    min-width: 200px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.sort-option {
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sort-option:hover {
+    background-color: #555555;
+}
+
+.sort-option + .sort-option {
+    border-top: 1px solid #3a3a3a;
+}
+.settings-dropdown {
+    position: absolute;
+    top: 90%;
+    left: 0;
+    background-color: #2f2f2f;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    min-width: 180px;
+    z-index: 1200;
+    overflow: hidden;
+}
+.settings-option {
+    padding: 8px 14px;
+    font-size: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.settings-option:hover {
+    background-color: #555555;
+}
+
+.settings-option + .settings-option {
+    border-top: 1px solid #3a3a3a;
+}
+
+.login-gate {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e1e1e;
+}
+
+.login-card {
+    width: 420px;
+    padding: 32px;
+    background: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    text-align: center;
+}
+
+.login-card h1 {
+    margin-bottom: 12px;
+}
+
+.login-card p {
+    margin-bottom: 24px;
+    color: #b0b0b0;
+}
+
+.primary-login-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    background: #058120;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.primary-login-btn:hover {
+    background: #06b52c;
+}
+
+.secondary-login-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.secondary-login-btn:hover {
+    background: #333;
+}
+
+
 
 

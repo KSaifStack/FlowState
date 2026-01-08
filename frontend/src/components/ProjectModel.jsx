@@ -1,42 +1,86 @@
+import { useState } from 'react';
 import dummyIcon from '../assets/images/defaultProj.png';
-import App from "../App.jsx";
+import App from '../App.jsx';
+import darkPin from '../assets/images/darkPin.png';
+import darkTrash from '../assets/images/darkTrash.png';
 
+/*
+TODO:
+- ADD TRASH UI ELEMENT
+- ADD PIN UI ELEMENT
+*/
 class ProjectModel {
-    constructor(project, onClose, onUpdateWorkflow, onUpdatePath) {
+    constructor(
+        project,
+        onClose,
+        onUpdateWorkflow,
+        onUpdatePath,
+        onUpdateTitle,
+        onUpdateIcon,
+        isConfigOpen,
+        toggleConfig,
+        titleInput,
+        setTitleInput,
+        handleTitleChange
+    ) {
         this.project = project;
         this.onClose = onClose;
         this.onUpdateWorkflow = onUpdateWorkflow;
         this.onUpdatePath = onUpdatePath;
+        this.onUpdateTitle = onUpdateTitle;
+        this.onUpdateIcon = onUpdateIcon;
+        this.isConfigOpen = isConfigOpen;
+        this.toggleConfig = toggleConfig;
+        this.titleInput = titleInput;
+        this.setTitleInput = setTitleInput;
+        this.handleTitleChange = handleTitleChange;
     }
 
     openWorkFlow() {
-        console.log("Open workflow for:", this.project);
+        console.log('Open workflow for:', this.project);
 
         for (let i = 0; i < this.project.workflow.length; i++) {
             window.electronAPI.openTool(this.project.workflow[i].path);
         }
-
     }
 
     async openInFileManager() {
-        console.log("Open in file manager:", this.project.path);
-
+        console.log('Open in file manager:', this.project.path);
         await window.electronAPI.openProjDirectory(this.project.path);
     }
 
     async changeFilePath() {
-        console.log("Open in file manager to change path:", this.project.path);
-        // TODO:
-        // - Electron: implement file/folder selection dialog
+        console.log('Open in file manager to change path:', this.project.path);
+
         const path = await window.electronAPI.openDirectoryDialog();
         if (!path) return;
 
         this.onUpdatePath(this.project.id, path);
-        // set current project path to path
-
-        console.log("Selected folder:", path);
+        console.log('Selected folder:', path);
     }
 
+    async openProjectIcon() {
+        console.log('Icon value:', this.project.icon);
+        console.log('Icon type:', typeof this.project.icon);
+
+        if (!this.project.icon) {
+            console.log('No icon set for this project');
+            return;
+        }
+
+        try {
+            await window.electronAPI.openTool(this.project.icon);
+            console.log('Successfully opened icon location');
+        } catch (error) {
+            console.error('Error opening file explorer:', error);
+        }
+    }
+
+    async changeProjectIcon(newImg) {
+        if (!newImg) return;
+        console.log('Changed project icon:', newImg);
+        this.onUpdateIcon(this.project.id, newImg);
+    }
 
     async addWorkflowItem() {
         try {
@@ -45,9 +89,10 @@ class ProjectModel {
 
             const toolInfo = await window.electronAPI.sendPathToBackend(newItemPath);
             const newWorkflow = [...this.project.workflow, toolInfo];
+
             this.onUpdateWorkflow(this.project.id, newWorkflow);
         } catch (err) {
-            console.error("Failed to add workflow item:", err);
+            console.error('Failed to add workflow item:', err);
         }
     }
 
@@ -63,6 +108,16 @@ class ProjectModel {
                     className="project-model"
                     onClick={(e) => e.stopPropagation()}
                 >
+                    <div className="button-container">
+                        <button className="Trashbutton" onClick={'input here'}>
+                            <img id="probuttonImage" src={darkTrash} />
+                        </button>
+
+                        <button className="Pinbutton" onClick={'input here'}>
+                            <img id="probuttonImage" src={darkPin} />
+                        </button>
+                    </div>
+
                     <button
                         className="close-button"
                         onClick={this.onClose}
@@ -80,8 +135,12 @@ class ProjectModel {
                         </div>
 
                         <div className="model-header-content">
-                            <h2 className="model-title">{this.project.title}</h2>
-                            <p className="model-subtitle">{this.project.subtitle}</p>
+                            <h2 className="model-title">
+                                {this.project.title}
+                            </h2>
+                            <p className="model-subtitle">
+                                {this.project.subtitle}
+                            </p>
 
                             <div className="header-action-buttons">
                                 <button
@@ -127,15 +186,21 @@ class ProjectModel {
 
                                         <div className="workflow-info">
                                             <div className="workflow-header">
-                                                <span className="workflow-name">{tool.name}</span>
+                                                <span className="workflow-name">
+                                                    {tool.name}
+                                                </span>
                                                 <button
                                                     className="remove-btn"
-                                                    onClick={() => this.removeWorkflowItem(idx)}
+                                                    onClick={() =>
+                                                        this.removeWorkflowItem(idx)
+                                                    }
                                                 >
                                                     ×
                                                 </button>
                                             </div>
-                                            <span className="workflow-path">{tool.path}</span>
+                                            <span className="workflow-path">
+                                                {tool.path}
+                                            </span>
                                         </div>
                                     </div>
                                 ))}
@@ -145,7 +210,7 @@ class ProjectModel {
                                         style={{
                                             color: '#888',
                                             fontSize: '14px',
-                                            fontStyle: 'italic'
+                                            fontStyle: 'italic',
                                         }}
                                     >
                                         No WorkFlow tools added yet!
@@ -171,38 +236,149 @@ class ProjectModel {
                         </div>
 
                         <div className="model-section">
-                            <h3>Project Configuration</h3>
-                            <p className="text">Project Main Directory</p>
-                            <div className="Directory-section">
-                                <button
-                                    className="path-button"
-                                    onClick={() => this.changeFilePath()}
+                            <button
+                                className="dropdown-header"
+                                onClick={this.toggleConfig}
+                            >
+                                <span>Project Configuration</span>
+                                <span
+                                    className={`dropdown-arrow ${
+                                        this.isConfigOpen ? 'open' : ''
+                                    }`}
                                 >
-                                    ...
-                                </button>
-                                <p className="path-text">{this.project.path}</p>
-                            </div>
+                                    ▾
+                                </span>
+                            </button>
+
+                            {this.isConfigOpen && (
+                                <div className="dropdown-container">
+                                    <div className="dropdown-option">
+                                        <p className="text">
+                                            Change Project Title
+                                        </p>
+                                        <input
+                                            type="text"
+                                            value={this.titleInput}
+                                            onChange={(e) =>
+                                                this.setTitleInput(e.target.value)
+                                            }
+                                            className="title-input"
+                                        />
+                                        <button
+                                            className="done-btn"
+                                            onClick={this.handleTitleChange}
+                                        >
+                                            Done
+                                        </button>
+                                    </div>
+
+                                    <div className="dropdown-option">
+                                        <p className="text">
+                                            Change Project img
+                                        </p>
+
+                                        <div
+                                            className="icon-wrapper"
+                                            style={{
+                                                cursor: 'pointer',
+                                                display: 'inline-block',
+                                            }}
+                                            title="Click to open in file explorer"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                this.openProjectIcon();
+                                            }}
+                                        >
+                                            <img
+                                                src={
+                                                    this.project.icon ||
+                                                    dummyIcon
+                                                }
+                                                alt="Project Icon"
+                                                className="current-icon"
+                                                style={{
+                                                    width: '60px',
+                                                    height: '60px',
+                                                    borderRadius: '8px',
+                                                    objectFit: 'cover',
+                                                    border: '1px solid #ccc',
+                                                }}
+                                            />
+                                        </div>
+
+                                        <button
+                                            className="done-btn"
+                                            onClick={async (e) => {
+                                                e.stopPropagation();
+                                                const iconPath =
+                                                    await window.electronAPI.openImageDialog();
+                                                if (iconPath)
+                                                    this.changeProjectIcon(
+                                                        iconPath
+                                                    );
+                                            }}
+                                        >
+                                            Change Icon
+                                        </button>
+                                    </div>
+
+                                    <div className="dropdown-option">
+                                        <p className="text">
+                                            Project Main Directory
+                                        </p>
+                                        <div className="Directory-section">
+                                            <button
+                                                className="path-button"
+                                                onClick={() =>
+                                                    this.changeFilePath()
+                                                }
+                                            >
+                                                ...
+                                            </button>
+                                            <p className="path-text">
+                                                {this.project.path}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         <div className="model-section">
                             <h3>Insights (AI)</h3>
-                            <p className="insights-text">{this.project.insights}</p>
+                            <p className="insights-text">
+                                {this.project.insights}
+                            </p>
                         </div>
+
                         <div className="model-stats">
                             <div className="stat-item">
-                                <div className="stat-label">Total Commits</div>
-                                <div className="stat-value">{this.project.commits}</div>
-                            </div>
-
-                            <div className="stat-item">
-                                <div className="stat-label">Average Daily Commits</div>
-                                <div className="stat-value">{this.project.dailyCommits}</div>
-                            </div>
-
-                            <div className="stat-item">
-                                <div className="stat-label">Last Opened</div>
+                                <div className="stat-label">
+                                    Total Commits
+                                </div>
                                 <div className="stat-value">
-                                    {this.project.date.replace("Last Opened: ", ">")}
+                                    {this.project.commits}
+                                </div>
+                            </div>
+
+                            <div className="stat-item">
+                                <div className="stat-label">
+                                    Average Daily Commits
+                                </div>
+                                <div className="stat-value">
+                                    {this.project.dailyCommits}
+                                </div>
+                            </div>
+
+                            <div className="stat-item">
+                                <div className="stat-label">
+                                    Last Opened
+                                </div>
+                                <div className="stat-value">
+                                    {this.project.date.replace(
+                                        'Last Opened: ',
+                                        '>'
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -213,8 +389,39 @@ class ProjectModel {
     }
 }
 
-function ProjectModelComponent({ project, onClose, onUpdateWorkflow, onUpdatePath }) {
-    const model = new ProjectModel(project, onClose, onUpdateWorkflow, onUpdatePath);
+function ProjectModelComponent({
+    project,
+    onClose,
+    onUpdateWorkflow,
+    onUpdatePath,
+    onUpdateTitle,
+    onUpdateIcon,
+}) {
+    const [isConfigOpen, setIsConfigOpen] = useState(false);
+    const [titleInput, setTitleInput] = useState(project.title);
+
+    const toggleConfig = () => setIsConfigOpen(!isConfigOpen);
+
+    const handleTitleChange = () => {
+        if (titleInput.trim() === '' || titleInput === project.title) return;
+        onUpdateTitle(project.id, titleInput);
+        console.log('Title has been updated to:', titleInput);
+    };
+
+    const model = new ProjectModel(
+        project,
+        onClose,
+        onUpdateWorkflow,
+        onUpdatePath,
+        onUpdateTitle,
+        onUpdateIcon,
+        isConfigOpen,
+        toggleConfig,
+        titleInput,
+        setTitleInput,
+        handleTitleChange
+    );
+
     return model.render();
 }
 
