@@ -1,5 +1,6 @@
 import './App.css';
 import TitleBar from './components/TitleBar.jsx';
+import GithubIcon from './assets/images/Github.png';
 function LoginGate({ onAuth }) {
     const loginWithGithub = async () => {
         // Later:
@@ -19,6 +20,7 @@ function LoginGate({ onAuth }) {
                     <p className="Title">FlowState</p>
                     <p className="Subtext">AI–Powered Project Manager.</p>
             <button className="Github-button" onClick={loginWithGithub}>
+                <img  src={GithubIcon} alt="Github" className="github-icon" />
                 Sign in with GitHub
             </button>
             <button className="Local-button" onClick={loginLocal}>

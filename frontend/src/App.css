@@ -250,12 +250,6 @@ html, body, #root {
     font-size: 44px;
 }
 
-.github-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-}
 
 .github-icon {
   width: 30px;
@@ -1030,7 +1024,7 @@ button:active {
     font-size: 15px;
     border-radius: 6px;
     cursor: pointer;
-    border: none;
+    border: 1px solid #3a3a3a;    
     transition: all 0.2s ease;
     margin-bottom: 10px;
 }
