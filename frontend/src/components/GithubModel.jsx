@@ -63,7 +63,6 @@ function GitHubProfile() {
             {showDropdown && (
                 <div
                     className="dropdown-container"
-                    style={{ position: 'absolute', top: '100%', right: 0 }}
                 >
                     <div
                         className="gitdropdown-option"
