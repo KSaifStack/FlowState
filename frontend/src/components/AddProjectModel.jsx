@@ -52,14 +52,14 @@ class AddProjectModel {
 
                         <div className="action-buttons vertical">
                             <button
-                                className="secondary-action-btn"
+                                className="Github-button"
                                 onClick={() => this.openGithub()}
                             >
                                 Import from GitHub
                             </button>
 
                             <button
-                                className="secondary-action-btn"
+                                className="Local-button"
                                 onClick={() => this.openInFileManager()}
                             >
                                 Import from Local Folder

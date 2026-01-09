@@ -62,7 +62,7 @@ function GitHubProfile() {
 
             {showDropdown && (
                 <div
-                    className="dropdown-container"
+                    className="gitdrop-container"
                 >
                     <div
                         className="gitdropdown-option"
