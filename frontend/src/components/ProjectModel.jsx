@@ -127,14 +127,16 @@ async requestPinProject() {
                     className="project-model"
                     onClick={(e) => e.stopPropagation()}
                 >
+                    
                     <div className="button-container">
                         <button className="Trashbutton" onClick={() => this.requestDeleteProject()}>
-                            <img id="probuttonImage" src={darkTrash} />
+                            <img id="ProjectbuttonImage" src={darkTrash} />
+                        </button>
+                        <button className="Pinbutton" onClick={() => this.requestDeleteProject()}>
+                            <img id="ProjectbuttonImage" src={darkPin} />
                         </button>
 
-                        <button className="Pinbutton" onClick={() => this.requestDeleteProject()}>
-                            <img id="probuttonImage" src={darkPin} />
-                        </button>
+                        
                     </div>
 
                     <button
