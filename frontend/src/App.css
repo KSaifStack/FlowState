@@ -1056,6 +1056,25 @@ button:active {
     background-color: #555555;
     border: 1px solid #888888;
 }
+.Add-text {
+  display: flex;
+  flex-direction: column;  /* stack title and subtitle vertically */
+}
+
+.Add-title {
+display: flex;
+  flex-direction: column;   /* stack vertically */
+  align-items: center;      /* center horizontally */
+  text-align: center;       /* center multi-line text inside spans */
+  gap: 4px;                 /* optional spacing between title and subtitle */
+}
+
+.Add-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.4;
+  margin-top: 2px;          /* small gap under title */
+}
 
 
 

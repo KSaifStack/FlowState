@@ -47,7 +47,7 @@ class AddProjectModel {
 
                     <div className="model-content">
                         <p className="model-subtitle">
-                            Choose how you want to create your project
+                            Choose how you want to create your project.
                         </p>
 
                         <div className="action-buttons vertical">
@@ -56,14 +56,27 @@ class AddProjectModel {
                                 onClick={() => this.openGithub()}
                             >
                                 <img  src={GithubIcon} alt="Github" className="github-icon" />
-                                Import from GitHub
+                                <div className="Add-text">
+                                <span className="Add-title"> Import from Github</span>
+                                <span className="Add-subtitle">
+                                    Link your repository to FlowState! The AI will automatically read through your repository
+                                    to track progress.
+                                </span>
+                                </div>
                             </button>
 
                             <button
                                 className="Local-button"
                                 onClick={() => this.openInFileManager()}
                             >
-                                Import from Local Folder
+                                <div className="Add-text">
+                                <span className="Add-title">Import from Local Folder</span>
+                                <span className="Add-subtitle">
+                                    Select a directory and fill out your project description.  
+                                    The AI will still auto-generate goals,ideas and suggestions.              
+                                  
+                                </span>
+                                </div>
                             </button>
                         </div>
                     </div>
