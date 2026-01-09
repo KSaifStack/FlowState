@@ -6,7 +6,7 @@
 
      LOCAL BUTTON: will open a window in the same format without the prefilled info.
 */
-
+import GithubIcon from '../assets/images/Github.png';
 class AddProjectModel {
     constructor(onClose, onUpdateWorkflow) {
         this.onClose = onClose;
@@ -55,6 +55,7 @@ class AddProjectModel {
                                 className="Github-button"
                                 onClick={() => this.openGithub()}
                             >
+                                <img  src={GithubIcon} alt="Github" className="github-icon" />
                                 Import from GitHub
                             </button>
 
