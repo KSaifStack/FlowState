@@ -132,6 +132,42 @@ html, body, #root {
         border: 1px solid #888888;
     }
 
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 24px;
+}
+
+.empty-text {
+    text-align: center;
+    color: #888888;
+    font-size: 18px;
+}
+
+.empty-text p {
+    margin: 0;
+}
+
+.empty-button {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    background-color: #333333;
+    color: #eeeeee;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.empty-button:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+
 .project-info {
     flex: 1;
 }
@@ -947,6 +983,12 @@ button:active {
 .done-btn:hover {
     background-color: #555555;
     border: 1px solid #888888;
+}
+
+.toolbar {
+    display: 'flex';
+    justify-content: space-between;
+    align-items: center;
 }
 
 .sort-dropdown {

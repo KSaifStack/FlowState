@@ -178,8 +178,10 @@ function App({ onSignOut, authState }) {
                         <div className="project-list">
                             {sortedProjects.length === 0 ? (
                                 <div className="empty-state">
+                                    <div className="empty-text">
                                     <p>No projects loaded yet.</p>
-                                    <button onClick={openAddModel}>Create your first project</button>
+                                    </div>
+                                    <button className ="empty-button" onClick={openAddModel}>Create your first project</button>
                                 </div>
                             ) : (
                                 sortedProjects.map((project) => (
