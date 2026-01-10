@@ -1,6 +1,13 @@
 @Backend_HostAddress = http://localhost:5180
 
-GET {{Backend_HostAddress}}/projdirectory/
+### Export project to JSON
+POST {{Backend_HostAddress}}/api/exportjson/
+Content-Type: application/json
+
+### Get project directory listing
+GET {{Backend_HostAddress}}/api/projdirectory/
 Accept: application/json
 
-###
+### Get all projects
+GET {{Backend_HostAddress}}/api/importjson/
+Accept: application/json

@@ -5,6 +5,7 @@ const waitPort = require("wait-port");
 const fs = require("fs");
 
 let backendProcess;
+let mainWindow;
 
 const BACKEND_PORT = 5180;
 
@@ -12,12 +13,11 @@ const BACKEND_PORT = 5180;
 const isWin = process.platform === "win32";
 const isMac = process.platform === "darwin";
 const isLinux = process.platform === "linux";
+
 function getBackendPath() {
-    // Detect backend path
     if (isWin) return path.join(__dirname, "backend-win", "Backend.exe");
     if (isMac) return path.join(__dirname, "backend-osx", "Backend");
     if (isLinux) return path.join(__dirname, "backend-linux", "Backend");
-
     throw new Error("Unsupported platform");
 }
 
@@ -35,20 +35,16 @@ function startBackend() {
     });
 }
 
-
 // Detect if React dev server is running
 async function isDevServerRunning() {
-    const open = await waitPort({ host: "localhost", port: 5173, timeout: 1000 });
-    return open;
+    return await waitPort({ host: "localhost", port: 5173, timeout: 1000 });
 }
 
 async function createWindow() {
     const devMode = await isDevServerRunning();
 
-    // Start backend first
     startBackend();
 
-    // Wait until backend is ready
     const backendReady = await waitPort({ host: "127.0.0.1", port: BACKEND_PORT, timeout: 10000 });
     if (!backendReady) {
         console.error(`Backend did not start on port ${BACKEND_PORT}`);
@@ -84,18 +80,11 @@ async function createWindow() {
     }
 }
 
-
-
-let mainWindow;
-
-// 👇 SINGLETON LOCK
+// SINGLETON LOCK
 const gotTheLock = app.requestSingleInstanceLock();
-
 if (!gotTheLock) {
-    // Another instance is already running → exit immediately
     app.quit();
 } else {
-    // Fired when a second instance is launched
     app.on("second-instance", () => {
         if (mainWindow) {
             if (mainWindow.isMinimized()) mainWindow.restore();
@@ -104,11 +93,8 @@ if (!gotTheLock) {
     });
 }
 
-if (gotTheLock) {
-    app.whenReady().then(createWindow);
-}
+if (gotTheLock) app.whenReady().then(createWindow);
 
-// Kill backend on exit
 app.on("quit", () => {
     if (backendProcess) backendProcess.kill();
 });
@@ -120,20 +106,15 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
+
 ipcMain.on('window-control', (event, action) => {
     const win = BrowserWindow.fromWebContents(event.sender);
     if (!win) return;
 
     switch (action) {
-        case 'minimize':
-            win.minimize();
-            break;
-        case 'maximize':
-            win.isMaximized() ? win.unmaximize() : win.maximize();
-            break;
-        case 'close':
-            win.close();
-            break;
+        case 'minimize': win.minimize(); break;
+        case 'maximize': win.isMaximized() ? win.unmaximize() : win.maximize(); break;
+        case 'close': win.close(); break;
     }
 });
 
@@ -145,67 +126,39 @@ ipcMain.handle("open-exe-dialog", async () => {
             { name: "All Files", extensions: ["*"] }
         ]
     });
-
-    if (result.canceled) return null;
-
-    return result.filePaths[0];
+    return result.canceled ? null : result.filePaths[0];
 });
 
 ipcMain.handle("open-directory-dialog", async () => {
-    const result = await dialog.showOpenDialog({
-        properties: ["openDirectory"]
-    });
-
-    if (result.canceled || result.filePaths.length === 0) {
-        return null;
-    }
-
-    return result.filePaths[0];
+    const result = await dialog.showOpenDialog({ properties: ["openDirectory"] });
+    return (!result.canceled && result.filePaths.length > 0) ? result.filePaths[0] : null;
 });
 
-ipcMain.handle('open-image-dialog', async (event) => {
+ipcMain.handle('open-image-dialog', async () => {
     const result = await dialog.showOpenDialog({
         properties: ['openFile'],
-        filters: [
-            { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'ico'] }
-        ]
+        filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'ico'] }]
     });
-    
-    if (result.canceled) {
-        return null;
-    }
-    
-    return result.filePaths[0];
+    return result.canceled ? null : result.filePaths[0];
 });
 
-
 async function sendPathToBackend(path) {
-    const response = await fetch("http://127.0.0.1:5180/api/projdirectory/send", {
+    const response = await fetch(`http://127.0.0.1:${BACKEND_PORT}/api/projdirectory/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ path }),
     });
 
-    if (!response.ok) {
-        throw new Error("Backend request failed");
-    }
-
+    if (!response.ok) throw new Error("Backend request failed");
     return await response.json();
 }
 
-ipcMain.handle("open-proj-directory", async (event, path) => {
+ipcMain.handle("open-proj-directory", async (_event, path) => {
     try {
         const validatedPath = await sendPathToBackend(path);
+        if (!validatedPath || !validatedPath.path) throw new Error("Invalid response from backend");
 
-        if (!validatedPath || !validatedPath.path) {
-            throw new Error("Invalid response from backend");
-        }
-
-        // Open in explorer/finder
         await shell.openPath(validatedPath.path);
-
-        console.log(validatedPath.path);
-
         return { success: true };
     } catch (err) {
         console.error("Failed to open project directory:", err);
@@ -213,11 +166,71 @@ ipcMain.handle("open-proj-directory", async (event, path) => {
     }
 });
 
+ipcMain.handle("send-path-to-backend", async (_event, path) => await sendPathToBackend(path));
 
-
-ipcMain.handle("send-path-to-backend", async (event, path) => {
-    return await sendPathToBackend(path);
+ipcMain.handle('open-tool', async (_event, toolPath) => {
+    try {
+        if (!toolPath) throw new Error('Tool path is empty');
+        const result = await shell.openPath(toolPath);
+        if (result) throw new Error(result);
+        return { success: true };
+    } catch (err) {
+        console.error('Failed to open tool:', toolPath, err.message);
+        return { success: false, error: err.message };
+    }
 });
 
+ipcMain.handle("export-project", async (_event, project) => {
+    await fetch(`http://127.0.0.1:${BACKEND_PORT}/api/exportjson/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(project)
+    });
+});
 
-ipcMain.handle("open-tool", async (event, path) => { shell.openExternal("file://" + path) });
+ipcMain.handle('load-all-projects', async () => {
+    try {
+        // Compute the correct projects directory
+        // __dirname points to electron folder, so go up one level to FlowState then electron/projects
+        const projectsDir = path.join(__dirname, 'projects'); // Already correct if electron folder
+        // If main.js is in FlowState/electron/, then projectsDir = FlowState/electron/projects
+
+        if (!fs.existsSync(projectsDir)) return [];
+
+        const files = fs.readdirSync(projectsDir)
+            .filter(file => file.endsWith('.json'))
+            .map(file => path.join(projectsDir, file)); // return full paths
+
+        return files;
+    } catch (err) {
+        console.error('Failed to load project files:', err);
+        return [];
+    }
+});
+
+ipcMain.handle("import-project", async (_event, filePath) => {
+    // Ensure the full path is absolute
+    let fullPath = filePath;
+
+    if (!path.isAbsolute(filePath)) {
+        fullPath = path.join(__dirname, 'projects', filePath);
+    }
+
+    if (!fs.existsSync(fullPath)) {
+        throw new Error(`File not found: ${fullPath}`);
+    }
+
+    const response = await fetch("http://127.0.0.1:5180/api/importjson/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: fullPath }),
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+    }
+
+    return await response.json();
+});
+

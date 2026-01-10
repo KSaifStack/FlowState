@@ -17,7 +17,6 @@ function SettingsModel({ theme, setTheme }) {
         setShowDropdown(false);
     };
 
-
     const handleGetVersion = () => {
         // TODO: Fetch app version from backend / Electron
         // Example later:
@@ -46,8 +45,6 @@ function SettingsModel({ theme, setTheme }) {
 
         closeDropdown();
     };
-
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {
