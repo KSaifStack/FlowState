@@ -29,18 +29,18 @@ By prioritizing ethical data use, burnout awareness, and human-in-the-loop workf
 - Once created the user should have a option to see and edit the workflow,open the workflow,see goals and roadmaps for project,commit history,to pin and trash the project
 - Keep sleeping like a bum. 
 - The app will stay open upon closing and can only be closed when pressed in menu other wise it will stay in system tray.
-- Once a project is pressed they should see the following: TechStack,Workflow,Goals(Ai),Insights(Ai),Total commits,Daily commits,Last opened data,Saved Workflow(while being able to edit it)
+- Once a project is pressed they should see the following: TechStack,Workflow,Goals(Ai),Insights(Ai),Total commits,Daily commits,Last opened data,Saved Workflow(while being able to edit it)(Done)
 - The pin and trash feature will be moved inside the project card window.
 - On the left side, it should display the username along with the last project they had open and the option to start it.(Done)
 - on the right should be a list of projects that are on GitHub/on System(if not connected to GitHub or didn't add)(Done)
-- When the project is pressed, it will open a card with AI features inside of it, along with a button to open the previous workflow in one go, rather than opening apps one by one.
+- When the project is pressed, it will open a card with AI features inside of it, along with a button to open the previous workflow in one go, rather than opening apps one by one.(Done)
 - Local users can link their data to GitHub at any time.
 - simple yet clean ui design.(Done).
-- If the user didn't open the project before or through the app, it will prompt them to choose an app of their choice to remember it by.
-  (eg: VS Code and if the user pressed VS Code through the app and opens Spotify for music, it will remember VS Code + Spotify.)
+- If the user didn't open the project before or through the app, it will prompt them to choose an app of their choice to remember it by.(Done)
+  (eg: VS Code and if the user pressed VS Code through the app and opens Spotify for music, it will remember VS Code + Spotify.)(Done)
 - The user should be able to press the icon on the top left to open a menu dialogue in which they can edit settings.
   e.g.: Exit application, future app settings. 
-  - FlowState title on the top left will be replaced with a logo this logo will open a dropdown menu which will open a settings page for the app.
+  - FlowState title on the top left will be replaced with a logo this logo will open a dropdown menu which will open a settings page for the app.(Done)
 
 AI FEATURES:
 --

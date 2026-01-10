@@ -6,7 +6,7 @@
 
      LOCAL BUTTON: will open a window in the same format without the prefilled info.
 */
-
+import GithubIcon from '../assets/images/Github.png';
 class AddProjectModel {
     constructor(onClose, onUpdateWorkflow) {
         this.onClose = onClose;
@@ -47,22 +47,36 @@ class AddProjectModel {
 
                     <div className="model-content">
                         <p className="model-subtitle">
-                            Choose how you want to create your project
+                            Choose how you want to create your project.
                         </p>
 
                         <div className="action-buttons vertical">
                             <button
-                                className="secondary-action-btn"
+                                className="Github-button"
                                 onClick={() => this.openGithub()}
                             >
-                                Import from GitHub
+                                <img  src={GithubIcon} alt="Github" className="github-icon" />
+                                <div className="Add-text">
+                                <span className="Add-title"> Import from Github</span>
+                                <span className="Add-subtitle">
+                                    Link your repository to FlowState! The AI will automatically read through your repository
+                                    to track progress.
+                                </span>
+                                </div>
                             </button>
 
                             <button
-                                className="secondary-action-btn"
+                                className="Local-button"
                                 onClick={() => this.openInFileManager()}
                             >
-                                Import from Local Folder
+                                <div className="Add-text">
+                                <span className="Add-title">Import from Local Folder</span>
+                                <span className="Add-subtitle">
+                                    Select a directory and fill out your project description.  
+                                    The AI will still auto-generate goals,ideas and suggestions.              
+                                  
+                                </span>
+                                </div>
                             </button>
                         </div>
                     </div>

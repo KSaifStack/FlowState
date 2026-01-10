@@ -80,7 +80,7 @@ function SettingsModel({ theme, setTheme }) {
                         className="settings-option"
                         onClick={handleGetVersion}
                     >
-                        Version 1.0.0
+                        Version 0.0.1
                     </div>
 
                     <div

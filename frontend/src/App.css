@@ -24,6 +24,51 @@ html, body, #root {
     padding-top: 45px;
 }
 
+
+
+.center-panel {
+    width: 90vw;
+    min-height: 80vh;
+    padding: 40px;
+
+    background-color: #2a2a2a;
+    border: 1px solid #3f3f3f;
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.login-screen {
+    height: 100vh;
+    width: 100vw;
+    background: #1e1e1e;
+}
+
+.login-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Title{
+    font-size: 60px;
+    font-weight: 500;
+    margin-top:-20px;
+}
+
+.Subtext{
+    font-size: 18px;
+    color: #e0e0e0;
+    margin-bottom: 10px;
+}
+
+
 .left-panel {
     width: 460px;
     background-color: #2a2a2a;
@@ -168,8 +213,9 @@ html, body, #root {
 .button-container {
     display: flex;
     gap: 15px;
-    margin-top: -9px;
-    margin-bottom: 10px;
+    margin-left: -15px;
+    margin-top: -15px;
+    margin-bottom: 15px;
 }
 
 #buttonImage {
@@ -181,15 +227,17 @@ html, body, #root {
     justify-content: center;
     font-size: 44px;
 }
-#probuttonImage {
-    width: 25px;
-    height: 25px;
+#ProjectbuttonImage {
+    width: 20px;
+    height: 20px;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 44px;
 }
+
+
 
 #TitleImage {
     margin-top: 10px;
@@ -202,6 +250,13 @@ html, body, #root {
     font-size: 44px;
 }
 
+
+.github-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  object-fit: contain;
+}
 .Trashbutton {
     background: transparent;
     border: none;
@@ -665,6 +720,14 @@ button:active {
     margin-top: 10px;
 }
 
+.action-buttons {
+   display: flex;
+   gap: 10px;
+   margin-top: 10px;
+}
+
+     
+
 .header-action-buttons button {
     padding: 8px 14px;
     font-size: 14px;
@@ -764,7 +827,7 @@ button:active {
 }
 
 .dropdown-container {
-    background: #2a2a2a;
+   background: #2a2a2a;
     border: 1px solid #3a3a3a;
     border-top: none;                
     border-radius: 0 0 8px 8px;       
@@ -772,6 +835,19 @@ button:active {
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.gitdrop-container {
+    position: absolute;
+    top: 90%;
+    left: 0;
+    background-color: #2f2f2f;
+    border: 1px solid #3f3f3f;
+    border-radius: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    min-width: 180px;
+    z-index: 1200;
+    overflow: hidden;
 }
 
 .dropdown-container .text {
@@ -798,13 +874,11 @@ button:active {
     transition: background-color 0.15s ease;
 }
 .gitdropdown-option{
-    display: flex;
     flex-direction: column;
     gap: 2px;
-    min-width: 125px;
+    min-width: 120px;
     padding: 10px 12px;
     border-radius: 6px;
-
     transition: background-color 0.15s ease;
 }
 
@@ -832,6 +906,7 @@ button:active {
     font-weight: 500;
 }
 .title-input {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
     width: 100%;
     padding: 10px 12px;
     font-size: 15px;
@@ -856,6 +931,7 @@ button:active {
 
 
 .done-btn {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
     align-self: flex-start;
     margin-top: 6px;
     padding: 6px 12px;
@@ -931,61 +1007,71 @@ button:active {
     border-top: 1px solid #3a3a3a;
 }
 
-.login-gate {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1e1e1e;
-}
 
-.login-card {
-    width: 420px;
-    padding: 32px;
-    background: #2a2a2a;
-    border-radius: 10px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-    text-align: center;
-}
-
-.login-card h1 {
-    margin-bottom: 12px;
-}
-
-.login-card p {
-    margin-bottom: 24px;
-    color: #b0b0b0;
-}
-
-.primary-login-btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-    background: #058120;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    margin-bottom: 12px;
-}
-
-.primary-login-btn:hover {
-    background: #06b52c;
-}
-
-.secondary-login-btn {
-    width: 100%;
-    padding: 10px;
-    background: transparent;
-    border: 1px solid #3a3a3a;
-    border-radius: 6px;
-    color: #ccc;
-    cursor: pointer;
-}
 
 .secondary-login-btn:hover {
     background: #333;
 }
+
+.Github-button,
+.Local-button {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid #3a3a3a;    
+    transition: all 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.Github-button {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
+    background: #24292e;
+    color: white;
+}
+
+.Github-button:hover {
+    border: 1px solid #888888;
+}
+
+.Local-button {
+    box-shadow: 0 0 6px rgba(4, 4, 4, 0.5);
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    color: #ccc;
+}
+
+.Local-button:hover {
+    background-color: #555555;
+    border: 1px solid #888888;
+}
+.Add-text {
+  display: flex;
+  flex-direction: column;  /* stack title and subtitle vertically */
+}
+
+.Add-title {
+display: flex;
+  flex-direction: column;   /* stack vertically */
+  align-items: center;      /* center horizontally */
+  text-align: center;       /* center multi-line text inside spans */
+  gap: 4px;                 /* optional spacing between title and subtitle */
+}
+
+.Add-subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.4;
+  margin-top: 2px;          /* small gap under title */
+}
+
+
+
 
 
 
