@@ -1,37 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import '../App.css';
 
-
-export const authenticateWithGitHub = async () => {
-    console.log('authenticateWithGitHub()');
-    return { username: 'KsaifStack', avatarUrl: 'https://github.com/KsaifStack.png' };
-};
-
-
-export const getGitHubUser = async () => {
-    console.log('GetGitHubUser()');
-    return { username: 'KsaifStack', avatarUrl: 'https://github.com/KsaifStack.png' };
-};
-
-export const signOutGitHub = async () => {
-    console.log('SignOutGitHub()');
-    return true;
-};
-
-export const fetchGitHubRepo = async (url) => {
-    console.log('FetchGitHubRepository():', url);
-    return null;
-};
-
-
-export const isValidGitHubUrl = (url) => {
-    const pattern = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/;
-    return pattern.test(url);
-};
-
-
-
-function GitHubProfile() {
+function GitHubProfile({ username, onSignOut }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -49,7 +19,7 @@ function GitHubProfile() {
     };
 
     const handleSignOut = () => {
-        console.log('Sign Out clicked');
+        if (onSignOut) onSignOut();
         closeDropdown();
     };
 
@@ -72,19 +42,17 @@ function GitHubProfile() {
         >
             <div className="user-footer" onClick={toggleDropdown}>
                 <img
-                    src="https://github.com/KsaifStack.png"
+                    src={`https://github.com/${username}.png`}
                     alt="GitHub Profile"
                     className="github-avatar"
                 />
                 <div className="user-info">
-                    <div className="github-username">KsaifStack</div>
+                    <div className="github-username">{username}</div>
                 </div>
             </div>
 
             {showDropdown && (
-                <div
-                    className="gitdrop-container"
-                >
+                <div className="gitdrop-container">
                     <div
                         className="gitdropdown-option"
                         onClick={handleViewProfile}
