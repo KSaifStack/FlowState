@@ -4,7 +4,7 @@ import logo from '../assets/images/logo.png';
 import GithubModel from './GithubProfile.jsx';
 import SettingsModel from './SettingsModel.jsx';
 
-function TitleBar({ authState }) {
+function TitleBar({ authState, githubLogin, onSignOut }) {
     const [theme, setTheme] = useState('dark');
 
     return (
@@ -16,7 +16,21 @@ function TitleBar({ authState }) {
             </SettingsModel>
 
             <div className="window-controls">
-                {authState !== 'guest' && <GithubModel />}
+                {authState !== 'guest' && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginRight: 10 }}>
+                        {authState === 'github' && githubLogin && (
+                            <span style={{ fontSize: 12, opacity: 0.85 }}>@{githubLogin}</span>
+                        )}
+
+                        {onSignOut && (
+                            <button onClick={onSignOut} style={{ fontSize: 12 }}>
+                                Sign out
+                            </button>
+                        )}
+
+                        <GithubModel />
+                    </div>
+                )}
 
                 <button onClick={() => window.electronAPI.windowControl('minimize')}>—</button>
                 <button onClick={() => window.electronAPI.windowControl('maximize')}>▢</button>

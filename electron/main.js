@@ -3,6 +3,7 @@ const { spawn } = require("child_process");
 const path = require("path");
 const waitPort = require("wait-port");
 const fs = require("fs");
+const PROTOCOL = "flowstate";
 
 let backendProcess;
 let mainWindow;
@@ -24,7 +25,18 @@ function getBackendPath() {
 function startBackend() {
     const backendPath = getBackendPath();
 
-    backendProcess = spawn(backendPath, ["--urls", `http://127.0.0.1:${BACKEND_PORT}`], { stdio: "inherit" });
+    backendProcess = spawn(
+        backendPath,
+        ["--urls", `http://127.0.0.1:${BACKEND_PORT}`],
+        {
+            stdio: "inherit",
+            env: {
+                ...process.env,
+                GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+                GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET
+            }
+        }
+    );
 
     backendProcess.on("exit", (code) => {
         console.log(`Backend exited with code ${code}`);
@@ -77,6 +89,15 @@ async function createWindow() {
         }
         console.log("Loading production React build...");
         mainWindow.loadFile(indexPath);
+
+        // Handle deep link passed on FIRST launch (Windows sometimes does this)
+        const initialUrl = process.argv.find(a => a.startsWith(`${PROTOCOL}://`));
+        if (initialUrl && initialUrl.startsWith(`${PROTOCOL}://oauth-complete`)) {
+            console.log("OAuth complete deep link received (first-launch):", initialUrl);
+            mainWindow.webContents.once("did-finish-load", () => {
+                mainWindow.webContents.send("oauth-complete");
+            });
+        }
     }
 }
 
@@ -85,13 +106,31 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
     app.quit();
 } else {
-    app.on("second-instance", () => {
-        if (mainWindow) {
-            if (mainWindow.isMinimized()) mainWindow.restore();
-            mainWindow.focus();
+    app.on("second-instance", (_event, argv) => {
+        console.log("second-instance argv:", argv);
+        const url = argv.find(a => a.startsWith(`${PROTOCOL}://`));
+        if (url && url.startsWith(`${PROTOCOL}://oauth-complete`)) {
+            console.log("OAuth deep link received:", url);
+            console.log("Sending oauth-complete to renderer");
+            const normalized = url.replace("flowstate://oauth-complete/", "flowstate://oauth-complete");
+            const parsed = new URL(normalized);
+            const code = parsed.searchParams.get("code");
+            mainWindow?.webContents.send("oauth-complete", { code });
+            mainWindow?.focus();
         }
     });
 }
+
+
+// --- Protocol registration (DEV + PROD) ---
+if (process.defaultApp) {
+    // IMPORTANT: use absolute path to your app folder (where main.js lives)
+    const appPath = path.resolve(__dirname);
+    app.setAsDefaultProtocolClient(PROTOCOL, process.execPath, [appPath]);
+} else {
+    app.setAsDefaultProtocolClient(PROTOCOL);
+}
+
 
 if (gotTheLock) app.whenReady().then(createWindow);
 
@@ -234,3 +273,8 @@ ipcMain.handle("import-project", async (_event, filePath) => {
     return await response.json();
 });
 
+ipcMain.handle("start-github-login", async () => {
+  const url = `http://127.0.0.1:${BACKEND_PORT}/auth/github/login`;
+  await shell.openExternal(url);
+  return { ok: true };
+});

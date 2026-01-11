@@ -1,27 +1,115 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using System.Security.Claims;
+using System.Text.Json;
+using AspNet.Security.OAuth.GitHub;
+using FlowState.Backend.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controllers
 builder.Services.AddControllers();
 
-// Enable CORS so frontend at 5180 can fetch
+// Data Protection key ring persisted on disk so encryption survives restarts.
+// (These keys protect the encrypted token file contents.)
+builder.Services
+    .AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FlowState", "dp_keys")
+    ));
+
+builder.Services.AddSingleton<IGitHubTokenStore, FileGitHubTokenStore>();
+
+builder.Services.AddHttpClient<GitHubApi>();
+
+// CORS: allow credentials (cookie auth). Cannot use AllowAnyOrigin with cookies.
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod());
+        policy
+            .SetIsOriginAllowed(_ => true) // Electron-safe (local-only app)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
 });
+
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
+    {
+        options.Cookie.Name = "flowstate_auth";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None; // localhost over HTTP
+    })
+    .AddGitHub("GitHub", options =>
+    {
+        options.ClientId = builder.Configuration["GITHUB_CLIENT_ID"] ?? "";
+        options.ClientSecret = builder.Configuration["GITHUB_CLIENT_SECRET"] ?? "";
+        options.CallbackPath = "/auth/github/callback";
+
+        options.Scope.Add("read:user");
+        options.Scope.Add("repo");
+
+        // IMPORTANT: we store tokens encrypted-at-rest ourselves (not in cookie)
+        options.SaveTokens = false;
+
+        options.Events.OnCreatingTicket = async context =>
+        {
+            var id = context.User.GetProperty("id").GetInt64().ToString();
+            var login = context.User.GetProperty("login").GetString() ?? "unknown";
+            var scope = context.TokenResponse?.Response?.RootElement.TryGetProperty("scope", out var s) == true
+                ? (s.GetString() ?? "")
+                : "";
+
+            if (string.IsNullOrWhiteSpace(context.AccessToken))
+            {
+                context.Fail("GitHub did not return an access token.");
+                return;
+            }
+
+            var store = context.HttpContext.RequestServices.GetRequiredService<IGitHubTokenStore>();
+            await store.SaveAsync(id, login, context.AccessToken, scope);
+
+            context.Identity!.AddClaim(new Claim("github:id", id));
+            context.Identity.AddClaim(new Claim("github:login", login));
+        };
+
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 app.UseCors();
-app.UseHttpsRedirection();
+
+// DO NOT redirect to HTTPS because Electron starts backend on http://127.0.0.1:5180
+// app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
+// Session check endpoint for your UI
+app.MapGet("/auth/me", (ClaimsPrincipal user) =>
+{
+    if (user.Identity?.IsAuthenticated != true) return Results.Unauthorized();
+    return Results.Ok(new
+    {
+        authenticated = true,
+        githubId = user.FindFirst("github:id")?.Value,
+        githubLogin = user.FindFirst("github:login")?.Value
+    });
+});
 
 app.Run();

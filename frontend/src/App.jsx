@@ -5,7 +5,7 @@ import AddProjectModelComponent from './components/AddProjectModel.jsx';
 import darkAdd from './assets/images/darkAdd.png';
 import dummyIcon from './assets/images/defaultProj.png';
 
-function App({ onSignOut, authState }) {
+function App({ authState, githubLogin, onSignOut }) {
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [showAddModel, setShowAddModel] = useState(false);
@@ -111,7 +111,7 @@ function App({ onSignOut, authState }) {
 
     return (
         <div className="app">
-            <TitleBar authState={authState} onSignOut={onSignOut} />
+            <TitleBar authState={authState} githubLogin={githubLogin} onSignOut={onSignOut} />
 
             <div className="main-content">
                 {/* LEFT PANEL - Suggestion / Greeting */}
@@ -179,9 +179,9 @@ function App({ onSignOut, authState }) {
                             {sortedProjects.length === 0 ? (
                                 <div className="empty-state">
                                     <div className="empty-text">
-                                    <p>No projects loaded yet.</p>
+                                        <p>No projects loaded yet.</p>
                                     </div>
-                                    <button className ="empty-button" onClick={openAddModel}>Create your first project</button>
+                                    <button className="empty-button" onClick={openAddModel}>Create your first project</button>
                                 </div>
                             ) : (
                                 sortedProjects.map((project) => (

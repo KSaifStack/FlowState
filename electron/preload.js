@@ -10,5 +10,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openImageDialog: () => ipcRenderer.invoke('open-image-dialog'),
     exportProject: (project) => ipcRenderer.invoke("export-project", project),
     importProject: (path) => ipcRenderer.invoke("import-project", path),
-    loadAllProjects: () => ipcRenderer.invoke('load-all-projects')
+    loadAllProjects: () => ipcRenderer.invoke('load-all-projects'),
+    startGitHubLogin: () => ipcRenderer.invoke("start-github-login"),
+    onOAuthComplete: (callback) => ipcRenderer.on("oauth-complete", (_evt, data) => callback(data)),
 });
