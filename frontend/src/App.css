@@ -512,6 +512,10 @@ button:active {
     font-size: 16px;
     color: #b0b0b0;
 }
+.gitmodel-subtitle{
+    font-size: 13px;
+    color: #b0b0b0;
+}
 
 .close-button {
     position: absolute;
@@ -1094,22 +1098,28 @@ button:active {
 }
 .Add-text {
   display: flex;
-  flex-direction: column;  /* stack title and subtitle vertically */
+  flex-direction: column; 
 }
 
 .Add-title {
 display: flex;
-  flex-direction: column;   /* stack vertically */
-  align-items: center;      /* center horizontally */
-  text-align: center;       /* center multi-line text inside spans */
-  gap: 4px;                 /* optional spacing between title and subtitle */
+  flex-direction: column;   
+  align-items: center;      
+  text-align: center;       
+  gap: 4px;                 
 }
 
 .Add-subtitle {
   font-size: 12px;
   opacity: 0.8;
   line-height: 1.4;
-  margin-top: 2px;          /* small gap under title */
+  margin-top: 2px;          
+}
+
+.Add-subbuttons{
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 

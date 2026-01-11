@@ -1,14 +1,16 @@
 import './App.css';
 import TitleBar from './components/TitleBar.jsx';
 import GithubIcon from './assets/images/Github.png';
+
 function LoginGate({ onAuth }) {
     const loginWithGithub = async () => {
-        // Later:
-        // await window.electronAPI.auth.github();
-
+        // TODO: Backend will handle GitHub OAuth
+        console.log('GitHub login button clicked');
         onAuth('github');
     };
-    const loginLocal =() => {
+
+    const loginLocal = () => {
+        console.log('Local login button clicked');
         onAuth('local');
     }
 
@@ -19,17 +21,17 @@ function LoginGate({ onAuth }) {
                 <div className="center-panel">
                     <p className="Title">FlowState</p>
                     <p className="Subtext">AI–Powered Project Manager.</p>
-            <button className="Github-button" onClick={loginWithGithub}>
-                <img  src={GithubIcon} alt="Github" className="github-icon" />
-                Sign in with GitHub
-            </button>
-            <button className="Local-button" onClick={loginLocal}>
-                Sign in as a Local User
-            </button>
+                    <button className="Github-button" onClick={loginWithGithub}>
+                        <img src={GithubIcon} alt="Github" className="github-icon" />
+                        Sign in with GitHub
+                    </button>
+                    <button className="Local-button" onClick={loginLocal}>
+                        Sign in as a Local User
+                    </button>
+                </div>
             </div>
-            
-        </div>
         </div>
     );
 }
+
 export default LoginGate;

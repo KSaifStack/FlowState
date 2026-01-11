@@ -1,10 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
 import '../App.css';
 
+
+export const authenticateWithGitHub = async () => {
+    console.log('authenticateWithGitHub()');
+    return { username: 'KsaifStack', avatarUrl: 'https://github.com/KsaifStack.png' };
+};
+
+
+export const getGitHubUser = async () => {
+    console.log('GetGitHubUser()');
+    return { username: 'KsaifStack', avatarUrl: 'https://github.com/KsaifStack.png' };
+};
+
+export const signOutGitHub = async () => {
+    console.log('SignOutGitHub()');
+    return true;
+};
+
+export const fetchGitHubRepo = async (url) => {
+    console.log('FetchGitHubRepository():', url);
+    return null;
+};
+
+
+export const isValidGitHubUrl = (url) => {
+    const pattern = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/;
+    return pattern.test(url);
+};
+
+
+
 function GitHubProfile() {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
-
 
     const toggleDropdown = () => {
         setShowDropdown(prev => !prev);
@@ -14,23 +43,15 @@ function GitHubProfile() {
         setShowDropdown(false);
     };
 
-
     const handleViewProfile = () => {
-        // TODO: Open GitHub profile
-        // Example later:
-        // window.electronAPI.openExternal(`https://github.com/username`);
         console.log('View Profile clicked');
         closeDropdown();
     };
 
     const handleSignOut = () => {
-        // TODO: Clear auth tokens / session
-        // Example later:
-        // window.electronAPI.auth.signOut();
         console.log('Sign Out clicked');
         closeDropdown();
     };
-
 
     useEffect(() => {
         const handleClickOutside = (event) => {

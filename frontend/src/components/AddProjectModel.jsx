@@ -1,31 +1,22 @@
-/**  NOTE: This is prob gonna be the hardest thing on my part depending how you want to handle this.
-     What I plan to do is have two windows open depending on what the user.
-
-     GITHUB BUTTON: will open a window with needed info for creating a project(simliar to docktask).
-     but the information will already be filled with information from the github.
-
-     LOCAL BUTTON: will open a window in the same format without the prefilled info.
-*/
+import {useState} from 'react'
 import GithubIcon from '../assets/images/Github.png';
+import { fetchGitHubRepo, isValidGitHubUrl } from '../components/GithubProfile.jsx';
+
 class AddProjectModel {
-    constructor(onClose, onUpdateWorkflow) {
+    constructor(onClose, onUpdateWorkflow, setImportType) {
         this.onClose = onClose;
         this.onUpdateWorkflow = onUpdateWorkflow;
+        this.setImportType = setImportType;
     }
 
-    openGithub() {
-        console.log("Opened Github link");
-        // TODO:
-        // - Prompt for GitHub URL
-        // - Fetch repo info
-        // - Auto-fill project fields using AI
+    async setLocal() {
+        console.log("Opened Local Folder.")
+        this.setImportType('local')
     }
 
-    async openInFileManager() {
-
-        window.electronAPI.openProjDirectory(this.project.path)
-
-        console.log("Opened file manager");
+    async setGithub(){
+        console.log("Opened Github Import.")
+        this.setImportType('github')
     }
 
     render() {
@@ -53,29 +44,28 @@ class AddProjectModel {
                         <div className="action-buttons vertical">
                             <button
                                 className="Github-button"
-                                onClick={() => this.openGithub()}
+                                onClick={() => this.setGithub()}
                             >
-                                <img  src={GithubIcon} alt="Github" className="github-icon" />
+                                <img src={GithubIcon} alt="Github" className="github-icon" />
                                 <div className="Add-text">
-                                <span className="Add-title"> Import from Github</span>
-                                <span className="Add-subtitle">
-                                    Link your repository to FlowState! The AI will automatically read through your repository
-                                    to track progress.
-                                </span>
+                                    <span className="Add-title">Import from Github</span>
+                                    <span className="Add-subtitle">
+                                        Link your repository to FlowState! The AI will automatically read through your repository
+                                        to track progress.
+                                    </span>
                                 </div>
                             </button>
 
                             <button
                                 className="Local-button"
-                                onClick={() => this.openInFileManager()}
+                                onClick={() => this.setLocal()}
                             >
                                 <div className="Add-text">
-                                <span className="Add-title">Import from Local Folder</span>
-                                <span className="Add-subtitle">
-                                    Select a directory and fill out your project description.  
-                                    The AI will still auto-generate goals,ideas and suggestions.              
-                                  
-                                </span>
+                                    <span className="Add-title">Add from Local Folder</span>
+                                    <span className="Add-subtitle">
+                                        Select a directory and fill out your project description.  
+                                        The AI will still auto-generate goals, ideas and suggestions.              
+                                    </span>
                                 </div>
                             </button>
                         </div>
@@ -86,9 +76,102 @@ class AddProjectModel {
     }
 }
 
-function AddProjectModelComponent({ onClose, onUpdateWorkflow }) {
-    const model = new AddProjectModel(onClose, onUpdateWorkflow);
-    return model.render();
+function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
+    const [ImportType, setImportType] = useState(null)
+    const [githubUrl, setGithubUrl] = useState('')
+
+    if (!ImportType) {
+        const model = new AddProjectModel(onClose, onUpdateWorkflow, setImportType)
+        return model.render()
+    }
+
+    if (ImportType === 'github') {
+        const handleGitHubImport = async () => {
+            console.log('Import button clicked for:', githubUrl);
+            console.log('Valid URL?', isValidGitHubUrl(githubUrl));
+            
+            onClose();
+        };
+
+        return (
+            <div className="overlay" onClick={onClose}>
+                <div className="project-model" onClick={(e) => e.stopPropagation()}>
+                    <div className="model-header">
+                        <h2 className="model-title">Import from Repository</h2>
+                    </div>
+                    
+                    <div className="model-content">
+                        <div className="model-section">
+                            <h3>Repository URL</h3>
+                            <input
+                                type="text"
+                                className="title-input"
+                                placeholder="https://github.com/username/repo"
+                                value={githubUrl}
+                                onChange={(e) => setGithubUrl(e.target.value)}
+                            />
+                            <p className="gitmodel-subtitle">Note: Private repositories may require authentication</p>
+                        </div>
+                    </div>
+                    
+                    <div className="Add-subbuttons"> 
+                        <button 
+                            className="secondary-action-btn" 
+                            onClick={() => setImportType(null)}
+                        >
+                            Back
+                        </button> 
+                        <button 
+                            className="primary-action-btn" 
+                            onClick={handleGitHubImport}
+                            disabled={!githubUrl.trim()}
+                        >
+                            Import
+                        </button>
+                    </div>
+                </div>
+            </div> 
+        );
+    }
+
+    if (ImportType === 'local') {
+        const handleLocalImport = async () => {
+            console.log('Select Folder clicked');
+            onClose();
+        };
+
+        return (
+            <div className="overlay" onClick={onClose}>
+                <div className="project-model" onClick={(e) => e.stopPropagation()}>
+                    <div className="model-header">
+                        <h2 className="model-title">Open from Folder</h2>
+                        <button className="close-button" onClick={onClose}>
+                            ×
+                        </button>
+                    </div>
+                    
+                    <div className="model-content">
+                        <p className="model-subtitle">Select a local folder to import as a project.</p>
+                    </div>
+                    
+                    <div className="Add-subbuttons">
+                        <button 
+                            className="secondary-action-btn" 
+                            onClick={() => setImportType(null)}
+                        >
+                            Back
+                        </button>
+                        <button 
+                            className="primary-action-btn"
+                            onClick={handleLocalImport}
+                        >
+                            Select Folder
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default AddProjectModelComponent;
