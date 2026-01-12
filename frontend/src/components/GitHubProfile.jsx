@@ -38,6 +38,7 @@ function GitHubProfile({ username, onSignOut }) {
 
     const handleViewProfile = () => {
         console.log('View Profile clicked');
+        window.electronAPI.openTool('https://github.com/' + username);
         closeDropdown();
     };
 

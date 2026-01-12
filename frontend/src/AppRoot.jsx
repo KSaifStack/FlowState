@@ -3,12 +3,34 @@ import LoginGate from './LoginGate.jsx';
 import App from './App.jsx';
 
 const BACKEND = 'http://127.0.0.1:5180';
+const TOKEN_KEY = 'flowstate_token';
 
 function AppRoot() {
     const [authState, setAuthState] = useState('guest'); // 'guest' | 'github' | 'local'
     const [githubLogin, setGithubLogin] = useState(null);
 
-    const handleSignOut = () => {
+    const handleSignOut = async () => {
+        // Attempt to tell backend to drop the session (bearer or cookie).
+        try {
+            const token = (() => {
+                try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
+            })();
+
+            const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
+            // Fire logout request; ignore failures but always clear local state after.
+            await fetch(`${BACKEND}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers,
+            });
+        } catch (e) {
+            console.warn('logout request failed', e);
+        }
+
+        // Remove stored token locally and update UI state.
+        try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
+
         setAuthState('guest');
         setGithubLogin(null);
     };

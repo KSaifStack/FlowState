@@ -32,3 +32,6 @@ nul
 /electron/backend-osx
 electron/backend-win/Backend.dll
 electron/projects
+frontend/dist
+builds
+backend/publish

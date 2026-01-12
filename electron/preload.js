@@ -11,6 +11,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     exportProject: (project) => ipcRenderer.invoke("export-project", project),
     importProject: (path) => ipcRenderer.invoke("import-project", path),
     loadAllProjects: () => ipcRenderer.invoke('load-all-projects'),
-    startGitHubLogin: () => ipcRenderer.invoke("start-github-login"),
-    onOAuthComplete: (callback) => ipcRenderer.on("oauth-complete", (_evt, data) => callback(data)),
+
+    onOAuthComplete: (cb) => {
+        const listener = (_event, payload) => cb(payload);
+        ipcRenderer.on('oauth-complete', listener);
+        return () => ipcRenderer.removeListener('oauth-complete', listener);
+    },
+
+    startGitHubLogin: () => ipcRenderer.invoke('start-github-login'),
+
+    getBackendCookies: () => ipcRenderer.invoke('get-backend-cookies'),
 });

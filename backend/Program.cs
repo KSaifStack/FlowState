@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using System.Text.Json;
 using AspNet.Security.OAuth.GitHub;
 using FlowState.Backend.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -19,7 +18,6 @@ builder.Services
     ));
 
 builder.Services.AddSingleton<IGitHubTokenStore, FileGitHubTokenStore>();
-
 builder.Services.AddHttpClient<GitHubApi>();
 
 // CORS: allow credentials (cookie auth). Cannot use AllowAnyOrigin with cookies.
@@ -33,18 +31,39 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
-
 builder.Services
     .AddAuthentication(options =>
     {
+        // Make cookies the default for auth checks and challenges
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
-    .AddCookie(options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.Name = "flowstate_auth";
         options.Cookie.HttpOnly = true;
+
+        // Electron + localhost over HTTP
         options.Cookie.SameSite = SameSiteMode.Lax;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.None; // localhost over HTTP
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+
+        // Avoid weird domain issues between localhost vs 127.0.0.1
+        options.Cookie.Domain = null;
+        options.Cookie.Path = "/";
+
+        // Helpful for APIs: return 401 instead of redirecting to a login page
+        options.Events.OnRedirectToLogin = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
     })
     .AddGitHub("GitHub", options =>
     {
@@ -78,7 +97,6 @@ builder.Services
             context.Identity!.AddClaim(new Claim("github:id", id));
             context.Identity.AddClaim(new Claim("github:login", login));
         };
-
     });
 
 builder.Services.AddAuthorization();
@@ -100,16 +118,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Session check endpoint for your UI
-app.MapGet("/auth/me", (ClaimsPrincipal user) =>
-{
-    if (user.Identity?.IsAuthenticated != true) return Results.Unauthorized();
-    return Results.Ok(new
-    {
-        authenticated = true,
-        githubId = user.FindFirst("github:id")?.Value,
-        githubLogin = user.FindFirst("github:login")?.Value
-    });
-});
+// IMPORTANT:
+// Removed minimal API /auth/me here to avoid having two endpoints for the same route.
+// /auth/me should be served by AuthController only.
 
 app.Run();

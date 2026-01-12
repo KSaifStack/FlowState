@@ -1,23 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import './App.css';
 import TitleBar from './components/TitleBar.jsx';
 import GithubIcon from './assets/images/Github.png';
 
 const BACKEND = 'http://127.0.0.1:5180';
+const TOKEN_KEY = 'flowstate_token';
 
 function LoginGate({ onAuth, onGitHubLogin }) {
     const [status, setStatus] = useState('checking'); // checking | anon | authed
     const [error, setError] = useState(null);
 
-    async function refreshAuth() {
-        setError(null);
+    const authedRef = useRef(false);
+    const isRefreshingRef = useRef(false);
+    const isExchangingRef = useRef(false);
+
+    const getToken = () => {
+        try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
+    };
+
+    const setToken = (token) => {
         try {
+            if (token) localStorage.setItem(TOKEN_KEY, token);
+            else localStorage.removeItem(TOKEN_KEY);
+        } catch { /* ignore */ }
+    };
+
+    const refreshAuth = useCallback(async () => {
+        if (isRefreshingRef.current) return;
+        isRefreshingRef.current = true;
+
+        try {
+            setError(null);
+
+            const token = getToken();
+            const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+
             const res = await fetch(`${BACKEND}/auth/me`, {
                 method: 'GET',
-                credentials: 'include',
+                credentials: 'include', // harmless; bearer is primary now
+                headers,
             });
 
             if (res.status === 401) {
+                authedRef.current = false;
                 setStatus('anon');
                 return;
             }
@@ -29,40 +54,60 @@ function LoginGate({ onAuth, onGitHubLogin }) {
 
             const data = await res.json();
             onGitHubLogin?.(data.githubLogin ?? null);
-            // baka onGitHubLogin?.(data.githubLogin ?? null);
 
+            authedRef.current = true;
             setStatus('authed');
-            onAuth('github'); // only switch after backend confirms session
+            onAuth('github');
         } catch (e) {
+            authedRef.current = false;
             setStatus('anon');
             setError(e?.message || String(e));
+        } finally {
+            isRefreshingRef.current = false;
         }
-    }
+    }, [onAuth, onGitHubLogin]);
 
     useEffect(() => {
-        // Initial check
+        // check once on mount
         refreshAuth();
 
-        // Light polling fallback (covers cases where deep link is blocked)
-        const poll = setInterval(() => {
-            if (status !== 'authed') refreshAuth();
-        }, 1500);
-
-        // Instant refresh when Electron receives flowstate://oauth-complete
-        window.electronAPI?.onOAuthComplete?.(async ({ code }) => {
+        const handler = async ({ code }) => {
             if (!code) return;
+            if (isExchangingRef.current) return;
+            isExchangingRef.current = true;
 
-            await fetch(`${BACKEND}/auth/exchange?code=${encodeURIComponent(code)}`, {
-                method: "POST",
-                credentials: "include",
-            });
+            try {
+                setError(null);
 
-            // Now the cookie exists in Electron session
-            refreshAuth();
-        });
+                const res = await fetch(`${BACKEND}/auth/exchange?code=${encodeURIComponent(code)}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                });
 
+                if (!res.ok) {
+                    const t = await res.text();
+                    throw new Error(t || `Exchange failed (${res.status})`);
+                }
 
-        return () => clearInterval(poll);
+                const data = await res.json();
+                setToken(data?.token || null);
+
+                await refreshAuth();
+            } catch (e) {
+                setToken(null);
+                setError(e?.message || String(e));
+                authedRef.current = false;
+                setStatus('anon');
+            } finally {
+                isExchangingRef.current = false;
+            }
+        };
+
+        const unsubscribe = window.electronAPI?.onOAuthComplete?.(handler);
+
+        return () => {
+            if (typeof unsubscribe === 'function') unsubscribe();
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,7 +115,6 @@ function LoginGate({ onAuth, onGitHubLogin }) {
         setError(null);
         try {
             await window.electronAPI.startGitHubLogin();
-            // No manual button; deep-link event or polling will detect the session.
         } catch (e) {
             setError(e?.message || String(e));
         }
