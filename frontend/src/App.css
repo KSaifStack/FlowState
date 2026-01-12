@@ -1122,6 +1122,233 @@ display: flex;
     margin-top: 20px;
 }
 
+/* Add these styles to your existing CSS file */
+
+/* Folder icon for local import button */
+.folder-icon {
+    font-size: 32px;
+}
+
+/* Error message styling */
+.error-message {
+    color: #ff4444;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* Loading container */
+.loading-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.loading-icon {
+    font-size: 32px;
+}
+
+.loading-text {
+    color: #999;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* Icon selection container */
+.icon-selection-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.config-project-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #3a3a3a;
+}
+
+.icon-selection-info {
+    flex: 1;
+}
+
+.icon-status-text {
+    font-size: 13px;
+    color: #b0b0b0;
+    margin-bottom: 8px;
+}
+
+/* No data text */
+.no-data-text {
+    font-size: 13px;
+    color: #b0b0b0;
+    font-style: italic;
+}
+
+/* Disabled button state */
+.primary-action-btn.disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.primary-action-btn.disabled:hover {
+    background: #333;
+    border-color: #3a3a3a;
+}
+
+.secondary-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-action-btn:disabled:hover {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+/* Add these styles to your existing CSS file */
+
+/* Folder icon for local import button */
+.folder-icon {
+    font-size: 32px;
+}
+
+/* Error message styling */
+.error-message {
+    color: #ff4444;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* Loading container */
+.loading-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.loading-icon {
+    font-size: 32px;
+}
+
+.loading-text {
+    color: #999;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+/* Icon selection container */
+.icon-selection-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.config-project-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #3a3a3a;
+}
+
+.icon-selection-info {
+    flex: 1;
+}
+
+.icon-status-text {
+    font-size: 13px;
+    color: #b0b0b0;
+    margin-bottom: 8px;
+}
+
+/* No data text */
+.no-data-text {
+    font-size: 13px;
+    color: #b0b0b0;
+    font-style: italic;
+}
+
+/* Disabled button state */
+.primary-action-btn.disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.primary-action-btn.disabled:hover {
+    background: #333;
+    border-color: #3a3a3a;
+}
+
+.secondary-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.secondary-action-btn:disabled:hover {
+    background: #2a2a2a;
+    border-color: #3a3a3a;
+}
+
+/* Configure modal specific styling */
+.config-modal {
+    width: 700px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.config-scrollable {
+    max-height: calc(85vh - 180px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+}
+
+/* Editable tags with remove button */
+.editable-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.remove-tag-btn {
+    background: transparent;
+    border: none;
+    color: #e91414;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+    margin-left: 4px;
+}
+
+.remove-tag-btn:hover {
+    color: #ff4444;
+}
+
+/* Scrollbar styling for configure screen */
+.config-scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.config-scrollable::-webkit-scrollbar-track {
+    background: #1e1e1e;
+    border-radius: 4px;
+}
+
+.config-scrollable::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 4px;
+}
+
+.config-scrollable::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
+}
 
 
 
