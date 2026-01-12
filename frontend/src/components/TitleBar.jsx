@@ -1,7 +1,7 @@
 ﻿import '../App.css';
 import { useState } from 'react';
 import logo from '../assets/images/logo.png';
-import GithubModel from './GithubProfile.jsx';
+import GithubModel from './GitHubProfile.jsx';
 import SettingsModel from './SettingsModel.jsx';
 
 function TitleBar({ authState, githubLogin, onSignOut }) {

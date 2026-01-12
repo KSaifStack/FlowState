@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import GithubIcon from '../assets/images/Github.png';
-import { fetchGitHubRepo, isValidGitHubUrl } from '../components/GithubProfile.jsx';
-
+import { fetchGitHubRepo, isValidGitHubUrl } from '../components/GitHubProfile.jsx';
 class AddProjectModel {
     constructor(onClose, onUpdateWorkflow, setImportType) {
         this.onClose = onClose;

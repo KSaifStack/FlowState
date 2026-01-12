@@ -29,6 +29,7 @@ function LoginGate({ onAuth, onGitHubLogin }) {
 
             const data = await res.json();
             onGitHubLogin?.(data.githubLogin ?? null);
+            // baka onGitHubLogin?.(data.githubLogin ?? null);
 
             setStatus('authed');
             onAuth('github'); // only switch after backend confirms session

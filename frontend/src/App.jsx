@@ -111,7 +111,7 @@ function App({ authState, githubLogin, onSignOut }) {
 
     return (
         <div className="app">
-            <TitleBar authState={authState} githubLogin={githubLogin} onSignOut={onSignOut} />
+            <TitleBar authState={authState} githubLogin={githubLogin||"Local User"} onSignOut={onSignOut} />
 
             <div className="main-content">
                 {/* LEFT PANEL - Suggestion / Greeting */}

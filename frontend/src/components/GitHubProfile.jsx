@@ -1,6 +1,29 @@
 import { useState, useEffect, useRef } from 'react';
 import '../App.css';
 
+
+const getGitHubUser = async () => {
+    //TODO: 
+    // Gets/pulls github user to check and verfiy github repo information
+    //Remove if AddProject/ProjectModel can access this information
+    const user ="IamBaka"
+    console.log("hi user :",{user},"!")
+};
+
+const isValidGitHubUrl = (url) => {
+    //TODO: 
+    //checks if its a vaild github link(just remove this if you already done it/handled it)
+    console.log("This github link is vaild!")
+};
+
+const fetchGitHubRepo = async (url) => {
+    //TODO:
+    //Get githubRepo info and return it
+    console.log("Return name ,desc ,tech stack ,url ,readme(for ai) , prev commit history")
+}
+
+
+
 function GitHubProfile({ username, onSignOut }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
@@ -71,5 +94,11 @@ function GitHubProfile({ username, onSignOut }) {
         </div>
     );
 }
+
+export { 
+    isValidGitHubUrl,
+    fetchGitHubRepo, 
+    getGitHubUser,      
+};
 
 export default GitHubProfile;
