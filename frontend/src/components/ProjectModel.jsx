@@ -10,11 +10,12 @@ function ProjectModelComponent({
     onUpdatePath,
     onUpdateTitle,
     onUpdateIcon,
-    onDeleteProject,    // ← added (recommended)
-    onPinProject,       // ← added (recommended)
+    onDeleteProject,
+    onPinProject,
 }) {
     const [isConfigOpen, setIsConfigOpen] = useState(false);
     const [titleInput, setTitleInput] = useState(project.title);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Unified save function
     const saveProject = async (updatedFields) => {
@@ -96,7 +97,6 @@ function ProjectModelComponent({
                 console.warn(`Failed to open tool: ${tool.path}`, err);
             }
         }
-        // Optional: save last opened timestamp etc.
     };
 
     const openInFileManager = async () => {
@@ -107,27 +107,107 @@ function ProjectModelComponent({
         }
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!onDeleteProject) return;
-        onDeleteProject(project.id);
-        onClose();
+        
+        try {
+            // Call backend to delete the project file
+            const result = await window.electronAPI.deleteProject(project.id);
+            
+            if (result.success) {
+                // Update state in parent component
+                onDeleteProject(project.id);
+                console.log('Project deleted successfully:', project.title);
+                onClose();
+            } else {
+                throw new Error(result.error || 'Failed to delete project');
+            }
+        } catch (err) {
+            console.error('Failed to delete project:', err);
+            alert('Failed to delete project. Please try again.');
+        }
     };
 
-    const handlePin = () => {
+    const handleDeleteClick = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const handlePin = async () => {
         if (!onPinProject) return;
-        onPinProject(project.id);
-        // Optional: could close or give feedback
+        
+        try {
+            const newPinnedState = !project.isPinned;
+            
+            // Call backend to pin/unpin the project
+            const result = await window.electronAPI.pinProject(project.id, newPinnedState);
+            
+            if (result.success) {
+                // Update state in parent component
+                onPinProject(project.id);
+                
+                // Save the updated pin state
+                await saveProject({ isPinned: newPinnedState });
+                
+                console.log(`Project ${newPinnedState ? 'pinned' : 'unpinned'}:`, project.title);
+            } else {
+                throw new Error(result.error || 'Failed to pin project');
+            }
+        } catch (err) {
+            console.error('Failed to pin/unpin project:', err);
+            alert('Failed to update pin status. Please try again.');
+        }
     };
 
     return (
         <div className="overlay" onClick={onClose}>
             <div className="project-model" onClick={(e) => e.stopPropagation()}>
+                {/* Delete Confirmation Modal */}
+                {showDeleteConfirm && (
+                    <div 
+                        className="overlay" 
+                        style={{ zIndex: 1001 }}
+                        onClick={() => setShowDeleteConfirm(false)}
+                    >
+                        <div 
+                            className="delete-confirm-modal" 
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <h3 className="delete-confirm-title">Delete Project?</h3>
+                            <p className="delete-confirm-message">
+                                Are you sure you want to delete "{project.title}"? This action cannot be undone.
+                            </p>
+                            <div className="Add-subbuttons">
+                                <button 
+                                    className="secondary-action-btn"
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    className="delete-confirm-btn"
+                                    onClick={handleDelete}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Control buttons (delete + pin) */}
                 <div className="button-container">
-                    <button className="Trashbutton" onClick={handleDelete} title="Delete project">
+                    <button 
+                        className="Trashbutton" 
+                        onClick={handleDeleteClick} 
+                        title="Delete project"
+                    >
                         <img id="ProjectbuttonImage" src={darkTrash} alt="Delete" />
                     </button>
-                    <button className="Pinbutton" onClick={handlePin} title="Pin project">
+                    <button 
+                        className={`Pinbutton ${project.isPinned ? 'pinned' : ''}`}
+                        onClick={handlePin} 
+                        title={project.isPinned ? "Unpin project" : "Pin project"}
+                    >
                         <img id="ProjectbuttonImage" src={darkPin} alt="Pin" />
                     </button>
                 </div>
@@ -194,7 +274,7 @@ function ProjectModelComponent({
                             ))}
 
                             {(!project.workflow || project.workflow.length === 0) && (
-                                <p style={{ color: '#888', fontSize: '14px', fontStyle: 'italic' }}>
+                                <p className="no-data-text">
                                     No WorkFlow tools added yet!
                                 </p>
                             )}
@@ -236,8 +316,6 @@ function ProjectModelComponent({
                                     <p className="text">Change Project Icon</p>
                                     <div
                                         className="icon-wrapper"
-                                        style={{ cursor: 'pointer', display: 'inline-block' }}
-                                        title="Click to change icon"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             changeProjectIcon();
@@ -247,13 +325,6 @@ function ProjectModelComponent({
                                             src={project.icon || dummyIcon}
                                             alt="Project Icon"
                                             className="current-icon"
-                                            style={{
-                                                width: '60px',
-                                                height: '60px',
-                                                borderRadius: '8px',
-                                                objectFit: 'cover',
-                                                border: '1px solid #ccc',
-                                            }}
                                         />
                                     </div>
                                 </div>
@@ -277,18 +348,6 @@ function ProjectModelComponent({
                         <h3>Insights (AI)</h3>
                         <p className="insights-text">{project.insights || 'No insights yet'}</p>
                     </div>
-
-                    {/* Optional: stats section */}
-                    {/* Uncomment if you want to keep it */}
-                    {/* 
-          <div className="model-stats">
-            <div className="stat-item">
-              <div className="stat-label">Total Commits</div>
-              <div className="stat-value">{project.commits ?? '-'}</div>
-            </div>
-            ...
-          </div>
-          */}
                 </div>
             </div>
         </div>

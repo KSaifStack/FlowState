@@ -1292,7 +1292,6 @@ display: flex;
     border-color: #3a3a3a;
 }
 
-/* Configure modal specific styling */
 .config-modal {
     width: 700px;
     max-height: 85vh;
@@ -1307,7 +1306,6 @@ display: flex;
     padding-right: 8px;
 }
 
-/* Editable tags with remove button */
 .editable-tag {
     display: inline-flex;
     align-items: center;
@@ -1331,7 +1329,6 @@ display: flex;
     color: #ff4444;
 }
 
-/* Scrollbar styling for configure screen */
 .config-scrollable::-webkit-scrollbar {
     width: 8px;
 }
@@ -1351,7 +1348,74 @@ display: flex;
 }
 
 
+.delete-confirm-modal {
+    background: #1e1e1e;
+    border-radius: 12px;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    border: 1px solid #2f2f2f;
+}
 
+.delete-confirm-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #f0f0f0;
+    margin-bottom: 16px;
+}
+
+.delete-confirm-message {
+    font-size: 14px;
+    color: #b0b0b0;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.delete-confirm-btn {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    background: #e91414;
+    color: #ffffff;
+    border: 1px solid #c91212;
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.delete-confirm-btn:hover {
+    background: #ff4444;
+    border-color: #ff4444;
+}
+
+.Pinbutton.pinned {
+    opacity: 1 !important;
+    transform: scale(1.1);
+}
+
+.Pinbutton:not(.pinned) {
+    opacity: 0.5;
+    transform: scale(1);
+}
+
+.icon-wrapper {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.current-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #3a3a3a;
+    transition: all 0.2s ease;
+}
+
+.icon-wrapper:hover .current-icon {
+    border-color: #888888;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
 
 
 
