@@ -11,14 +11,6 @@
 
 We were two developers working on our own separate projects—ambitious apps that we were passionate about. But we kept hitting the same wall: **we were spending more time managing our projects than actually building them.**
 
-##  Current Features
-
--  AI-assisted project context tracking
--  Project-based workspace organization
--  One-click project launching
--  Task and progress tracking per project
--  Local-first, privacy-focused design
-
 
 ### The Problem We Lived
 
