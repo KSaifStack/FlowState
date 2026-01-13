@@ -5,6 +5,8 @@
 # FlowState: AI-Powered Desktop Project Assistant
 > 🚧 **Hackathon Demo:** This is an early prototype built for ColorStack Winter Hack 2025. Core ideas are implemented, with more features planned.
 
+> **Windows**: [Download Demo](https://github.com/KSaifStack/FlowState/releases/download/0.0.1/FlowState.Setup.0.0.1.exe)
+
 ## 💡 Inspiration
 
 **FlowState was born from our own frustration.**
