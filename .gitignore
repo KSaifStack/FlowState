@@ -108,3 +108,5 @@ bld/
 # Build verification
 builder-effective-config.yaml
 builder-debug.yml
+
+fs-builds
