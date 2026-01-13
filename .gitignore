@@ -7,12 +7,38 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+electron/node_modules
+frontend/node_modules
+
+# Build outputs
 dist
 dist-ssr
-*.local
+dist-electron
+frontend/dist
+backend/bin
+backend/obj
+backend/publish
+
+# Electron build artifacts
 out
-nul
+release
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
+# Electron builder cache
+.cache
+electron-builder-*.yaml
+
+# Local env files
+*.local
+.env
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*
@@ -24,14 +50,61 @@ nul
 *.njsproj
 *.sln
 *.sw?
-/.vs
-/Backend/bin
-/Backend/obj
-/electron/backend-win
-/electron/backend-linux
-/electron/backend-osx
-electron/backend-win/Backend.dll
-electron/projects
-frontend/dist
-builds
-backend/publish
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# .NET specific
+*.user
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+
+# Rider
+.idea/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Electron cache
+**/electron/cache/
+**/AppData/
+
+# Build verification
+builder-effective-config.yaml
+builder-debug.yml
