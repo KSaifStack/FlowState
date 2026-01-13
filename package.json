@@ -1,0 +1,50 @@
+{
+  "name": "flowstate",
+  "version": "1.0.0",
+  "description": "FlowState - Project Management Tool",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"wait-on http://localhost:5173 && npm run dev --prefix electron\"",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "dotnet publish backend/Backend.csproj -c Release -o backend/bin/Release/net8.0/publish --self-contained false",
+    "build:all": "node build.js",
+    "dist": "npx electron-builder --win"
+  },
+  "build": {
+    "appId": "com.flowstate.app",
+    "productName": "FlowState",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "build"
+    },
+    "files": [
+      "frontend/dist/**/*",
+      "electron/**/*",
+      "electron/node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "backend/bin/Release/net8.0/publish",
+        "to": "backend",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^39.2.7",
+    "electron-builder": "^24.9.1",
+    "wait-on": "^7.2.0"
+  },
+  "keywords": ["electron", "react", "dotnet", "project-management"],
+  "author": "Your Name",
+  "license": "MIT"
+}
