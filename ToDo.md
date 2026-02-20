@@ -6,6 +6,8 @@
 <h2>FRONTEND ISSUES</h2>
 <ul>
   <li>COMMENT CODE</li>
+  <li>Make it where instead of showing the icons of the apps it will showcase the github logo or the file exp icon.<li>
+  <li>Add a option in the settings for the user to select which ide they use in settings<li>
   <li>Finish about page</li>
   <li>Finish theme picker for light and dark toggle or go for a glassy theme</li>
   <li>Fix pictures not displaying</li>
