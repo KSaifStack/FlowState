@@ -4,10 +4,18 @@ import ProjectModelComponent from './components/ProjectModel.jsx';
 import AddProjectModelComponent from './components/AddProjectModel.jsx';
 import darkAdd from './assets/images/darkAdd.png';
 import dummyIcon from './assets/images/defaultProj.png';
+import githubLogo from './assets/images/logo.png'; // Using existing logo as placeholder for github if needed, or I'll check if there's a better one.
 
+
+/*
+ * Main Application Component
+ * Manages the project list, sorting, and authentication state.
+ * Bridges the gap between the Electron API and the UI components.
+ */
 function App({ authState, githubLogin, onSignOut }) {
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
+    const [osUsername, setOsUsername] = useState("Developer");
     const [showAddModel, setShowAddModel] = useState(false);
     const [sortBy, setSortBy] = useState('Name (A-Z)');
     const [showSortDropdown, setShowSortDropdown] = useState(false);
@@ -23,9 +31,17 @@ function App({ authState, githubLogin, onSignOut }) {
                     const data = await window.electronAPI.importProject(filePath);
                     const payload = data.projectPayload || data.ProjectPayload || data;
 
+                    const getProjectIcon = (payload) => {
+                        if (payload.icon || payload.IconClass) return payload.icon || payload.IconClass;
+                        // Use ProjectType to determine default icon
+                        const type = payload.ProjectType ?? payload.projectType ?? 'Local Project';
+                        if (type.toLowerCase().includes('github')) return 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+                        return 'https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/folder-icon.png';
+                    };
+
                     loadedProjects.push({
                         id: payload.id ?? payload.Id ?? Date.now() + Math.random(),
-                        icon: payload.icon ?? payload.IconClass ?? dummyIcon,
+                        icon: getProjectIcon(payload),
                         ProjectType: payload.ProjectType ?? payload.projectType ?? 'Local Project',
                         title: payload.title ?? payload.Title ?? 'Untitled Project',
                         subtitle: payload.subtitle ?? payload.Subtitle ?? '',
@@ -56,6 +72,16 @@ function App({ authState, githubLogin, onSignOut }) {
         }
 
         loadProjects();
+
+        const fetchUser = async () => {
+            try {
+                const user = await window.electronAPI.getOSUsername();
+                setOsUsername(user);
+            } catch (e) {
+                console.error("OS username fetch failed", e);
+            }
+        };
+        fetchUser();
     }, []);
 
     // Project modal handlers
@@ -64,6 +90,7 @@ function App({ authState, githubLogin, onSignOut }) {
     const openAddModel = () => setShowAddModel(true);
     const closeAddModel = () => setShowAddModel(false);
 
+    // Adds a new project to the local state (persisted by the AddProjectModel via Electron)
     const addProject = (newProject) => {
         setProjects((prev) => [...prev, newProject]);
     };
@@ -83,6 +110,25 @@ function App({ authState, githubLogin, onSignOut }) {
     const updatePath = createUpdater('path');
     const updateTitle = createUpdater('title');
     const updateIcon = createUpdater('icon');
+    const updateGoals = createUpdater('goals');
+    const updateTechStack = createUpdater('techStack');
+    const updateInsights = createUpdater('insights');
+
+    const handleDeleteProject = (projectId) => {
+        setProjects((prev) => prev.filter((p) => p.id !== projectId));
+        if (selectedProject?.id === projectId) {
+            setSelectedProject(null);
+        }
+    };
+
+    const handlePinProject = (projectId) => {
+        setProjects((prev) =>
+            prev.map((p) => (p.id === projectId ? { ...p, isPinned: !p.isPinned } : p))
+        );
+        if (selectedProject?.id === projectId) {
+            setSelectedProject((prev) => ({ ...prev, isPinned: !prev.isPinned }));
+        }
+    };
 
     // Sorting
     const handleSortChange = (newSort) => {
@@ -111,13 +157,13 @@ function App({ authState, githubLogin, onSignOut }) {
 
     return (
         <div className="app">
-            <TitleBar authState={authState} githubLogin={githubLogin||"Local User"} onSignOut={onSignOut} />
+            <TitleBar authState={authState} githubLogin={githubLogin || "Local User"} onSignOut={onSignOut} />
 
             <div className="main-content">
                 {/* LEFT PANEL - Suggestion / Greeting */}
                 <div className="left-panel">
                     <div className="greeting">
-                        Hey, <span className="username">[USER]</span>
+                        Welcome, <strong>{githubLogin || "USER"} !</strong>
                     </div>
 
                     {mostRecentProject ? (
@@ -136,7 +182,7 @@ function App({ authState, githubLogin, onSignOut }) {
                         </>
                     ) : (
                         <p className="Mess">
-                            No projects yet — add your first one to get started! 🚀
+                            No projects found... <br /> <strong>Create</strong> your first project to get started! 
                         </p>
                     )}
                 </div>
@@ -191,7 +237,7 @@ function App({ authState, githubLogin, onSignOut }) {
                                         onClick={() => handleProjectClick(project)}
                                     >
                                         <div className="project-icon">
-                                            <img src={project.icon || dummyIcon} alt="Project icon" />
+                                            <img src={(project.icon === 'https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/folder-icon.png' || !project.icon) ? dummyIcon : project.icon} alt="Project icon" />
                                         </div>
                                         <div className="project-info">
                                             <div className="project-title">{project.title}</div>
@@ -200,6 +246,8 @@ function App({ authState, githubLogin, onSignOut }) {
                                             <div className="project-date">{project.date}</div>
                                             <div className="project-status">{project.status}</div>
                                         </div>
+
+                                         
                                     </div>
                                 ))
                             )}
@@ -217,9 +265,12 @@ function App({ authState, githubLogin, onSignOut }) {
                     onUpdatePath={updatePath}
                     onUpdateTitle={updateTitle}
                     onUpdateIcon={updateIcon}
-                // Bonus: pass these when you implement them in ProjectModel
-                // onDeleteProject={handleDeleteProject}
-                // onPinProject={handlePinProject}
+                    onUpdateGoals={updateGoals}
+                    onUpdateTechStack={updateTechStack}
+                    onUpdateInsights={updateInsights}
+                    onDeleteProject={handleDeleteProject}
+                    onPinProject={handlePinProject}
+                    githubId={githubLogin !== "Local User" ? githubLogin : null}
                 />
             )}
 

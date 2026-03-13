@@ -1,8 +1,10 @@
-﻿const { ipcMain, app, BrowserWindow, dialog, shell, session } = require("electron");
+﻿const { ipcMain, app, BrowserWindow, dialog, shell, session, protocol } = require("electron");
 const { spawn } = require("child_process");
 const path = require("path");
+const os = require("os"); // Added for OS username
 const waitPort = require("wait-port");
 const fs = require("fs");
+const { exec } = require("child_process"); // Added for git commands later
 
 const PROTOCOL = "flowstate";
 
@@ -82,8 +84,8 @@ function startBackend() {
         cwd: path.dirname(backendPath),
         env: {
             ...process.env,
-            GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-            GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+            ...(process.env.GITHUB_CLIENT_ID && { GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID }),
+            ...(process.env.GITHUB_CLIENT_SECRET && { GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET }),
         },
     });
 
@@ -278,6 +280,14 @@ ipcMain.handle("open-proj-directory", async (_event, p) => {
 
 ipcMain.handle("send-path-to-backend", async (_event, p) => await sendPathToBackend(p));
 
+ipcMain.handle("get-os-username", () => {
+    try {
+        return os.userInfo().username || "Developer";
+    } catch (e) {
+        return "Developer";
+    }
+});
+
 ipcMain.handle("open-tool", async (_event, toolPath) => {
     try {
         if (!toolPath) throw new Error("Tool path is empty");
@@ -366,4 +376,106 @@ ipcMain.handle("start-github-login", async () => {
     const url = `http://127.0.0.1:${BACKEND_PORT}/auth/github/login`;
     await shell.openExternal(url);
     return { ok: true };
+});
+
+ipcMain.handle("pin-project", async (_event, projectId, isPinned) => {
+    try {
+        const projectsDir = path.join(__dirname, "projects");
+        const filePath = path.join(projectsDir, `${projectId}.json`);
+
+        if (!fs.existsSync(filePath)) throw new Error("Project file not found");
+
+        const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+        // Handle different casing from backend vs frontend
+        if (data.ProjectPayload) {
+            data.ProjectPayload.IsPinned = isPinned;
+        } else if (data.projectPayload) {
+            data.projectPayload.isPinned = isPinned;
+        } else {
+            data.isPinned = isPinned;
+        }
+
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+        return { success: true };
+    } catch (err) {
+        console.error("Failed to pin project:", err);
+        return { success: false, error: err.message };
+    }
+});
+
+ipcMain.handle("delete-project", async (_event, projectId) => {
+    try {
+        const projectsDir = path.join(__dirname, "projects");
+        const filePath = path.join(projectsDir, `${projectId}.json`);
+
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            return { success: true };
+        }
+        return { success: false, error: "File not found" };
+    } catch (err) {
+        console.error("Failed to delete project:", err);
+        return { success: false, error: err.message };
+    }
+});
+
+ipcMain.handle("read-directory", async (_event, dirPath) => {
+    try {
+        return fs.readdirSync(dirPath).map(file => ({
+            name: file,
+            isDirectory: fs.statSync(path.join(dirPath, file)).isDirectory()
+        }));
+    } catch (err) {
+        console.error("Failed to read directory:", err);
+        return [];
+    }
+});
+
+ipcMain.handle("read-file", async (_event, filePath) => {
+    try {
+        return fs.readFileSync(filePath, "utf8");
+    } catch (err) {
+        console.error("Failed to read file:", err);
+        return "";
+    }
+});
+
+ipcMain.handle("clone-github-repo", async (_event, url, targetDir) => {
+    try {
+        const baseDir = targetDir || path.join(app.getPath("temp"), "FlowState", Date.now().toString());
+        if (!fs.existsSync(baseDir)) fs.mkdirSync(baseDir, { recursive: true });
+
+        await new Promise((resolve, reject) => {
+            exec(`git clone ${url}`, { cwd: baseDir }, (error, stdout, stderr) => {
+                if (error) reject(error);
+                else resolve();
+            });
+        });
+
+        // The repo folder name
+        const repoName = url.split("/").pop().replace(".git", "");
+        return path.join(baseDir, repoName);
+    } catch (err) {
+        console.error("Failed to clone repo:", err);
+        throw err;
+    }
+});
+
+ipcMain.handle("find-application", async (_event, name) => {
+    // Simple mock/stub for now as searching for apps is OS specific and complex
+    return null;
+});
+
+ipcMain.handle("get-application-icon", async (_event, appPath) => {
+    try {
+        const icon = await app.getFileIcon(appPath, { size: "large" });
+        return icon.toDataURL();
+    } catch (err) {
+        console.error("Failed to get app icon:", err);
+        return null;
+    }
+});
+
+app.on("quit", () => {
+    if (backendProcess) backendProcess.kill();
 });

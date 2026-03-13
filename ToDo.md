@@ -5,25 +5,26 @@
 
 <h2>FRONTEND ISSUES</h2>
 <ul>
-  <li>COMMENT CODE</li>
-  <li>Make it where instead of showing the icons of the apps it will showcase the github logo or the file exp icon.<li>
-  <li>Add a option in the settings for the user to select which ide they use in settings<li>
-  <li>Finish about page</li>
-  <li>Finish theme picker for light and dark toggle or go for a glassy theme</li>
-  <li>Fix pictures not displaying</li>
-  <li>Make it where the Local User icon becomes a question mark or does not show the img icon at all, where on local user</li>
-  <li>Add pin functionally.</li>
-  <li>Change default Project Pictures to some well-known IDE by default(WE refuse to give Microsoft any more support than it already has)</li>
+  <li><s>COMMENT CODE</s></li>
+  <li><s>Make it where instead of showing the icons of the apps it will showcase the github logo or the file exp icon.</s></li>
+  <li><s>Add a option in the settings for the user to select which ide they use in settings</s></li>
+  <li><s>Finish about page</s></li>
+  <li><s>Finish theme picker for light and dark toggle or go for a glassy theme</s></li>
+  <li><s>Fix pictures not displaying</s></li>
+  <li><s>Make it where the Local User icon becomes a question mark or does not show the img icon at all, where on local user</s></li>
+  <li><s>Add pin functionally.</s></li>
+  <li><s>Change default Project Pictures to some well-known IDE by default(WE refuse to give Microsoft any more support than it already has)</s></li>
+  <li>Removing project from the frontend</li>
+  <li>Changing project icon when create a new project to the IDE's dropdown menu</li>
+  <li>Adding a option in the settings for the user to select which ide they use in settings and add IDE's on there machine to the app/project icons.</li>  
+  <li>Fixing open workflow</li>
+  <li>Fixing reading text stack</li>
+  <li>Add ai insights to inside the project card</li>
 </ul>
 
 <h2>BACKEND ISSUES</h2>
-<p>I'm not 100% aware of what is wrong with the backend. Everything below is what I couldn't find or a feature that should be there.</p>
 <ul>
-  <li>Github auth</li>
-  <li>Ai funcionally</li>
-  <li>Commit history communitcation</li>
-  <li>Updating Json file when Project values are changed</li>
-  <li>Pinning a project through JSON files</li>
-  <li>deleting task from JSON files</li>
+  <li>Pinning a project through JSON files</s></li>
+  <li>deleting task from JSON files</s></li>
 </ul>
        

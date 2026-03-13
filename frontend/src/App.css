@@ -330,8 +330,15 @@ html, body, #root {
         background-color: #272727;
     }
 
+    .Title-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  object-fit: contain;
+}
 .Titlebutton {
-    margin-left: -26px;
+    margin-top: 10px;
+    margin-left: -10px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -453,24 +460,6 @@ button:active {
     font-weight: 500;
 }
 
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000;
-}
-
-.project-model {
-    position: relative;
-    background: #1e1e1e;
-    border-radius: 10px;
-    padding: 32px;
-    width: 520px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-}
 .overlay {
     position: fixed;
     inset: 0;
@@ -1120,91 +1109,6 @@ display: flex;
     display: flex;
     gap: 10px;
     margin-top: 20px;
-}
-
-/* Add these styles to your existing CSS file */
-
-/* Folder icon for local import button */
-.folder-icon {
-    font-size: 32px;
-}
-
-/* Error message styling */
-.error-message {
-    color: #ff4444;
-    font-size: 14px;
-    margin-top: 12px;
-}
-
-/* Loading container */
-.loading-container {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.loading-icon {
-    font-size: 32px;
-}
-
-.loading-text {
-    color: #999;
-    font-size: 14px;
-    margin-top: 12px;
-}
-
-/* Icon selection container */
-.icon-selection-container {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 12px;
-}
-
-.config-project-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-    border: 1px solid #3a3a3a;
-}
-
-.icon-selection-info {
-    flex: 1;
-}
-
-.icon-status-text {
-    font-size: 13px;
-    color: #b0b0b0;
-    margin-bottom: 8px;
-}
-
-/* No data text */
-.no-data-text {
-    font-size: 13px;
-    color: #b0b0b0;
-    font-style: italic;
-}
-
-/* Disabled button state */
-.primary-action-btn.disabled {
-    background: #333;
-    color: #666;
-    cursor: not-allowed;
-}
-
-.primary-action-btn.disabled:hover {
-    background: #333;
-    border-color: #3a3a3a;
-}
-
-.secondary-action-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.secondary-action-btn:disabled:hover {
-    background: #2a2a2a;
-    border-color: #3a3a3a;
 }
 
 /* Add these styles to your existing CSS file */

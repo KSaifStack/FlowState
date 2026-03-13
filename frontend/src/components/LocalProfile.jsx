@@ -1,29 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import '../App.css';
 
-
-const getGitHubUser = async () => {
-    //TODO: 
-    // Gets/pulls github user to check and verfiy github repo information
-    //Remove if AddProject/ProjectModel can access this information
-    const user = "IamBaka"
-    console.log("hi user :", { user }, "!")
-};
-
-const isValidGitHubUrl = (url) => {
-    const regex = /^https?:\/\/(www\.)?github\.com\/[\w-]+\/[\w.-]+\/?$/;
-    return regex.test(url);
-};
-
-const fetchGitHubRepo = async (url) => {
-    //TODO:
-    //Get githubRepo info and return it
-    console.log("Return name ,desc ,tech stack ,url ,readme(for ai) , prev commit history")
-}
-
-
-
-function GitHubProfile({ username, onSignOut }) {
+function LocalProfile({ onSignOut }) {
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -33,12 +11,6 @@ function GitHubProfile({ username, onSignOut }) {
 
     const closeDropdown = () => {
         setShowDropdown(false);
-    };
-
-    const handleViewProfile = () => {
-        console.log('View Profile clicked');
-        window.electronAPI.openTool('https://github.com/' + username);
-        closeDropdown();
     };
 
     const handleSignOut = () => {
@@ -64,25 +36,14 @@ function GitHubProfile({ username, onSignOut }) {
             style={{ position: 'relative' }}
         >
             <div className="user-footer" onClick={toggleDropdown}>
-                <img
-                    src={`https://github.com/${username}.png`}
-                    alt="GitHub Profile"
-                    className="github-avatar"
-                />
+                <div className="local-user-avatar">?</div>
                 <div className="user-info">
-                    <div className="github-username">{username}</div>
+                    <div className="github-username">Local User</div>
                 </div>
             </div>
 
             {showDropdown && (
                 <div className="gitdrop-container">
-                    <div
-                        className="gitdropdown-option"
-                        onClick={handleViewProfile}
-                    >
-                        <span className="option-label">View Profile</span>
-                    </div>
-
                     <div
                         className="gitdropdown-option"
                         onClick={handleSignOut}
@@ -95,10 +56,4 @@ function GitHubProfile({ username, onSignOut }) {
     );
 }
 
-export {
-    isValidGitHubUrl,
-    fetchGitHubRepo,
-    getGitHubUser,
-};
-
-export default GitHubProfile;
+export default LocalProfile;

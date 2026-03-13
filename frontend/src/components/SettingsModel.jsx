@@ -1,13 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import '../App.css';
-import logo from '../assets/images/logo.png';
+import logo from '../assets/images/icon.png';
 
-function SettingsModel({ theme, setTheme }) {
+function SettingsModel({ children, theme, setTheme }) {
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
 
     const dropdownRef = useRef(null);
     const buttonRef = useRef(null);
 
+    // Initial theme load
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('flowstate-theme') || 'dark';
+        setTheme(savedTheme);
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }, [setTheme]);
 
     const toggleDropdown = () => {
         setShowDropdown(prev => !prev);
@@ -25,26 +32,18 @@ function SettingsModel({ theme, setTheme }) {
     };
 
     const handleOpenAbout = () => {
-        // TODO: Open About modal / window
-        // Example later:
-        // window.electronAPI.openAboutWindow();
-        console.log('Open About FlowState');
+        setShowAbout(true);
         closeDropdown();
     };
 
     const handleToggleTheme = () => {
-        // UI state change
         const newTheme = theme === 'dark' ? 'light' : 'dark';
         setTheme(newTheme);
         document.documentElement.setAttribute('data-theme', newTheme);
-
-        // TODO: Persist theme preference
-        // Example later:
-        // window.electronAPI.settings.setTheme(newTheme);
-        console.log('Theme switched to:', newTheme);
-
+        localStorage.setItem('flowstate-theme', newTheme);
         closeDropdown();
     };
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -63,13 +62,24 @@ function SettingsModel({ theme, setTheme }) {
 
     return (
         <div style={{ position: 'relative' }}>
-            <button
-                ref={buttonRef}
-                className="Titlebutton"
-                onClick={toggleDropdown}
-            >
-                <img id="TitleImage" src={logo} alt="App Logo" />
-            </button>
+            {/* Toggle Button - uses children if provided */}
+            {children ? (
+                <div 
+                    ref={buttonRef} 
+                    onClick={toggleDropdown}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                >
+                    {children}
+                </div>
+            ) : (
+                <button
+                    ref={buttonRef}
+                    className="Titlebutton"
+                    onClick={toggleDropdown}
+                >
+                    <img id="TitleImage" src={logo} alt="App Logo" />
+                </button>
+            )}
 
             {showDropdown && (
                 <div
@@ -96,8 +106,12 @@ function SettingsModel({ theme, setTheme }) {
                     >
                         Theme: {theme === 'dark' ? 'Dark' : 'Light'}
                     </div>
+
+
+                    
                 </div>
             )}
+
         </div>
     );
 }

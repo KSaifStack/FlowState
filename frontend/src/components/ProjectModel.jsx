@@ -1,4 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+/* 
+ * ProjectModel Component
+ * Displays detailed information about a single project, including:
+ * - Workflow tools
+ * - Git commit history
+ * - AI-generated insights
+ * - Project configuration (title, icon, path)
+ */
 import dummyIcon from '../assets/images/defaultProj.png';
 import darkPin from '../assets/images/darkPin.png';
 import darkTrash from '../assets/images/darkTrash.png';
@@ -10,12 +18,47 @@ function ProjectModelComponent({
     onUpdatePath,
     onUpdateTitle,
     onUpdateIcon,
+    onUpdateGoals,
+    onUpdateTechStack,
+    onUpdateInsights,
     onDeleteProject,
     onPinProject,
+    githubId,
 }) {
     const [isConfigOpen, setIsConfigOpen] = useState(false);
     const [titleInput, setTitleInput] = useState(project.title);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [gitHistory, setGitHistory] = useState([]);
+    const [totalCommits, setTotalCommits] = useState(0);
+    const [aiInsight, setAiInsight] = useState(project.insights || 'Loading insights...');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!project.path) return;
+
+            try {
+                // Fetch Git History
+                const gitRes = await fetch(`http://127.0.0.1:5180/api/git/history?path=${encodeURIComponent(project.path)}`);
+                if (gitRes.ok) {
+                    const data = await gitRes.json();
+                    setGitHistory(data.history || []);
+                    setTotalCommits(data.total || 0);
+                }
+
+                // Fetch AI Insights
+                const aiRes = await fetch(`http://127.0.0.1:5180/api/ai/insights?path=${encodeURIComponent(project.path)}&githubId=${githubId || ''}`);
+                if (aiRes.ok) {
+                    const data = await aiRes.json();
+                    setAiInsight(data.message);
+                    if (onUpdateInsights) onUpdateInsights(project.id, data.message);
+                }
+            } catch (err) {
+                console.error('Failed to fetch project data:', err);
+            }
+        };
+
+        fetchData();
+    }, [project.path]);
 
     // Unified save function
     const saveProject = async (updatedFields) => {
@@ -107,13 +150,44 @@ function ProjectModelComponent({
         }
     };
 
+    const handleAddGoal = async () => {
+        const goal = prompt('Enter a new goal/task:');
+        if (goal && goal.trim()) {
+            const newGoals = [...(project.goals || []), goal.trim()];
+            if (onUpdateGoals) onUpdateGoals(project.id, newGoals);
+            await saveProject({ goals: newGoals });
+        }
+    };
+
+    const handleRemoveGoal = (index) => {
+        const newGoals = project.goals.filter((_, i) => i !== index);
+        onUpdateGoals(project.id, newGoals);
+        saveProject({ goals: newGoals });
+    };
+
+    const handleRecommendGoals = async () => {
+        try {
+            const aiRes = await fetch(`http://127.0.0.1:5000/api/ai/goals?path=${encodeURIComponent(project.path)}${githubId ? `&githubId=${githubId}` : ''}`);
+            if (aiRes.ok) {
+                const data = await aiRes.json();
+                const newGoals = [...(project.goals || []), ...data.goals];
+                // Limit to unique goals and max reasonable amount
+                const uniqueGoals = [...new Set(newGoals)].slice(0, 10);
+                onUpdateGoals(project.id, uniqueGoals);
+                saveProject({ goals: uniqueGoals });
+            }
+        } catch (err) {
+            console.error('Failed to recommend goals:', err);
+        }
+    };
+
     const handleDelete = async () => {
         if (!onDeleteProject) return;
-        
+
         try {
             // Call backend to delete the project file
             const result = await window.electronAPI.deleteProject(project.id);
-            
+
             if (result.success) {
                 // Update state in parent component
                 onDeleteProject(project.id);
@@ -134,20 +208,20 @@ function ProjectModelComponent({
 
     const handlePin = async () => {
         if (!onPinProject) return;
-        
+
         try {
             const newPinnedState = !project.isPinned;
-            
+
             // Call backend to pin/unpin the project
             const result = await window.electronAPI.pinProject(project.id, newPinnedState);
-            
+
             if (result.success) {
                 // Update state in parent component
                 onPinProject(project.id);
-                
+
                 // Save the updated pin state
                 await saveProject({ isPinned: newPinnedState });
-                
+
                 console.log(`Project ${newPinnedState ? 'pinned' : 'unpinned'}:`, project.title);
             } else {
                 throw new Error(result.error || 'Failed to pin project');
@@ -163,13 +237,13 @@ function ProjectModelComponent({
             <div className="project-model" onClick={(e) => e.stopPropagation()}>
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
-                    <div 
-                        className="overlay" 
+                    <div
+                        className="overlay"
                         style={{ zIndex: 1001 }}
                         onClick={() => setShowDeleteConfirm(false)}
                     >
-                        <div 
-                            className="delete-confirm-modal" 
+                        <div
+                            className="delete-confirm-modal"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <h3 className="delete-confirm-title">Delete Project?</h3>
@@ -177,13 +251,13 @@ function ProjectModelComponent({
                                 Are you sure you want to delete "{project.title}"? This action cannot be undone.
                             </p>
                             <div className="Add-subbuttons">
-                                <button 
+                                <button
                                     className="secondary-action-btn"
                                     onClick={() => setShowDeleteConfirm(false)}
                                 >
                                     Cancel
                                 </button>
-                                <button 
+                                <button
                                     className="delete-confirm-btn"
                                     onClick={handleDelete}
                                 >
@@ -196,16 +270,16 @@ function ProjectModelComponent({
 
                 {/* Control buttons (delete + pin) */}
                 <div className="button-container">
-                    <button 
-                        className="Trashbutton" 
-                        onClick={handleDeleteClick} 
+                    <button
+                        className="Trashbutton"
+                        onClick={handleDeleteClick}
                         title="Delete project"
                     >
                         <img id="ProjectbuttonImage" src={darkTrash} alt="Delete" />
                     </button>
-                    <button 
+                    <button
                         className={`Pinbutton ${project.isPinned ? 'pinned' : ''}`}
-                        onClick={handlePin} 
+                        onClick={handlePin}
                         title={project.isPinned ? "Unpin project" : "Pin project"}
                     >
                         <img id="ProjectbuttonImage" src={darkPin} alt="Pin" />
@@ -256,7 +330,10 @@ function ProjectModelComponent({
                             {project.workflow?.map((tool, idx) => (
                                 <div key={idx} className="workflow-item">
                                     <div className="workflow-icon">
-                                        <img src={tool.icon || dummyIcon} alt={tool.name} />
+                                        <img
+                                            src={tool.icon && tool.icon.startsWith('data:') ? tool.icon : (tool.icon || 'https://cdn-icons-png.flaticon.com/512/1085/1085732.png')}
+                                            alt={tool.name}
+                                        />
                                     </div>
                                     <div className="workflow-info">
                                         <div className="workflow-header">
@@ -343,10 +420,62 @@ function ProjectModelComponent({
                         )}
                     </div>
 
-                    {/* Insights & Stats */}
+                    {/* Goals / Tasks */}
                     <div className="model-section">
-                        <h3>Insights (AI)</h3>
-                        <p className="insights-text">{project.insights || 'No insights yet'}</p>
+                        <h3>Goals & Tasks</h3>
+                        <div className="workflow-list">
+                            {project.goals?.map((goal, idx) => (
+                                <div key={idx} className="workflow-item">
+                                    <div className="workflow-info">
+                                        <div className="workflow-header">
+                                            <span className="workflow-name">{goal}</span>
+                                            <button
+                                                className="remove-btn"
+                                                onClick={() => handleRemoveGoal(idx)}
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {(!project.goals || project.goals.length === 0) && (
+                                <p className="no-data-text">No goals set for this project.</p>
+                            )}
+                            <div className="add-goal-actions">
+                                <button className="add-workflow-btn" onClick={handleAddGoal}>
+                                    + Add Goal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="model-section">
+                        <h3>Commit History ({totalCommits} total)</h3>
+                        <div className="git-history-list">
+                            {gitHistory.map((commit, idx) => (
+                                <div key={idx} className="git-commit-item">
+                                    <span className="commit-hash">[{commit.hash}]</span>
+                                    <span className="commit-message">{commit.message}</span>
+                                    <span className="commit-date">({commit.date})</span>
+                                </div>
+                            ))}
+                            {gitHistory.length === 0 && <p className="no-data-text">No git history found.</p>}
+                        </div>
+                    </div>
+                    {/* AI Insights */}
+                    <div className="model-section">
+                        <h3>AI Insights</h3>
+                        <div className="insights-list">
+                            {insights.map((insight, idx) => (
+                                <div key={idx} className="insight-item">
+                                    <span className="insight-message">{insight.message}</span>
+                                    <span className="insight-date">({insight.date})</span>
+                                </div>
+                            ))}
+                            {insights.length === 0 && <p className="no-data-text">No insights found.</p>}
+                        </div>
                     </div>
                 </div>
             </div>

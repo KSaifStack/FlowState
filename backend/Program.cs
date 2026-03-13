@@ -19,6 +19,8 @@ builder.Services
 
 builder.Services.AddSingleton<IGitHubTokenStore, FileGitHubTokenStore>();
 builder.Services.AddHttpClient<GitHubApi>();
+builder.Services.AddHttpClient<AiService>();
+builder.Services.AddSingleton<GitService>();
 
 // CORS: allow credentials (cookie auth). Cannot use AllowAnyOrigin with cookies.
 builder.Services.AddCors(options =>

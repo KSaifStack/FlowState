@@ -44,9 +44,9 @@ const getApplicationIcon = async (appPath) => {
 };
 
 
-const cloneGitHubRepo = async (url) => {
+const cloneGitHubRepo = async (url, targetDir) => {
     try {
-        return await window.electronAPI.cloneGitHubRepo(url);
+        return await window.electronAPI.cloneGitHubRepo(url, targetDir);
     } catch (error) {
         console.error('Error cloning GitHub repo:', error);
         throw error;
@@ -107,9 +107,6 @@ class AddProjectModel {
                 <div className="project-model" onClick={(e) => e.stopPropagation()}>
                     <div className="model-header">
                         <h2 className="model-title">Add New Project</h2>
-                        <button className="close-button" onClick={this.onClose}>
-                            ×
-                        </button>
                     </div>
 
                     <div className="model-content">
@@ -123,7 +120,7 @@ class AddProjectModel {
                                 <div className="Add-text">
                                     <span className="Add-title">Import from Github</span>
                                     <span className="Add-subtitle">
-                                        Link your repository to FlowState! The AI will automatically read through your repository
+                                        Link your repository to <strong>FlowState!</strong> The AI will automatically read through your repository
                                         to track progress.
                                     </span>
                                 </div>
@@ -157,6 +154,7 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
     const [selectedPath, setSelectedPath] = useState('');
     const [projectTitle, setProjectTitle] = useState('');
     const [projectIcon, setProjectIcon] = useState(null);
+    const [cloneDir, setCloneDir] = useState('');
     const [detectedTechStack, setDetectedTechStack] = useState([]);
     const [detectedWorkflow, setDetectedWorkflow] = useState([]);
 
@@ -164,14 +162,14 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
     const detectProjectIcon = async (path) => {
         try {
             const files = await readDirectory(path);
-            
+
             const iconPatterns = [
                 'icon.png', 'icon.jpg', 'icon.jpeg', 'icon.svg',
                 'logo.png', 'logo.jpg', 'logo.jpeg', 'logo.svg',
                 'app-icon.png', 'app-icon.jpg',
                 'favicon.png', 'favicon.ico'
             ];
-            
+
             for (const iconName of iconPatterns) {
                 if (files.includes(iconName)) {
                     return `${path}/${iconName}`;
@@ -237,7 +235,7 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                     const packageJson = await readFile(`${path}/package.json`);
                     const pkg = JSON.parse(packageJson);
                     const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-                    
+
                     if (deps.react) techStack.add('React');
                     if (deps.vue) techStack.add('Vue');
                     if (deps['@angular/core']) techStack.add('Angular');
@@ -253,13 +251,14 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                 }
             }
 
-            if (files.includes('requirements.txt') || files.includes('setup.py')) techStack.add('Python');
-            if (files.includes('pom.xml') || files.includes('build.gradle')) techStack.add('Java');
-            if (files.some(f => f.endsWith('.csproj'))) techStack.add('.NET');
-            if (files.includes('go.mod')) techStack.add('Go');
-            if (files.includes('Cargo.toml')) techStack.add('Rust');
-            if (files.includes('Gemfile')) techStack.add('Ruby');
-            if (files.includes('composer.json')) techStack.add('PHP');
+            if (files.includes('requirements.txt') || files.includes('setup.py') || files.some(f => f.endsWith('.py'))) techStack.add('Python');
+            if (files.includes('pom.xml') || files.includes('build.gradle') || files.some(f => f.endsWith('.java'))) techStack.add('Java');
+            if (files.some(f => f.endsWith('.csproj')) || files.some(f => f.endsWith('.sln'))) techStack.add('.NET / C#');
+            if (files.includes('go.mod') || files.some(f => f.endsWith('.go'))) techStack.add('Go');
+            if (files.includes('Cargo.toml') || files.some(f => f.endsWith('.rs'))) techStack.add('Rust');
+            if (files.includes('Gemfile') || files.some(f => f.endsWith('.rb'))) techStack.add('Ruby');
+            if (files.includes('composer.json') || files.some(f => f.endsWith('.php'))) techStack.add('PHP');
+            if (files.some(f => f.endsWith('.cpp') || f.endsWith('.hpp') || f.endsWith('.c') || f.endsWith('.h'))) techStack.add('C / C++');
 
             return Array.from(techStack);
         } catch (err) {
@@ -347,15 +346,15 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                 icon: projectIcon,
                 techStack: detectedTechStack.length > 0 ? detectedTechStack : ['Unknown'],
                 workflow: detectedWorkflow,
-                githubUrl: projectData.githubUrl || null,
+                githubUrl: projectData?.githubUrl || githubUrl || null,
                 createdAt: new Date().toISOString(),
                 lastOpened: new Date().toISOString(),
                 isPinned: false,
-                insights: 'Project insights will be generated...'
+                insights: 'AI is analyzing your project files for insights...'
             };
 
             await exportProject(newProject);
-            
+
             if (onAddProject) {
                 onAddProject(newProject);
             }
@@ -390,9 +389,9 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
             setError('');
 
             try {
-                const localPath = await cloneGitHubRepo(githubUrl);
+                const localPath = await cloneGitHubRepo(githubUrl, cloneDir || null);
                 const folderName = githubUrl.split('/').pop().replace('.git', '');
-                
+
                 setSelectedPath(localPath);
                 setProjectTitle(folderName);
 
@@ -425,8 +424,7 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
         return (
             <div className="overlay" onClick={onClose}>
                 <div className="project-model" onClick={(e) => e.stopPropagation()}>
-                    <button className="close-button" onClick={onClose}>×</button>
-                    
+
                     <div className="model-header">
                         <h2 className="model-title">Import from Repository</h2>
                     </div>
@@ -445,6 +443,15 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                                 }}
                                 disabled={isLoading}
                             />
+
+                            <div className="Directory-section">
+                                <button className="path-button" onClick={async () => {
+                                    const dir = await openDirectoryDialog();
+                                    if (dir) setCloneDir(dir);
+                                }}>...</button>
+                                <p className="path-text">{cloneDir || 'Default temporary folder'}</p>
+                            </div>
+
                             <p className="gitmodel-subtitle">Note: Private repositories may require authentication</p>
 
                             {error && (
@@ -530,9 +537,6 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                 <div className="project-model" onClick={(e) => e.stopPropagation()}>
                     <div className="model-header">
                         <h2 className="model-title">Open from Folder</h2>
-                        <button className="close-button" onClick={onClose}>
-                            ×
-                        </button>
                     </div>
 
                     <div className="model-content">
@@ -582,8 +586,7 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
         return (
             <div className="overlay" onClick={onClose}>
                 <div className="project-model config-modal" onClick={(e) => e.stopPropagation()}>
-                    <button className="close-button" onClick={onClose}>×</button>
-                    
+
                     <div className="model-header">
                         <h2 className="model-title">Configure Project</h2>
                     </div>
@@ -599,8 +602,8 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                                 />
                                 <div className="icon-selection-info">
                                     <p className="icon-status-text">
-                                        {projectIcon && projectIcon !== defaultIcon 
-                                            ? 'Icon detected' 
+                                        {projectIcon && projectIcon !== defaultIcon
+                                            ? 'Icon detected'
                                             : 'No icon found - using default'}
                                     </p>
                                     <button onClick={handleChangeIcon} className="done-btn">
@@ -627,7 +630,7 @@ function AddProjectModelComponent({ onClose, onUpdateWorkflow, onAddProject }) {
                                     detectedTechStack.map((tech, idx) => (
                                         <span key={idx} className="tag editable-tag">
                                             {tech}
-                                            <button 
+                                            <button
                                                 className="remove-tag-btn"
                                                 onClick={() => handleRemoveTech(idx)}
                                             >
